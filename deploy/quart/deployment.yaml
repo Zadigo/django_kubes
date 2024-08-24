@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: quart-depl
+  labels:
+    app: django-kubes
 spec:
   selector:
     matchLabels:
@@ -19,7 +21,7 @@ spec:
         emptyDir: {}
       containers:
       - name: quart-pod
-        image: python:latest
+        image: django_kubes-api_server:latest
         imagePullPolicy: Always
         volumeMounts:
         - name: quart-data

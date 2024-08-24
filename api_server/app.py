@@ -19,3 +19,7 @@ app_cors.config.update(SECRET_KEY=os.getenv('SECRET_KEY'))
 @app.route('/home')
 def home():
     return jsonify({'state': True})
+
+
+if __name__ == '__main__':
+    app.run(debug=os.getenv('DEBUG', False))
