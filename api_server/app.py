@@ -18,8 +18,8 @@ app_cors.config.update(SECRET_KEY=os.getenv('SECRET_KEY'))
 
 
 @app.route('/')
-def home():
-    return render_template('site.html')
+async def home():
+    return await render_template('home.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
