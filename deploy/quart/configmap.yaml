@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: quart-config
+  labels:
+    app: quart-app
+data:
+  debug: "0"
+  quart_env: "production"

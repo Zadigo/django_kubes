@@ -1,0 +1,52 @@
+volumes:
+  PostgresData:
+  NginxLogs:
+
+services:
+  app:
+    build: ./mykube
+    container_name: app_django
+    env_file:
+      - ./docker/environment/django.env
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+
+  quart:
+    build: ./api_server
+    container_name: app_api_server
+    env_file:
+      - ./docker/environment/api_server.env
+      
+  db:
+    build: ./docker/database
+    container_name: app_database
+    restart: always
+    env_file:
+      - ./docker/environment/database.env
+    volumes:
+      - PostgresData:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  nginx:
+    build: ./docker/nginx
+    container_name: app_nginx
+    volumes:
+      - NginxLogs:/var/log:ro
+      - ./dist:/usr/share/nginx/html/
+    depends_on:
+      - app
+    ports:
+      - 80:80
+
+  frontend:
+    build: ./frontend
+    container_name: app_frontend
+    environment:
+      - VITE_PRODUCTION_API_URL=https://example.com/api/v1/
+    volumes:
+      - ./dist:/app/dist:rw
+    ports:
+      - 5173:8080

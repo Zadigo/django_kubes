@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-ser
+spec:
+  selector:
+    app: django-app
+  ports:
+  - port: 5432
+    targetPort: postgres-port

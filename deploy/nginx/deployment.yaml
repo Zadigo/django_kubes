@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-app
+spec:
+  selector:
+    matchLabels:
+      app: nginx-app
+  template:
+    metadata:
+      labels:
+        app: nginx-app
+    spec:
+      volumes:
+        # ./http/nginx.conf /etc/nginx/nginx.conf
+        - name: nginx-temp
+          emptyDir: {}
+      containers:
+      - name: nginx-app
+        image: nginx:latest
+        imagePullPolicy: Always
+        volumeMounts:
+          - name: nginx-temp
+            mountPath: /mnt/data/
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+          name: nginx-port
