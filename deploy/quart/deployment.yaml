@@ -21,8 +21,8 @@ spec:
         emptyDir: {}
       containers:
       - name: quart-pod
-        image: django_kubes-api_server:latest
-        imagePullPolicy: Always
+        image: django_kubes-api_server
+        imagePullPolicy: IfNotPresent
         volumeMounts:
         - name: quart-data
           mountPath: /mnt/pvc/
