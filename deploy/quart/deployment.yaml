@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: quart-depl
+  namespace: ingress-nginx
   labels:
     app: django-kubes
 spec:
@@ -34,3 +35,4 @@ spec:
             cpu: "500m"
         ports:
         - containerPort: 5000
+          protocol: TCP

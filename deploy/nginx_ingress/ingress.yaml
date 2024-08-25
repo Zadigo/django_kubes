@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: django-kubes-ingr
+  namespace: ingress-nginx
   labels:
     app: django-kubes
 spec:
@@ -16,4 +17,4 @@ spec:
           service:
             name: quart-serv
             port:
-              name: quart-port
+              number: 5000
