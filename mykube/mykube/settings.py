@@ -6,12 +6,14 @@ import dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-dotenv.load_dotenv(BASE_DIR / '.env')
-
 
 def get_debug():
     debug_value = os.getenv('DEBUG')
-    return True if debug_value == '1' else False
+    state = True if debug_value == '1' else False
+
+    if state:
+        dotenv.load_dotenv(BASE_DIR / '.env')
+    return state
 
 
 # Quick-start development settings - unsuitable for production

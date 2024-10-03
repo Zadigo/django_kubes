@@ -1,9 +1,8 @@
 import os
 
 from quart import Quart, jsonify, render_template
+from quart_api import BASE_PROJECT, get_debug
 from quart_cors import cors
-
-from api_server import BASE_PROJECT, get_debug
 
 app = Quart(__name__, root_path=BASE_PROJECT)
 app_cors = cors(

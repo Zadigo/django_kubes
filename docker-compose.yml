@@ -11,7 +11,7 @@ services:
     ports:
       - 8000:8000
 
-  api_server:
+  quart_api:
     build: ./api_server
     container_name: app_api_django_kubes
     env_file:
