@@ -4,7 +4,7 @@ metadata:
   name: config
   namespace: metallb-system
   labels:
-    app: myapplication
+    app: django-kubes
 data:
   config: |
     address-pools:
