@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: django-kubes-ingr
+  namespace: ingress-nginx
+  labels:
+    app: django-kubes
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: gency313.fr
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: quart-serv
+            port:
+              number: 5000
