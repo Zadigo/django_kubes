@@ -18,12 +18,14 @@ services:
       - kubes_network
 
   quart_api:
-    build: ./api_server
-    container_name: app_api_django_kubes
+    build: ./quart_api
+    container_name: app_api_quart
     env_file:
-      - ./docker/environment/api_server.env
+      - ./docker/environment/quart.env
     ports:
       - 5000:5000
+    networks:
+      - kubes_network
 
   frontend:
     build: ./frontend

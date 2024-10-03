@@ -2,7 +2,7 @@ FROM python:latest
 
 ENV PYTHONPATH="/"
 
-WORKDIR /api_server
+WORKDIR /quart_api
 
 RUN pip install --upgrade pip
 RUN pip3 install pipenv

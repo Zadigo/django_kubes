@@ -5,7 +5,7 @@ from quart_api import BASE_PROJECT, get_debug
 from quart_cors import cors
 
 app = Quart(__name__, root_path=BASE_PROJECT)
-app_cors = cors(
+cors_app = cors(
     app,
     allow_credentials=True,
     allow_origin=[
@@ -13,12 +13,12 @@ app_cors = cors(
     ]
 )
 
-app_cors.config.update(SECRET_KEY=os.getenv('SECRET_KEY'))
+cors_app.config.update(SECRET_KEY=os.getenv('SECRET_KEY'))
 
 
-@app.route('/')
+@cors_app.route('/')
 async def home():
     return await render_template('home.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    cors_app.run(debug=True)
