@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: nginx-in-config
-  namespace: ingress-nginx
+  name: nginxingress
+  namespace: nginx-ingress
 data:
   error-log-level: "debug"

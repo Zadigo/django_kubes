@@ -1,14 +1,14 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: django-kubes-ingr
-  namespace: ingress-nginx
+  name: nginxingress
+  namespace: nginx-ingress
   labels:
     app: django-kubes
 spec:
-  ingressClassName: nginx
+  ingressClassName: nginx-class
   rules:
-  - host: gency313.fr
+  - host: johnpm.fr
     http:
       paths:
       - path: /
