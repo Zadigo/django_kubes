@@ -6,3 +6,5 @@ metadata:
     app: django-app
 data:
   DEBUG: "0"
+  DB_NAME: "django_database"
+  DB_HOST: "1.1.1.1"

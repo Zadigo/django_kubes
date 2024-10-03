@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: quart-depl
-  namespace: ingress-nginx
+  # namespace: ingress-nginx
   labels:
     app: django-kubes
 spec:
@@ -22,7 +22,7 @@ spec:
         emptyDir: {}
       containers:
       - name: quart-pod
-        image: django_kubes-api_server
+        image: django_kubes-quart_api:latest
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - name: quart-data
@@ -30,6 +30,9 @@ spec:
         - name: quart-temp
           mountPath: /mnt/temp/
         resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
           limits:
             memory: "128Mi"
             cpu: "500m"

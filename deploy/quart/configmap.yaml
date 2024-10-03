@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: quart-config
-  namespace: ingress-nginx
+  # namespace: ingress-nginx
   labels:
     app: quart-app
 data:

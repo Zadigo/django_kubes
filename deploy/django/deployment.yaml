@@ -12,12 +12,18 @@ spec:
         app: django-app
     spec:
       containers:
-      - name: django-app
-        image: django_kube-app
-        imagePullPolicy: Never
+      - name: django-pod
+        image: django_kubes-app:latest
+        imagePullPolicy: IfNotPresent
         resources:
           limits:
             memory: "128Mi"
             cpu: "500m"
         ports:
-          - containerPort: 8000
+        - containerPort: 8000
+          protocol: TCP
+        envFrom:
+        - secretRef:
+            name: django-secrets
+        - configMapRef:
+            name: django-config
