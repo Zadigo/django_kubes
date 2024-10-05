@@ -234,7 +234,11 @@ services:
   second_site:
     build: ./mycelery
     container_name: app_second_site
-    command: [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
+    command: [ "python", "manage.py", "runserver", "0.0.0.0:8010" ]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.second_site.rule=Host(`app.johnpm.fr`)"
+      - "traefik.http.services.second_site.loadbalancer.server.port=8010"
     env_file:
       - ./docker/environment/second_site.env
       - ./docker/environment/rabbit.env
@@ -242,6 +246,53 @@ services:
     volumes:
       - ./mycelery:/code
     ports:
-      - 4002:80
+      - 8010:8010
+    networks:
+      - kubes_network
+
+  celery:
+    build: ./mycelery
+    container_name: celery_kubes
+    command: celery -A mycelery.celery_app worker --loglevel=info --logfile=celery.log
+    env_file:
+      - ./docker/environment/second_site.env
+      - ./docker/environment/rabbit.env
+      - ./docker/environment/redis.env
+    volumes:
+      - ./mycelery:/code
+    networks:
+      - kubes_network
+  
+  celerybeat:
+    build: ./mycelery
+    container_name: celery_beat_kubes
+    
+    command: celery -A mycelery.celery_app beat --loglevel=info
+    env_file:
+      - ./docker/environment/second_site.env
+      - ./docker/environment/rabbit.env
+      - ./docker/environment/redis.env
+    volumes:
+      - ./mycelery:/code
+    networks:
+      - kubes_network
+
+  flower:
+    build: ./mycelery
+    container_name: flower_kubes
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flower.priority=8"
+      - "traefik.http.routers.flower.rule=Host(`app.johnpm.fr`) && Path(`/flower`)"
+      - "traefik.http.services.flower.loadbalancer.server.port=5555"
+    command: celery -A mycelery.celery_app flower --loglevel=info
+    env_file:
+      - ./docker/environment/second_site.env
+      - ./docker/environment/rabbit.env
+      - ./docker/environment/redis.env
+    ports:
+      - 5555:80
+    volumes:
+      - ./mycelery:/code
     networks:
       - kubes_network
