@@ -33,6 +33,11 @@ services:
     networks:
       - kubes_network
 
+  simple_go:
+    build: ./simple_go
+    networks:
+      - kubes_network
+      
   reverse-proxy:
     image: traefik:v3.1
     command:
