@@ -11,9 +11,11 @@ secrets:
     file: ./docker/secrets/postgres-password.txt
   django_secret_key:
     file: ./docker/secrets/django-secret-key.txt
+  pg_admin_password:
+    file: ./docker/secrets/pgadmin-password.txt
 
 services:
-  django_app:
+  main_site:
     build: ./mykube
     container_name: app_django_kubes
     secrets:
@@ -23,10 +25,7 @@ services:
       replicas: 1
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.django_app.rule=Host(`johnpm.fr`) || Host(`176.31.162.80`)"
-      - "traefik.http.services.django_app.loadbalancer.server.port=8000"
-      - "entryPoints.web.address=:80"
-      - "entryPoints.websecure.address=:443"
+      - "traefik.http.routers.main_site.rule=(Host(`johnpm.fr`) || Host(`176.31.162.80`))"
     env_file:
       - ./docker/environment/django.env
     environment:
@@ -45,9 +44,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.quart.rule=Host(`johnpm.fr`) && PathPrefix(`/quart`)"
-      - "traefik.http.services.quart.loadbalancer.server.port=5000"
-      - "entryPoints.web.address=:80"
-      - "entryPoints.websecure.address=:443"
     env_file:
       - ./docker/environment/quart.env
     ports:
@@ -55,59 +51,35 @@ services:
     networks:
       - kubes_network
 
-  # simple_go:
-  #   build: ./simple_go
-  #   networks:
-  #     - kubes_network
-      
   reverse-proxy:
     image: traefik:v3.1
     # command: --configFile=/docker/traefik/traefik.yml
-    command:
-      # - "--log.level=DEBUG"
-      - "--api.insecure=true"
-      - "--global.sendAnonymousUsage"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entryPoints.web.address=:80"
-      - "--entryPoints.web.reusePort=true"
-      - "--accesslog=true"
-      - "--accesslog.filepath=/home/ubuntu/var/access.log"
-      - "--metrics.addinternals=true"
-      - "--metrics.prometheus=true"
-      - "--tracing=true"
-      - "--tracing.addinternals=true"
     ports:
       - 80:80
       - 443:443
       - 8080:8080
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ~/var/letsencrypt:/letsencrypt
+      - ~/var/access.log:/var/log/access.log
+      - ~/var/traefik.log:/var/log/traefik.log
+      - ./docker/traefik:/etc/traefik
     networks:
       - kubes_network
 
-  uptimekuma:
-    image: louislam/uptime-kuma
-    container_name: app_uptime_kuma
-    restart: always
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: app_pgadmin
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.uptimekuma.rule=Host(`johnpm.fr`) && Path(`/uptimekuma`)"
-      - "traefik.http.services.uptimekuma.loadbalancer.server.port=3001"
-      - "entryPoints.web.address=:80"
-      - "entryPoints.websecure.address=:443"
+      - "traefik.http.routers.pgadmin.rule=Host(`traefik.johnpm.fr`) && PathPrefix(`/pgadmin`)"
     ports:
-      - 3001:3001
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - 5050:80
+    secrets:
+      - pg_admin_password
+    environment:
+      - PGADMIN_DEFAULT_PASSWORD=/run/secrets/pg_admin_password
+    env_file: 
+      - ./docker/environment/pgadmin.env
     networks:
       - kubes_network
-
-  # whoami:
-  #   image: traefik/whoami
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
-  #     - "traefik.http.routers.whoami.entrypoints=web"
-  #   networks:
-  #     - kubes_network

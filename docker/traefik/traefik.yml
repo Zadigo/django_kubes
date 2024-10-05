@@ -1,0 +1,79 @@
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: true
+
+log:
+  level: ERROR
+  filePath: /var/log/traefik.log
+  
+accessLog:
+  filePath: /var/log/access.log
+
+api:
+  dashboard: true
+  insecure: true # Set to false in production
+
+entryPoints:
+  web:
+    address: :80      
+    # Permanent redirect to port
+    # HTTPS and prevent any HTTP
+    # http:
+    #   redirections:
+    #     entryPoint:
+    #       to: websecure
+    #       scheme: https
+  websecure:
+    address: :443
+
+# http:
+#   routers:
+#     main_site:
+#       rule: "(Host(`johnpm.fr`) || Host(`176.31.162.80`))"
+#       service: main_site
+#     quart:
+#       rule: "(Host(`johnpm.fr`) && PathPrefix(`/quart`))"
+#       service: api_site
+
+#   services:
+#     main_site:
+#       loadBalancer:
+#         insecureSkipVerify: true
+#         passHostHeader: true
+#         servers:
+#         - url: "http://main_site"
+#     quart:
+#       loadBalancer:
+#         insecureSkipVerify: true
+#         passHostHeader: true
+#         servers:
+#         - url: "http://quart"
+
+##
+# HTTPS
+##
+
+# certificatesResolvers:
+#   staging:
+#     acme:
+#       email: pendenquejohn@gmail.com
+#       storage: home/ubuntu/var/tls/acme.json
+#       caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+#       httpChallenge:
+#         entryPoint: web
+#   production:
+#     acme:
+#       email: pendenquejohn@gmail.com
+#       storage: var/tls/acme.json
+#       caServer: "https://acme-v02.api.letsencrypt.org/directory"
+#       httpChallenge:
+#         entryPoint: web
+
+providers:
+  docker:
+    exposedByDefault: false
+
+metrics:
+  prometheus: {}
+
+tracing: {}
