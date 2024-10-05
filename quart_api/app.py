@@ -1,7 +1,7 @@
 import os
 
 from quart import Quart, jsonify, render_template
-from quart_api import BASE_PROJECT, get_debug
+from quart_api import BASE_PROJECT, get_debug, get_host
 from quart_cors import cors
 
 app = Quart(__name__, root_path=BASE_PROJECT)
@@ -22,4 +22,4 @@ async def home():
     return await render_template('home.html')
 
 if __name__ == '__main__':
-    cors_app.run(host='0.0.0.0', debug=True)
+    cors_app.run(host=get_host(), debug=get_debug())

@@ -10,3 +10,10 @@ dotenv.load_dotenv(BASE_PROJECT / '.env')
 def get_debug():
     debug = os.getenv('DEBUG')
     return True if debug == '1' else False
+
+
+def get_host():
+    debug = get_debug()
+    if debug:
+        return None
+    return '0.0.0.0'

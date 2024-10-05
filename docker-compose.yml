@@ -6,30 +6,27 @@ volumes:
   PostgresData:
   NginxLogs:
 
-secrets:
-  postgres_password:
-    file: ./docker/secrets/postgres-password.txt
-  django_secret_key:
-    file: ./docker/secrets/django-secret-key.txt
-  pg_admin_password:
-    file: ./docker/secrets/pgadmin-password.txt
+# secrets:
+#   postgres_password:
+#     file: ./docker/secrets/postgres-password.txt
+#   django_secret_key:
+#     file: ./docker/secrets/django-secret-key.txt
+#   pg_admin_password:
+#     file: ./docker/secrets/pgadmin-password.txt
 
 services:
   main_site:
     build: ./mykube
     container_name: app_django_kubes
-    secrets:
-      - django_secret_key
     deploy:
       mode: replicated
       replicas: 1
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.main_site.rule=(Host(`johnpm.fr`) || Host(`176.31.162.80`))"
+      - "traefik.http.routers.main_site.priority=1"
+      - "traefik.http.routers.main_site.rule=Host(`johnpm.fr`) && Path(`/`)"
     env_file:
-      - ./docker/environment/django.env
-    environment:
-      - SECRET_KEY_FILE=/run/secrets/django_secret_key
+      - ./docker/environment/main_site.env
     ports:
       - 8000:8000
     networks:
@@ -43,7 +40,10 @@ services:
       replicas: 1
     labels:
       - "traefik.enable=true"
+      - "traefik.http.routers.quart.priority=10"
       - "traefik.http.routers.quart.rule=Host(`johnpm.fr`) && PathPrefix(`/quart`)"
+      - "traefik.http.middlewares.quart-stripprefix.stripprefix.prefixes=/quart"
+      - "traefik.http.routers.quart.middlewares=quart-stripprefix"
     env_file:
       - ./docker/environment/quart.env
     ports:
@@ -51,9 +51,43 @@ services:
     networks:
       - kubes_network
 
-  reverse-proxy:
+  db:
+    build: ./docker/database
+    container_name: app_database
+    restart: always
+    env_file:
+      - ./docker/environment/main_site.env
+      - ./docker/environment/postgres.env
+    ports:
+      - 5432:5432
+    volumes:
+      - PostgresData:/var/lib/postgresql/data/
+    networks:
+      - kubes_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -U $$DB_USER -d $$DB_NAME"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: app_pgadmin
+    restart: always
+    env_file: 
+      - ./docker/environment/pgadmin.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.johnpm.fr`)"
+    depends_on:
+      - db
+    ports:
+      - 5050:80
+    networks:
+      - kubes_network
+
+  proxy:
     image: traefik:v3.1
-    # command: --configFile=/docker/traefik/traefik.yml
     ports:
       - 80:80
       - 443:443
@@ -64,22 +98,5 @@ services:
       - ~/var/access.log:/var/log/access.log
       - ~/var/traefik.log:/var/log/traefik.log
       - ./docker/traefik:/etc/traefik
-    networks:
-      - kubes_network
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: app_pgadmin
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.pgadmin.rule=Host(`traefik.johnpm.fr`) && PathPrefix(`/pgadmin`)"
-    ports:
-      - 5050:80
-    secrets:
-      - pg_admin_password
-    environment:
-      - PGADMIN_DEFAULT_PASSWORD=/run/secrets/pg_admin_password
-    env_file: 
-      - ./docker/environment/pgadmin.env
     networks:
       - kubes_network
