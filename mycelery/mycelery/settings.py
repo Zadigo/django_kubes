@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     'django_celery_beat'
 ]
 
@@ -88,7 +89,6 @@ DATABASES = {
         'PORT': '5432'
     }
 }
-
 
 
 # Password validation
@@ -153,7 +153,8 @@ if not DEBUG:
 
     RABBITMQ_PASSWORD = os.getenv('RABBITMQ_DEFAULT_PASS')
 
-    CELERY_BROKER_URL = f'amqp://{RABBITMQ_USER}:{RABBITMQ_PASSWORD}@rabbitmq:5672'
+    CELERY_BROKER_URL = f'amqp://{RABBITMQ_USER}:{
+        RABBITMQ_PASSWORD}@rabbitmq:5672'
 
     CELERY_RESULT_BACKEND = f'redis://:{REDIS_PASSWORD}@redis:6379'
 else:
