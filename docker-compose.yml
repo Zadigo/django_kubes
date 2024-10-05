@@ -236,7 +236,7 @@ services:
     container_name: app_second_site
     command: [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
     env_file:
-      - ./docker/environment/django.env
+      - ./docker/environment/second_site.env
       - ./docker/environment/rabbit.env
       - ./docker/environment/redis.env
     volumes:
