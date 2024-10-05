@@ -173,3 +173,58 @@ services:
       - GrafanaStorage:/var/lib/grafana
     networks:
       - kubes_network
+
+  uptimekuma:
+    image: louislam/uptime-kuma
+    container_name: app_uptime_kuma
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.uptimekuma.priority=15"
+      - "traefik.http.routers.uptimekuma.rule=Host(`uptime.johnpm.fr`)"
+      - "traefik.http.middlewares.uptimekuma-replacepath.replacepath.path=/dashboard"
+    ports:
+      - 3001:3001
+    volumes:
+      - ~/var/uptime-kuma:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - kubes_network
+
+  autokuma:
+    image: ghcr.io/bigboot/autokuma:latest
+    restart: unless-stopped
+    env_file:
+      - ./docker/environment/autokuma.env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - uptimekuma
+    networks:
+      - kubes_network
+
+  autometrics:
+    image: autometrics/am-proxy:latest
+    container_name: app_autometrics
+    ports:
+      - 6789:6789
+    # environment:
+    #   - PROMETHEUS_URL=http://prometheus:9090
+    networks:
+      - kubes_network
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: app_rabbitmq
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rabbitmq.rule=Host(`rabbit.johnpm.fr`)"
+      - "traefik.http.routers.uptimekuma.priority=3"
+      - "traefik.http.services.django_app.loadbalancer.server.port=15672"
+    env_file:
+      - ./docker/environment/rabbit.env
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - kubes_network
