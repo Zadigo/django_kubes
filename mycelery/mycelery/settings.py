@@ -156,7 +156,8 @@ if not DEBUG:
 
     RABBITMQ_PASSWORD = os.getenv('RABBITMQ_DEFAULT_PASS')
 
-    CELERY_BROKER_URL = f'amqp://{RABBITMQ_USER}:{RABBITMQ_PASSWORD}@rabbitmq:5672'
+    CELERY_BROKER_URL = f'amqp://{RABBITMQ_USER}:{
+        RABBITMQ_PASSWORD}@rabbitmq:5672'
 
     CELERY_RESULT_BACKEND = f'redis://:{REDIS_PASSWORD}@redis:6379'
 else:
@@ -186,4 +187,48 @@ STORAGES = {
     'staticfiles': {
         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'
     }
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'INFO'
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'level': 'WARNING',
+            'filename': 'mycelery/django_debug.log'
+        },
+        # 'failed_requests': {
+        #     'class': 'logging.FileHandler',
+        #     'level': 'WARNING',
+        #     'filename': 'prosite/failed_requests.log'
+        # }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'propagate': True
+        },
+        # 'django.request': {
+        #     'handlers': ['failed_requests'],
+        #     'filters': ['failed_request_filter'],
+        #     'formatter': 'failed',
+        #     'propagate': False
+        # }
+    },
+    'formatters': {
+        'failed': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+            'style': '%'
+        }
+    },
+    # 'filters': {
+    #     'failed_request_filter': {
+    #         '()': 'prosite.custom_logging.FailedRequestFilter'
+    #     }
+    # }
 }
