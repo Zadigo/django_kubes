@@ -1,5 +1,7 @@
 FROM python:latest
 
+LABEL "com.kubes.app"="quart"
+
 ENV PYTHONPATH="/"
 
 WORKDIR /quart_api

@@ -10,6 +10,9 @@ services:
   app:
     build: ./mykube
     container_name: app_django_kubes
+    deploy:
+      mode: replicated
+      replicas: 1
     env_file:
       - ./docker/environment/django.env
     ports:
@@ -17,9 +20,12 @@ services:
     networks:
       - kubes_network
 
-  quart_api:
+  quart:
     build: ./quart_api
     container_name: app_api_quart
+    deploy:
+      mode: replicated
+      replicas: 1
     env_file:
       - ./docker/environment/quart.env
     ports:
@@ -27,12 +33,20 @@ services:
     networks:
       - kubes_network
 
-  frontend:
-    build: ./frontend
-    container_name: app_front_django_kubes
-    environment:
-      - VITE_PRODUCTION_API_URL=https://example.com/api/v1/
-    volumes:
-      - ./dist:/app/dist:rw
+  reverse-proxy:
+    image: traefik:v3.1
+    command: --api.insecure=true --providers.docker
     ports:
-      - 5173:5173
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - kubes_network
+
+  whoami:
+    image: traefik/whoami
+    labels:
+      - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)"
+    networks:
+      - kubes_network
