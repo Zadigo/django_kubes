@@ -8,12 +8,27 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-beo1a29iuo#zrz=89m6834@$0^g#nu3ov&d4s#*y!xah745yj5'
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+
+def get_debug():
+    debug_value = os.getenv('DEBUG')
+    state = True if debug_value == '1' else False
+
+    if state:
+        dotenv.load_dotenv(BASE_DIR / '.env')
+    return state
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = get_debug()
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    '176.31.162.80',
+    'johnpm.fr',
+    'app.johnpm.fr'
+]
 
 
 # Application definition
@@ -25,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'django_celery_beat'
 ]
 
 MIDDLEWARE = [
@@ -63,10 +80,15 @@ WSGI_APPLICATION = 'mycelery.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': '5432'
     }
 }
+
 
 
 # Password validation
@@ -104,6 +126,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATIC_ROOT = BASE_DIR / 'static'
+
+MEDIA_URL = 'media/'
+
+MEDIA_ROOT = BASE_DIR / 'static'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

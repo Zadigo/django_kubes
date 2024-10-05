@@ -1,3 +1,5 @@
+# https://www.spad.uk/posts/practical-configuration-of-traefik-as-a-reverse-proxy-for-docker/
+
 global:
   checkNewVersion: true
   sendAnonymousUsage: true

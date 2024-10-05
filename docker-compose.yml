@@ -29,6 +29,8 @@ services:
       - "traefik.http.routers.main_site.rule=Host(`johnpm.fr`) && Path(`/`)"
     env_file:
       - ./docker/environment/main_site.env
+    volumes:
+      - ./mykube:/code
     ports:
       - 8000:8000
     networks:
@@ -226,5 +228,20 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+    networks:
+      - kubes_network
+
+  second_site:
+    build: ./mycelery
+    container_name: app_second_site
+    command: [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
+    env_file:
+      - ./docker/environment/django.env
+      - ./docker/environment/rabbit.env
+      - ./docker/environment/redis.env
+    volumes:
+      - ./mycelery:/code
+    ports:
+      - 4002:80
     networks:
       - kubes_network
