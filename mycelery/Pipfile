@@ -10,12 +10,12 @@ psycopg = {extras = ["binary", "pool"], version = "*"}
 python-dotenv = "*"
 django-redis-cache = "*"
 django-redis = "*"
+celery = "*"
 autometrics = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
 
 [dev-packages]
-autopep8 = "*"
 
 [requires]
 python_version = "3.12"
