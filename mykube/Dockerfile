@@ -3,7 +3,7 @@ FROM python:3
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
-LABEL "com.kubes.app"="django"
+LABEL "django_kubes"="site_1"
 
 RUN pip install --upgrade pip
 RUN pip3 install pipenv

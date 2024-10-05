@@ -21,4 +21,4 @@ async def home():
     return await render_template('home.html')
 
 if __name__ == '__main__':
-    cors_app.run(debug=True)
+    cors_app.run(host='0.0.0.0', debug=True)

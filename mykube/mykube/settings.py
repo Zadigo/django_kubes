@@ -26,7 +26,8 @@ DEBUG = get_debug()
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
-    'gency313.fr'
+    '176.31.162.80',
+    'johnpm.fr'
 ]
 
 

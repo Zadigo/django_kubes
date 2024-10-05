@@ -1,6 +1,6 @@
 FROM python:latest
 
-LABEL "com.kubes.app"="quart"
+LABEL "django_kubes"="quart"
 
 ENV PYTHONPATH="/"
 

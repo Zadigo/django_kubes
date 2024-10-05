@@ -6,15 +6,31 @@ volumes:
   PostgresData:
   NginxLogs:
 
+secrets:
+  postgres_password:
+    file: ./docker/secrets/postgres-password.txt
+  django_secret_key:
+    file: ./docker/secrets/django-secret-key.txt
+
 services:
-  app:
+  django_app:
     build: ./mykube
     container_name: app_django_kubes
+    secrets:
+      - django_secret_key
     deploy:
       mode: replicated
       replicas: 1
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.django_app.rule=Host(`johnpm.fr`) || Host(`176.31.162.80`)"
+      - "traefik.http.services.django_app.loadbalancer.server.port=8000"
+      - "--entryPoints.web.address=:80"
+      - "--entryPoints.websecure.address=:443"
     env_file:
       - ./docker/environment/django.env
+    environment:
+      - SECRET_KEY_FILE=/run/secrets/django_secret_key
     ports:
       - 8000:8000
     networks:
@@ -22,6 +38,10 @@ services:
 
   quart:
     build: ./quart_api
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.quart.rule=Path(`/quart`)"
+      - "traefik.http.services.quart.loadbalancer.server.port=5000"
     container_name: app_api_quart
     deploy:
       mode: replicated
@@ -33,22 +53,23 @@ services:
     networks:
       - kubes_network
 
-  simple_go:
-    build: ./simple_go
-    networks:
-      - kubes_network
+  # simple_go:
+  #   build: ./simple_go
+  #   networks:
+  #     - kubes_network
       
   reverse-proxy:
     image: traefik:v3.1
     command:
-      # - "--log.level=DEBUG"
+      - "--log.level=ERROR"
       - "--api.insecure=true"
+      - "--global.sendAnonymousUsage"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entryPoints.web.address=:80"
     ports:
-      - "80:80"
-      - "8080:8080"
+      - 80:80
+      - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
@@ -58,7 +79,7 @@ services:
     image: traefik/whoami
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`johnpm.fr`)"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
       - "traefik.http.routers.whoami.entrypoints=web"
     networks:
       - kubes_network
