@@ -48,4 +48,9 @@ app.conf.beat_schedule = {
 
 @app.task(bind=True)
 def debug_task(self):
-    print(f'Request: {self.request!r}')
+    print(f'Request: {self.request}')
+
+
+@app.task
+def add(a, b):
+    return a + b
