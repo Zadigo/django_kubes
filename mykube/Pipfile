@@ -13,6 +13,7 @@ django-redis = "*"
 autometrics = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
+whitenoise = "*"
 
 [dev-packages]
 autopep8 = "*"
