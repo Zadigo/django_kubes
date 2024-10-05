@@ -5,6 +5,8 @@ networks:
 volumes:
   PostgresData:
   NginxLogs:
+  RedisData:
+  GrafanaStorage:
 
 # secrets:
 #   postgres_password:
@@ -98,5 +100,76 @@ services:
       - ~/var/access.log:/var/log/access.log
       - ~/var/traefik.log:/var/log/traefik.log
       - ./docker/traefik:/etc/traefik
+    networks:
+      - kubes_network
+
+  redis:
+    build: ./docker/redis
+    container_name: app_redis
+    # https://stackoverflow.com/questions/68461172/docker-compose-redis-password-via-environment-variable
+    ports:
+      - 6379:6000
+    restart: always
+    volumes:
+      - RedisData:/data
+      - ~/var/redis.log:/data/redis.log:rw
+      - ./docker/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - kubes_network
+
+  memcache:
+    image: memcached
+    container_name: app_memcache
+    ports:
+      - 11211:11211
+    restart: always
+    networks:
+      - kubes_network
+
+  n8n:
+    image: n8nio/n8n
+    container_name: app_n8n
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.n8n.rule=Host(`n8n.johnpm.fr`)"
+    ports:
+      - 5678:5678
+    env_file:
+      - ./docker/environment/automation.env
+    networks:
+      - kubes_network
+
+  prometheus:
+    build: ./docker/prometheus
+    container_name: app_prometheus
+    command: 
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--web.external-url=/prometheus/"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prometheus.rule=Host(`johnpm.fr`) && PathPrefix(`/prometheus`)"
+    ports:
+      - 9090:9090
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - kubes_network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: app_grafana
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`johnpm.fr`) && PathPrefix(`/grafana`)"
+    env_file:
+      - ./docker/environment/grafana.env
+      - ./docker/environment/redis.env
+    ports:
+      - 3000:3000
+    volumes:
+      - ~/var/grafana.log:/var/log/grafana.log
+      - ./docker/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - GrafanaStorage:/var/lib/grafana
     networks:
       - kubes_network
