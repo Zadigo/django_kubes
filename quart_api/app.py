@@ -1,10 +1,12 @@
-import os
-import logging
 import asyncio
-from quart import Quart, jsonify, render_template, redirect
-from quart_cors import cors
-from hypercorn.config import Config
+import logging
+import os
+
 from hypercorn.asyncio import serve
+from hypercorn.config import Config
+from quart import Quart, jsonify, redirect, render_template, websocket
+from quart_cors import cors
+
 from quart_api import BASE_PROJECT, debug_mode, get_host
 from quart_api.connections import REDIS_CONNECTION
 
@@ -30,6 +32,21 @@ def create_connections():
 @cors_app.route('/')
 async def initial_home():
     return await render_template('home.html')
+
+
+@cors_app.websocket('/ws/test')
+async def test_websocket():
+    await websocket.accept()
+    while True:
+        try:
+            data = websocket.receive_json()
+        except asyncio.CancelledError:
+            await websocket.close(1)
+        except Exception:
+            await websocket.close(1)
+        else:
+            await websocket.send({'state': True})
+            await asyncio.sleep(40)
 
 
 if __name__ == '__main__':
