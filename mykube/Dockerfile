@@ -19,4 +19,8 @@ COPY . .
 
 EXPOSE 8000
 
-ENTRYPOINT [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
+# Development
+# ENTRYPOINT [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
+
+# Product
+CMD gunicorn mykube.wsgi -w 4 -b 0.0.0.0:8000 --log-level=debug --access-logfile=gunicorn_access.log --log-file=gunicorn.log

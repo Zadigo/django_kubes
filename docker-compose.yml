@@ -19,7 +19,7 @@ volumes:
 services:
   main_site:
     build: ./mykube
-    container_name: app_django_kubes
+    container_name: app_django_kubes      
     deploy:
       mode: replicated
       replicas: 1
