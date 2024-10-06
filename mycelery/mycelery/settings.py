@@ -14,11 +14,12 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 
 def get_debug():
+    env_path = BASE_DIR / '.env'
+    if env_path.exists():
+        dotenv.load_dotenv(BASE_DIR / '.env')
+
     debug_value = os.getenv('DEBUG')
     state = True if debug_value == '1' else False
-
-    if state:
-        dotenv.load_dotenv(BASE_DIR / '.env')
     return state
 
 
@@ -63,7 +64,9 @@ ROOT_URLCONF = 'mycelery.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
