@@ -249,6 +249,8 @@ services:
       - ./docker/environment/redis.env
     volumes:
       - ./mycelery:/code
+    depends_on:
+      - celery
     ports:
       - 8010:8010
     networks:
@@ -262,6 +264,9 @@ services:
       - ./docker/environment/second_site.env
       - ./docker/environment/rabbit.env
       - ./docker/environment/redis.env
+    depends_on:
+      - rabbitmq
+      - celerybeat
     volumes:
       - ./mycelery:/code
     networks:

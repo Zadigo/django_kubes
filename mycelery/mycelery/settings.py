@@ -159,8 +159,10 @@ if not DEBUG:
 
     RABBITMQ_PASSWORD = os.getenv('RABBITMQ_DEFAULT_PASS')
 
-    CELERY_BROKER_URL = f'amqp://{RABBITMQ_USER}:{
-        RABBITMQ_PASSWORD}@rabbitmq:5672'
+    CELERY_BROKER_URL = 'amqp://{user}:{password}@rabbitmq:5672'.format(
+        user=RABBITMQ_USER,
+        password=RABBITMQ_PASSWORD
+    )
 
     CELERY_RESULT_BACKEND = f'redis://:{REDIS_PASSWORD}@redis:6379'
 else:

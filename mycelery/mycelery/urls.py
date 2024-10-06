@@ -17,6 +17,5 @@ base_patterns = [
 ]
 
 urlpatterns = [
-    path('mycelery/', include(base_patterns)),
-    path('', RedirectView.as_view(url=reverse_lazy('home')))
+    path('mycelery/', include(base_patterns))
 ]
