@@ -241,7 +241,7 @@ services:
     command: [ "python", "manage.py", "runserver", "0.0.0.0:8010" ]
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.second_site.rule=Host(`app.johnpm.fr`)"
+      - "traefik.http.routers.second_site.rule=Host(`app.johnpm.fr`) && PathPrefix(`/mycelery`)"
       - "traefik.http.services.second_site.loadbalancer.server.port=8010"
     env_file:
       - ./docker/environment/second_site.env
