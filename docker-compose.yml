@@ -69,7 +69,9 @@ services:
     ports:
       - 12500:80
     volumes:
-      - ./frontend:/var/www/frontend:ro
+      - ./frontend:/var/www/frontend/
+      - ~/var/frontend_access.log:/var/log/nginx/access.log
+      - ~/var/frontend_error.log:/var/log/nginx/error.log
     networks:
       - kubes_network
     
