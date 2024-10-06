@@ -37,6 +37,7 @@ async def initial_home():
 
 @cors_app.websocket('/ws/test')
 async def test_websocket():
+    counter = 0
     await websocket.accept()
     while True:
         try:
@@ -46,7 +47,8 @@ async def test_websocket():
         except Exception:
             await websocket.close(1)
         else:
-            await websocket.send({'state': True})
+            counter = counter + 1
+            await websocket.send_json({'state': True, 'counter': 1})
             await asyncio.sleep(40)
 
 
