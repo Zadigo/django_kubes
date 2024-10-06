@@ -59,6 +59,20 @@ services:
     networks:
       - kubes_network
 
+  frontend:
+    build: ./docker/frontend
+    container_name: app_frontend
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.quart.rule=Host(`app.johnpm.fr`) && Path(`/`)"
+    ports:
+      - 12500:80
+    volumes:
+      - ./frontend:/var/www/frontend:ro
+    networks:
+      - kubes_network
+    
   db:
     build: ./docker/database
     container_name: app_database
