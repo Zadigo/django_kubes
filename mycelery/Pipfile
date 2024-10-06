@@ -17,6 +17,9 @@ django-cors-headers = "*"
 django-celery-beat = "*"
 flower = "*"
 whitenoise = "*"
+channels = "*"
+daphne = "*"
+pandas = "*"
 
 [dev-packages]
 
