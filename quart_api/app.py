@@ -1,8 +1,11 @@
 import os
 
+from hypercorn import asyncio
 from quart import Quart, jsonify, render_template, redirect
 from quart_cors import cors
-
+from hypercorn.config import Config
+from hypercorn.asyncio import serve
+from mykube.mykube.settings import BASE_DIR
 from quart_api import BASE_PROJECT, get_debug, get_host
 from quart_api.connections import REDIS_CONNECTION
 
@@ -36,4 +39,9 @@ async def initial_home():
 
 
 if __name__ == '__main__':
-    cors_app.run(host=get_host(), debug=get_debug())
+    if get_debug():
+        cors_app.run(host=get_host(), debug=get_debug())
+    else:
+        config = Config()
+        config.from_toml(BASE_DIR / 'hypercorn.toml')
+        asyncio.run(serve(cors_app, Config()))
