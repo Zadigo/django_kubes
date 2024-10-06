@@ -43,7 +43,7 @@ async def test_websocket():
         try:
             data = websocket.receive_json()
         except asyncio.CancelledError:
-            await websocket.close(1)
+            await websocket.close(1000)
         except Exception:
             await websocket.close(1000)
         else:
