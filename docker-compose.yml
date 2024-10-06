@@ -45,7 +45,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.quart.priority=10"
-      - "traefik.http.routers.quart.rule=Host(`johnpm.fr`) && PathPrefix(`/quart`)"
+      - "traefik.http.routers.quart.rule=Host(`api.johnpm.fr`)"
       - "traefik.http.middlewares.quart-stripprefix.stripprefix.prefixes=/quart"
       - "traefik.http.routers.quart.middlewares=quart-stripprefix"
     volumes:
@@ -65,7 +65,7 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.quart.rule=Host(`app.johnpm.fr`) && Path(`/`)"
+      - "traefik.http.routers.frontend.rule=Host(`app.johnpm.fr`) && Path(`/`)"
     ports:
       - 12500:80
     volumes:
