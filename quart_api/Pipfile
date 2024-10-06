@@ -7,6 +7,8 @@ name = "pypi"
 quart = "*"
 quart-cors = "*"
 python-dotenv = "*"
+hypercorn = "*"
+redis = "*"
 
 [dev-packages]
 

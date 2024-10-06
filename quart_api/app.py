@@ -1,8 +1,10 @@
 import os
 
-from quart import Quart, jsonify, render_template
-from quart_api import BASE_PROJECT, get_debug, get_host
+from quart import Quart, jsonify, render_template, redirect
 from quart_cors import cors
+
+from quart_api import BASE_PROJECT, get_debug, get_host
+from quart_api.connections import REDIS_CONNECTION
 
 app = Quart(__name__, root_path=BASE_PROJECT)
 cors_app = cors(
@@ -14,12 +16,24 @@ cors_app = cors(
     ]
 )
 
+
 cors_app.config.update(SECRET_KEY=os.getenv('SECRET_KEY'))
+
+
+@cors_app.before_serving
+def create_connections():
+    REDIS_CONNECTION(cors_app)
 
 
 @cors_app.route('/')
 async def home():
+    return redirect('/quart')
+
+
+@cors_app.route('/quart')
+async def initial_home():
     return await render_template('home.html')
+
 
 if __name__ == '__main__':
     cors_app.run(host=get_host(), debug=get_debug())
