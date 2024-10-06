@@ -42,5 +42,5 @@ if __name__ == '__main__':
         cors_app.run(host=get_host(), debug=get_debug())
     else:
         config = Config()
-        config.from_toml(BASE_PROJECT / 'hypercorn.toml')
+        config._bind = ['0.0.0.0:5000']
         asyncio.run(serve(cors_app, config))
