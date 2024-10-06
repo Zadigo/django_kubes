@@ -5,7 +5,7 @@ from quart import Quart, jsonify, render_template, redirect
 from quart_cors import cors
 from hypercorn.config import Config
 from hypercorn.asyncio import serve
-from quart_api import BASE_PROJECT, get_debug, get_host
+from quart_api import BASE_PROJECT, debug_mode, get_host
 from quart_api.connections import REDIS_CONNECTION
 
 app = Quart(__name__, root_path=BASE_PROJECT)
@@ -28,19 +28,14 @@ def create_connections():
 
 
 @cors_app.route('/')
-async def home():
-    return redirect('/quart')
-
-
-@cors_app.route('/quart')
 async def initial_home():
     return await render_template('home.html')
 
 
 if __name__ == '__main__':
-    if get_debug():
-        cors_app.run(host=get_host(), debug=get_debug())
+    if debug_mode():
+        cors_app.run(host=get_host(), debug=debug_mode())
     else:
         config = Config()
-        config._bind = ['0.0.0.0:5000']
-        asyncio.run(serve(cors_app, config))
+        production_config = config.from_toml(BASE_PROJECT / 'hypercorn.toml')
+        asyncio.run(serve(cors_app, production_config))

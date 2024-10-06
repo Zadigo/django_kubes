@@ -48,6 +48,10 @@ services:
       - "traefik.http.routers.quart.rule=Host(`johnpm.fr`) && PathPrefix(`/quart`)"
       - "traefik.http.middlewares.quart-stripprefix.stripprefix.prefixes=/quart"
       - "traefik.http.routers.quart.middlewares=quart-stripprefix"
+    volumes:
+      - ~/var/quart/access.log:/quart_api/access.log:rw
+      - ~/var/quart/error.log:/quart_api/error.log:rw
+      - ~/var/quart/quart_server.log:/quart_api/quartserver.log
     env_file:
       - ./docker/environment/quart.env
     ports:

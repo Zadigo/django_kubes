@@ -7,7 +7,7 @@ import dotenv
 BASE_PROJECT = pathlib.Path(__file__).parent.absolute()
 
 
-def get_debug():
+def debug_mode():
     env_path = BASE_PROJECT / '.env'
     if env_path.exists():
         dotenv.load_dotenv(BASE_PROJECT / '.env')
@@ -17,8 +17,7 @@ def get_debug():
 
 
 def get_host():
-    debug = get_debug()
-    if debug:
+    if debug_mode():
         return None
     return '0.0.0.0'
 
@@ -38,7 +37,7 @@ dictConfig({
         },
         'file': {
             'class': 'logging.FileHandler',
-            'filename': BASE_PROJECT / 'quart_server.log',
+            'filename': BASE_PROJECT / 'quartserver.log',
             'formatter': 'default'
         }
     },

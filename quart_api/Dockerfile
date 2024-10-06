@@ -19,7 +19,4 @@ COPY . .
 EXPOSE 5000
 
 # Development
-# CMD [ "python", "-m", "app" ]
-
-# Production
-CMD [ "hypercorn", "app:app" ]
+CMD [ "python", "-m", "app" ]
