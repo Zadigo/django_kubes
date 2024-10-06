@@ -44,8 +44,10 @@ async def test_websocket():
             data = websocket.receive_json()
         except asyncio.CancelledError:
             await websocket.close(1000)
+            break
         except Exception:
             await websocket.close(1000)
+            break
         else:
             counter = counter + 1
             await websocket.send_json({'state': True, 'counter': 1})
