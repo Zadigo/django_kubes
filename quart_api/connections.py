@@ -19,7 +19,9 @@ class ConnectRedis:
         try:
             self.conn.ping()
         except:
-            logging.error('Could not connect to Redis server')
+            logging.error('Could not connect to Redis')
+        else:
+            logging.info('Connected to Redis')
 
 
 REDIS_CONNECTION = ConnectRedis()
