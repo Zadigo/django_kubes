@@ -48,6 +48,8 @@ async def test_websocket():
         else:
             await websocket.send({'state': True})
             await asyncio.sleep(40)
+
+
 @cors_app.post('/api/v1/test')
 async def test_quart():
     return jsonify({'state': True})
