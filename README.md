@@ -1,3 +1,8 @@
-# Vite + Django + Quart Kubernetes testing
+# Django Kubes
 
-This project uses Vite, Django and Quart to test deployment with Docker and Kubernetes.
+A template project used to test Kubernetes and Docker with Django, Quart, Vite, Celery and Go. This project uses:
+* Redis
+* RabbitMQ
+* PostGres
+
+The websites a served using Traefik.

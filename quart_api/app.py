@@ -16,6 +16,7 @@ cors_app = cors(
     allow_credentials=True,
     allow_origin=[
         'http://127.0.0.1:8000',
+        'http://localhost:5173',
         'http://johpm.fr'
     ]
 )
@@ -47,6 +48,9 @@ async def test_websocket():
         else:
             await websocket.send({'state': True})
             await asyncio.sleep(40)
+@cors_app.post('/api/v1/test')
+async def test_quart():
+    return jsonify({'state': True})
 
 
 if __name__ == '__main__':

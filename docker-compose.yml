@@ -19,14 +19,14 @@ volumes:
 services:
   main_site:
     build: ./mykube
-    container_name: app_django_kubes
+    container_name: app_django_kubes      
     deploy:
       mode: replicated
       replicas: 1
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.main_site.priority=1"
-      - "traefik.http.routers.main_site.rule=Host(`johnpm.fr`) && Path(`/`)"
+      - "traefik.http.routers.main_site.rule=Host(`johnpm.fr`) && PathPrefix(`/`)"
     env_file:
       - ./docker/environment/main_site.env
     volumes:
@@ -45,7 +45,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.quart.priority=10"
-      - "traefik.http.routers.quart.rule=Host(`johnpm.fr`) && PathPrefix(`/quart`)"
+      - "traefik.http.routers.quart.rule=Host(`api.johnpm.fr`)"
       - "traefik.http.middlewares.quart-stripprefix.stripprefix.prefixes=/quart"
       - "traefik.http.routers.quart.middlewares=quart-stripprefix"
     volumes:
@@ -59,6 +59,20 @@ services:
     networks:
       - kubes_network
 
+  frontend:
+    build: ./docker/frontend
+    container_name: app_frontend
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`app.johnpm.fr`) && Path(`/`)"
+    ports:
+      - 12500:80
+    volumes:
+      - ./frontend:/var/www/frontend:ro
+    networks:
+      - kubes_network
+    
   db:
     build: ./docker/database
     container_name: app_database
