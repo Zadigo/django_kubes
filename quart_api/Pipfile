@@ -9,6 +9,8 @@ quart-cors = "*"
 python-dotenv = "*"
 hypercorn = "*"
 redis = "*"
+requests = "*"
+python-memcached = "*"
 
 [dev-packages]
 
