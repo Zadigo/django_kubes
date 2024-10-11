@@ -26,6 +26,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.main_site.priority=1"
+      - "traefik.http.routers.main_site.entrypoints=websecure" # HTTPS
+      - "traefik.http.routers.main_site.tls.certresolver=letsencrypt" # HTTPS
       - "traefik.http.routers.main_site.rule=Host(`johnpm.fr`) && PathPrefix(`/`)"
     env_file:
       - ./docker/environment/main_site.env
@@ -69,7 +71,9 @@ services:
     ports:
       - 12500:80
     volumes:
-      - ./frontend:/var/www/frontend:ro
+      - ./frontend/dist/:/var/www/dist/
+      - ~/var/frontend_access.log:/var/log/nginx/access.log
+      - ~/var/frontend_error.log:/var/log/nginx/error.log
     networks:
       - kubes_network
     
