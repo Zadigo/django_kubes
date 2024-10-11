@@ -1,14 +1,12 @@
 import asyncio
-import logging
 import os
-
 from hypercorn.asyncio import serve
 from hypercorn.config import Config
-from quart import Quart, jsonify, redirect, render_template, websocket
+from quart import Quart, jsonify, render_template, websocket
 from quart_cors import cors
 
 from quart_api import BASE_PROJECT, debug_mode, get_host
-from quart_api.connections import connect_redis, connect_memcache
+from quart_api.connections import connect_redis
 
 app = Quart(__name__, root_path=BASE_PROJECT)
 cors_app = cors(
@@ -24,12 +22,25 @@ cors_app = cors(
 
 cors_app.config.update(SECRET_KEY=os.getenv('SECRET_KEY'))
 
-cors_app = connect_redis(connect_memcache(cors_app))
+cors_app = connect_redis(cors_app)
 
 
 @cors_app.route('/')
 async def initial_home():
     return await render_template('home.html')
+
+
+@cors_app.route('/api/v1/test')
+async def test_endpoint():
+    try:
+        response = requests.get(
+            'https://jsonplaceholder.typicode.com/comments')
+    except:
+        return jsonify([])
+    else:
+        data = response.json()
+        cors_app.redis.set('comments', data)
+        return jsonify(data)
 
 
 @cors_app.websocket('/ws/test')
