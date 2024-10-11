@@ -8,7 +8,7 @@ from quart import Quart, jsonify, redirect, render_template, websocket
 from quart_cors import cors
 
 from quart_api import BASE_PROJECT, debug_mode, get_host
-from quart_api.connections import REDIS_CONNECTION
+from quart_api.connections import connect_redis, connect_memcache
 
 app = Quart(__name__, root_path=BASE_PROJECT)
 cors_app = cors(
@@ -24,10 +24,7 @@ cors_app = cors(
 
 cors_app.config.update(SECRET_KEY=os.getenv('SECRET_KEY'))
 
-
-@cors_app.before_serving
-def create_connections():
-    REDIS_CONNECTION(cors_app)
+cors_app = connect_redis(connect_memcache(cors_app))
 
 
 @cors_app.route('/')
