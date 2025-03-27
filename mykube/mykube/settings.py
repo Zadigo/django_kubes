@@ -10,6 +10,7 @@ env_path = BASE_DIR / '.env'
 if env_path.exists():
     dotenv.load_dotenv(BASE_DIR / '.env')
 
+
 def get_debug():
     debug_value = os.getenv('DEBUG')
     state = True if debug_value == '1' else False
@@ -26,6 +27,7 @@ DEBUG = get_debug()
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
+    'localhost',
     '176.31.162.80',
     'johnpm.fr'
 ]
@@ -130,7 +132,11 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
 
 MEDIA_URL = 'media/'
 
@@ -150,6 +156,8 @@ if os.getenv('USES_HTTP_SCHEME', 'http') == 'https':
 
     SECURE_PROXY_SSL_HEADERSSL_REDIRECT = True
 
+
+# Storages
 
 STORAGES = {
     'staticfiles': {

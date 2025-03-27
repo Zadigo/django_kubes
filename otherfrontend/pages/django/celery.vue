@@ -36,6 +36,10 @@ interface WebsocketMessage {
   message?: string
 }
 
+useHead({
+  title: 'Celery'
+})
+
 const { $djangoClient } = useNuxtApp()
 
 const { data } = useFetch('/api/schools', {
