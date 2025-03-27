@@ -30,6 +30,7 @@ DEBUG = get_debug()
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
+    'localhost',
     '176.31.162.80',
     'johnpm.fr',
     'app.johnpm.fr'
@@ -392,3 +393,16 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+
+
+# Channels
+# https://channels.readthedocs.io/en/latest/topics/channel_layers.html
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [REDIS_URL]
+        }
+    }
+}
