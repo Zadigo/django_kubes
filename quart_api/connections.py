@@ -13,8 +13,8 @@ class ConnectRedis:
         self.app = None
         self.conn = None
         self.params = {
-            'host': os.getenv('REDIS_HOST', 'localhost'),
-            'port': os.getenv('REDIS_PORT', 6379),
+            'host': os.getenv('REDIS_HOST', '127.0.0.1'),
+            'port': os.getenv('REDIS_PORT', '6379'),
             'password': os.getenv('REDIS_PASSWORD')
         }
 

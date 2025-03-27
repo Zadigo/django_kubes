@@ -6,12 +6,12 @@ import dotenv
 
 BASE_PROJECT = pathlib.Path(__file__).parent.absolute()
 
+env_path = BASE_PROJECT / '.env'
+if env_path.exists():
+    dotenv.load_dotenv(env_path)
+
 
 def debug_mode():
-    env_path = BASE_PROJECT / '.env'
-    if env_path.exists():
-        dotenv.load_dotenv(BASE_PROJECT / '.env')
-
     debug = os.getenv('DEBUG')
     return True if debug == '1' else False
 

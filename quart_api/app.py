@@ -1,5 +1,11 @@
+import json
 import asyncio
 import os
+
+import firebase_admin
+import requests
+from firebase_admin import firestore
+from firebase_admin.credentials import ApplicationDefault
 from hypercorn.asyncio import serve
 from hypercorn.config import Config
 from quart import Quart, jsonify, render_template, websocket
@@ -25,12 +31,23 @@ cors_app.config.update(SECRET_KEY=os.getenv('SECRET_KEY'))
 cors_app = connect_redis(cors_app)
 
 
+@cors_app.before_serving
+def initialize_storages():
+    # firebase_app = firebase_admin.initialize_app()
+    # db = firestore.client()
+
+    defaults = ApplicationDefault()
+    firebase_admin.initialize_app(defaults)
+    db = firestore.client()
+    setattr(cors_app, 'firedb', db)
+
+
 @cors_app.route('/')
 async def initial_home():
     return await render_template('home.html')
 
 
-@cors_app.route('/api/v1/test')
+@cors_app.route('/api/v1/test-2')
 async def test_endpoint():
     try:
         response = requests.get(
@@ -38,7 +55,7 @@ async def test_endpoint():
     except:
         return jsonify([])
     else:
-        data = response.json()
+        data = json.dumps(response.json())
         cors_app.redis.set('comments', data)
         return jsonify(data)
 
