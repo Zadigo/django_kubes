@@ -1,7 +1,7 @@
 import { useServerAxiosClient } from '~/composables/client'
 import type { School } from '~/types'
 
-export default defineEventHandler(async event => {
+export default defineCachedEventHandler(async event => {
     const access = getCookie(event, 'access')
     const refresh = getCookie(event, 'refresh')
     const { client } = useServerAxiosClient(access, refresh, (token) => {
@@ -13,4 +13,7 @@ export default defineEventHandler(async event => {
 
     const response = await client.get<School[]>('/schools/v1/')
     return response.data
+}, {
+    base: 'redis',
+    maxAge: 10
 })

@@ -1,4 +1,4 @@
-import type { AxiosError, AxiosInstance } from 'axios'
+import { AxiosError, type AxiosInstance } from 'axios'
 import axios from 'axios'
 
 export interface LoginApiResponse {
@@ -57,7 +57,7 @@ export function createSimpleClient(altDomain?: string, websocket: boolean = fals
     return axios.create({
         baseURL: getDomain(altDomain, websocket, port),
         withCredentials: true,
-        headers: { 'User-Agent': 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         timeout: 10000
     })
 }
@@ -66,7 +66,7 @@ export function createSimpleClient(altDomain?: string, websocket: boolean = fals
  * Function that adds authentication intercepors on the base client
  * in order to send and handle authenticated requests 
  */
-function authenticationInterceptors(client: AxiosInstance, access?: string, refresh?: string, refreshCallback?: (token: string) => void, errorCallback?: (error: AxiosError) => void) {
+function authenticationInterceptors(client: AxiosInstance, access?: string | null | undefined, refresh?: string | null | undefined, refreshCallback?: (token: string) => void, errorCallback?: (error: AxiosError) => void) {
     client.interceptors.request.use(
         config => {
             if (access) {
@@ -94,7 +94,7 @@ function authenticationInterceptors(client: AxiosInstance, access?: string, refr
 
                 try {
                     const authClient = axios.create({ baseURL: getDomain() })
-                    const response = await authClient.post<RefreshApiResposne>('/api/v1/token/refresh/', { refresh })
+                    const response = await authClient.post<RefreshApiResposne>('/auth/v1/refresh', { refresh })
                     
                     if (refreshCallback) {
                         refreshCallback(response.data.access)
@@ -102,6 +102,9 @@ function authenticationInterceptors(client: AxiosInstance, access?: string, refr
 
                     return authClient
                 } catch (refreshError) {
+                    if (errorCallback && refreshError instanceof AxiosError) {
+                        errorCallback(refreshError)
+                    }
                     return Promise.reject(refreshError)
                 }
             }
@@ -121,10 +124,23 @@ function authenticationInterceptors(client: AxiosInstance, access?: string, refr
  */
 export function useAxiosClient() {
     const client = createSimpleClient()
-    const authenticatedClient = authenticationInterceptors
+    const authenticatedClient = authenticationInterceptors(client)
 
     return {
         client,
+        authenticatedClient
+    }
+}
+
+/**
+ * Same as useAxiosClient but adds a layer of authentication
+ * that with access and refresh tokens for protected views
+ */
+export function useAuthenticatedAxiosClient(access: string | null | undefined, refresh: string | null | undefined) {
+    const { client } = useAxiosClient()
+    const authenticatedClient = authenticationInterceptors(client, access, refresh)
+
+    return {
         authenticatedClient
     }
 }

@@ -5,6 +5,10 @@
         <h2 class="font-bold text-sm">
           {{ item.name }}
         </h2>
+
+        <a href="#" @click.prevent="getProtectedData">
+          Test protected view
+        </a>
       </div>
     </div>
   </section>
@@ -12,6 +16,8 @@
 
 <script setup lang="ts">
 import type { School } from '~/types';
+
+const { $djangoClient } = useNuxtApp()
 
 const { data } = useFetch('/api/schools', {
   transform(data: School[]) {
@@ -26,4 +32,13 @@ const schools = computed(() => {
     return []
   }
 })
+
+async function getProtectedData() {
+  try {
+    const response = $djangoClient.get<School>('schools/v1/1')
+    console.log(response.data)
+  } catch (e) {
+    console.error(e)
+  }
+}
 </script>
