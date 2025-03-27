@@ -26,7 +26,7 @@ export function inProduction() {
  * @param path The path to the endpoint to use
  * @param altDomain Alternative odmain to the one registered in useRuntimeConfig.public.prodUrl
  */
-export function getDomain(altDomain?: string, websocket: boolean = false, port: number = 8000): string {
+export function getDomain(altDomain?: string | null | undefined, websocket: boolean = false, port: number = 8000): string {
     let domain = '127.0.0.1'
 
     if (inProduction()) {
@@ -54,12 +54,26 @@ export function getDomain(altDomain?: string, websocket: boolean = false, port: 
 }
 
 /**
+ * Function that returns an url ready to be used with any Django or Quart
+ * websocket endpoint
+ * 
+ * @param path The path to the endpoint to use
+ * @param altDomain Alternative odmain to the one registered in useRuntimeConfig.public.prodUrl
+ * @param [port=8000] The port of the backend (development only)
+ */
+export function getWebsocketUrl(path: string, altDomain?: string | null | undefined, port: number = 8000): string {
+    const domain = getDomain(altDomain, true, port)
+    const url = new URL(path, domain)
+    return url.toString()
+}
+
+/**
  * Function used to create a basic axios client that
  * can be used to send api requests
  */
-export function createSimpleClient(altDomain?: string, websocket: boolean = false, port: number = 8000) {
+export function createSimpleClient(altDomain?: string, port: number = 8000) {
     return axios.create({
-        baseURL: getDomain(altDomain, websocket, port),
+        baseURL: getDomain(altDomain, false, port),
         withCredentials: true,
         headers: { 'Content-Type': 'application/json' },
         timeout: 10000
