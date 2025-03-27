@@ -36,11 +36,23 @@ export default defineNuxtConfig({
       firebaseProjectId: process.env.NUXT_FIREBASE_PROJECT_ID,
     }
   },
+  eslint: {
+    config: {
+      stylistic: true
+    }
+  },
+  googleFonts: {
+    families: {
+      Roboto: {
+        wght: '100..700'
+      }
+    }
+  },
   i18n: {
     baseUrl: './',
     langDir: './locales',
     defaultLocale: 'fr',
-    vueI18n: './i18n.config.ts',
+    // vueI18n: './i18n.config.ts',
     locales: [
       {
         code: 'en',
