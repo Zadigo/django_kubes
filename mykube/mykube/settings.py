@@ -6,12 +6,11 @@ import dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env_path = BASE_DIR / '.env'
+if env_path.exists():
+    dotenv.load_dotenv(BASE_DIR / '.env')
 
 def get_debug():
-    env_path = BASE_DIR / '.env'
-    if env_path.exists():
-        dotenv.load_dotenv(BASE_DIR / '.env')
-
     debug_value = os.getenv('DEBUG')
     state = True if debug_value == '1' else False
     return state

@@ -1,4 +1,4 @@
-import { AxiosError, type AxiosInstance } from 'axios'
+import { AxiosError, type AxiosInstance, type InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
 
 export interface LoginApiResponse {
@@ -7,6 +7,10 @@ export interface LoginApiResponse {
 }
 
 export type RefreshApiResposne = Pick<LoginApiResponse, 'access'>
+
+interface ExtendedInternalAxiosRequestConfig extends InternalAxiosRequestConfig {
+    _retry?: boolean
+}
 
 /**
  * Checks whether the application in prodcution mode
@@ -26,7 +30,7 @@ export function getDomain(altDomain?: string, websocket: boolean = false, port: 
     let domain = '127.0.0.1'
 
     if (inProduction()) {
-        domain = altDomain || useRuntimeConfig().public.prodUrl
+        domain = altDomain || useRuntimeConfig().public.prodDomain
     }
 
     let loc = websocket ? 'ws' : 'http'
@@ -83,29 +87,31 @@ function authenticationInterceptors(client: AxiosInstance, access?: string | nul
         response => {
             return response
         },
-        async (error) => {
+        async (error: AxiosError) => {
             // Sequence that refreshes the access token when
             // we get a 401 code trying to access a page
 
-            const originalRequest = error.config
-
-            if (error.response.status === 401 && !originalRequest._retry) {
-                originalRequest._retry = true
-
-                try {
-                    const authClient = axios.create({ baseURL: getDomain() })
-                    const response = await authClient.post<RefreshApiResposne>('/auth/v1/refresh', { refresh })
-                    
-                    if (refreshCallback) {
-                        refreshCallback(response.data.access)
+            const originalRequest = error.config as ExtendedInternalAxiosRequestConfig
+            
+            if (error.response) {
+                if (error.response.status === 401 && !originalRequest?._retry) {
+                    originalRequest._retry = true
+    
+                    try {
+                        const authClient = axios.create({ baseURL: getDomain() })
+                        const response = await authClient.post<RefreshApiResposne>('/auth/v1/refresh', { refresh })
+                        
+                        if (refreshCallback) {
+                            refreshCallback(response.data.access)
+                        }
+    
+                        return authClient
+                    } catch (refreshError) {
+                        if (errorCallback && refreshError instanceof AxiosError) {
+                            errorCallback(refreshError)
+                        }
+                        return Promise.reject(refreshError)
                     }
-
-                    return authClient
-                } catch (refreshError) {
-                    if (errorCallback && refreshError instanceof AxiosError) {
-                        errorCallback(refreshError)
-                    }
-                    return Promise.reject(refreshError)
                 }
             }
 

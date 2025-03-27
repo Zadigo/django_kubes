@@ -1,3 +1,4 @@
+from datetime import timedelta
 import os
 import dotenv
 from pathlib import Path
@@ -47,8 +48,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'drf_spectacular',
     'django_celery_beat',
     'django_extensions',
+    'rest_framework',
+    'rest_framework.authtoken',
 
     'channels',
     'import_export',
@@ -318,6 +322,7 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
+    'http://localhost:3000',
     'http://johnpm.fr',
     'http://app.johnpm.fr',
     'http://uptime.johnpm.fr',
@@ -325,6 +330,7 @@ CORS_ALLOWED_ORIGINS = [
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:5173',
+    'http://localhost:3000',
     'http://johnpm.fr',
     'http://app.johnpm.fr',
     'http://uptime.johnpm.fr',
@@ -332,14 +338,25 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 # Restframework
+# https://www.django-rest-framework.org/
 
 REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication'
-    ],
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+    ]
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1440),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+    'SLIDING_TOKEN_LIFETIME': timedelta(days=30),
+    'SLIDING_TOKEN_REFRESH_LIFETIME_LATE_USER': timedelta(days=1),
+    'SLIDING_TOKEN_LIFETIME_LATE_USER': timedelta(days=30),
+    'UPDATE_LAST_LOGIN': True,
+    'AUTH_HEADER_TYPES': ['Token']
 }
 
 
@@ -360,3 +377,18 @@ CACHES = {
         'LOCATION': 'memcache:11211'
     }
 }
+
+
+# Emailing
+
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+EMAIL_USE_TLS = True
+
+EMAIL_PORT = 587
+
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')

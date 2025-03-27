@@ -35,7 +35,7 @@ const schools = computed(() => {
 
 async function getProtectedData() {
   try {
-    const response = $djangoClient.get<School>('schools/v1/1')
+    const response = await $djangoClient.get<School>('schools/v1/1')
     console.log(response.data)
   } catch (e) {
     console.error(e)

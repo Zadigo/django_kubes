@@ -1,3 +1,4 @@
+from rest_framework.permissions import IsAuthenticated
 import requests
 from django.core.cache import cache
 from rest_framework.generics import GenericAPIView
@@ -6,7 +7,6 @@ from schools.api import serializers
 
 
 class ListSchools(GenericAPIView):
-    permission_classes = []
     serializer_class = serializers.SchoolSerializer
     api_url = 'https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/us-colleges-and-universities/records'
 
@@ -29,3 +29,10 @@ class ListSchools(GenericAPIView):
         serializer = self.get_serializer(data=data, many=True)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data)
+
+
+class School(GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        return Response({'status': True})

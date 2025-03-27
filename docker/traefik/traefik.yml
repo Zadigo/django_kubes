@@ -4,16 +4,16 @@ global:
   checkNewVersion: true
   sendAnonymousUsage: true
 
+api:
+  dashboard: true
+  insecure: true # Set to false in production
+
 log:
   level: ERROR
   filePath: /var/log/traefik.log
   
 accessLog:
-  filePath: /var/log/access.log
-
-api:
-  dashboard: true
-  insecure: true # Set to false in production
+  filePath: /var/log/traefik_access.log
 
 entryPoints:
   web:
@@ -25,8 +25,22 @@ entryPoints:
         entryPoint:
           to: websecure
           scheme: https
+          permanent: true    
   websecure:
     address: :443
+  traefik:
+    address: :8080
+
+providers:
+  docker:
+    watch: true
+    exposedByDefault: false
+    network: kubes_network
+
+metrics:
+  prometheus: {}
+
+tracing: {}
 
 ##
 # HTTPS
@@ -41,19 +55,10 @@ certificatesResolvers:
       httpChallenge:
         entryPoint: web
 
-  # production:
-  #   acme:
-  #     email: pendenquejohn@gmail.com
-  #     storage: var/tls/acme.json
-  #     caServer: "https://acme-v02.api.letsencrypt.org/directory"
-  #     httpChallenge:
-  #       entryPoint: web
-
-providers:
-  docker:
-    exposedByDefault: false
-
-metrics:
-  prometheus: {}
-
-tracing: {}
+  production:
+    acme:
+      email: pendenquejohn@gmail.com
+      storage: /letsencrypt/acme.json
+      caServer: "https://acme-v02.api.letsencrypt.org/directory"
+      httpChallenge:
+        entryPoint: web

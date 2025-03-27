@@ -31,8 +31,8 @@
 </template>
 
 <script setup lang="ts">
-const access = useCookie('access')
-const refresh = useCookie('refresh')
+const access = useCookie('access', { watch: true })
+const refresh = useCookie('refresh', { watch: true })
 const authenticated = useState('authenticated', () => false)
 
 const requestData = ref<{ username: string, password: string }>({
