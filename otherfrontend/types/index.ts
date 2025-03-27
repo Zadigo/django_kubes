@@ -4,3 +4,7 @@ export interface School {
     state: string
     website: string
 }
+
+export interface TestApiResponse {
+    status: boolean
+}

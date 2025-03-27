@@ -71,7 +71,7 @@ export function getWebsocketUrl(path: string, altDomain?: string | null | undefi
  * Function used to create a basic axios client that
  * can be used to send api requests
  */
-export function createSimpleClient(altDomain?: string, port: number = 8000) {
+export function createSimpleClient(altDomain?: string | null | undefined, port: number = 8000) {
     return axios.create({
         baseURL: getDomain(altDomain, false, port),
         withCredentials: true,
@@ -142,8 +142,8 @@ function authenticationInterceptors(client: AxiosInstance, access?: string | nul
  * vueuse and other composables that require client sotrages to
  * be fully available
  */
-export function useAxiosClient() {
-    const client = createSimpleClient()
+export function useAxiosClient(altDomain?: string | null | undefined, port: number = 8000) {
+    const client = createSimpleClient(altDomain, port)
     const authenticatedClient = authenticationInterceptors(client)
 
     return {

@@ -4,6 +4,18 @@ from mykube.views import base as base_views
 
 
 urlpatterns = [
-    path('', base_views.HomeView.as_view(), name='home'),
-    path('admin/', admin.site.urls),
+    re_path(
+        r'^api/v1/test',
+        base_views.test_endpoint,
+        name='test_endpoint'
+    ),
+    path(
+        '',
+        base_views.HomeView.as_view(),
+        name='home'
+    ),
+    path(
+        'admin/',
+        admin.site.urls
+    )
 ]
