@@ -23,6 +23,10 @@ from mycelery import views
 
 urlpatterns = [
     path(
+        'schools/v1/',
+        include('schools.api.urls')
+    ),
+    path(
         '',
         views.HomeView.as_view(),
         name='home'

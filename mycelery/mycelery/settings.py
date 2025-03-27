@@ -6,16 +6,16 @@ import mimetypes
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env_path = BASE_DIR / '.env'
+if env_path.exists():
+    dotenv.load_dotenv(env_path)
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
-
-env_path = BASE_DIR / '.env'
-if env_path.exists():
-    dotenv.load_dotenv(BASE_DIR / '.env')
 
 
 def get_debug():
@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'channels',
     'import_export',
     'corsheaders',
+
+    'schools'
 ]
 
 MIDDLEWARE = [
@@ -212,8 +214,8 @@ STATICFILES_DIRS = [
 #     '.js': 'text/javascript'
 # }
 
-mimetypes.add_type('text/plain', '.css')
-mimetypes.add_type('text/plain', '.js')
+# mimetypes.add_type('text/plain', '.css')
+# mimetypes.add_type('text/plain', '.js')
 
 
 # Default primary key field type
