@@ -28,18 +28,18 @@ cors_app = cors(
 
 cors_app.config.update(SECRET_KEY=os.getenv('SECRET_KEY'))
 
-cors_app = connect_redis(cors_app)
+# cors_app = connect_redis(cors_app)
 
 
-@cors_app.before_serving
-def initialize_storages():
-    # firebase_app = firebase_admin.initialize_app()
-    # db = firestore.client()
+# @cors_app.before_serving
+# def initialize_storages():
+#     # firebase_app = firebase_admin.initialize_app()
+#     # db = firestore.client()
 
-    defaults = ApplicationDefault()
-    firebase_admin.initialize_app(defaults)
-    db = firestore.client()
-    setattr(cors_app, 'firedb', db)
+#     defaults = ApplicationDefault()
+#     firebase_admin.initialize_app(defaults)
+#     db = firestore.client()
+#     setattr(cors_app, 'firedb', db)
 
 
 @cors_app.route('/')

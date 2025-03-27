@@ -21,7 +21,7 @@ COPY ./pnpm-lock.yaml /app/
 RUN pnpm install --shamefully-hoist
 
 # Copy the rest of the application files to the working directory
-COPY . ./
+COPY . .
 
 # Build the application
 RUN pnpm run build
@@ -36,7 +36,7 @@ WORKDIR /app
 COPY --from=build /app/.output ./
 
 # Define environment variables
-ENV HOST=0.0.0.0 NODE_ENV=production
+ENV HOST=0.0.0.0
 ENV NODE_ENV=production
 
 # Expose the port the application will run on
