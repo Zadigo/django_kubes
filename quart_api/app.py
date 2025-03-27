@@ -1,5 +1,5 @@
-import json
 import asyncio
+import json
 import os
 
 import firebase_admin
@@ -82,6 +82,14 @@ async def test_websocket():
 @cors_app.post('/api/v1/test')
 async def test_quart():
     return jsonify({'state': True})
+
+
+@cors_app.get('/api/v1/firebase')
+async def test_firebase():
+    ref = cors_app.firedb.collection('toys')
+    doc = ref.document('something')
+    doc.set({'a': 1, 'user': {'id': 1}})
+    return {}, 200
 
 
 if __name__ == '__main__':

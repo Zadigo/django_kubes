@@ -11,6 +11,7 @@ hypercorn = "*"
 redis = "*"
 requests = "*"
 python-memcached = "*"
+firebase-admin = "*"
 
 [dev-packages]
 
