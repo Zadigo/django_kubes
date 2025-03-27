@@ -36,10 +36,13 @@ class SchoolEndpoint(GroupMixin, AsyncJsonWebsocketConsumer):
         await self.channel_layer.group_add(self.diffusion_group_name, self.channel_name)
 
     async def receive_json(self, content, **kwargs):
-        message_type, content = self.parse_message(content)
+        message_type, data = self.parse_message(content)
 
         if message_type == 'read_data':
             pass
+
+        if message_type == 'test':
+            await self.send_json(self.format_message('test', message='Test message'))
 
     async def disconnect(self, code):
         await self.send_json(self.format_message('disconnection', message='Bye bye!'))

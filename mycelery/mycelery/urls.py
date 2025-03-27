@@ -27,17 +27,17 @@ jwtpatterns = [
     re_path(
         r'^token$',
         jwt_views.TokenObtainPairView.as_view(),
-        name='login'
+        name='token_obtain'
     ),
     re_path(
         r'^refresh$',
         jwt_views.TokenRefreshView.as_view(),
-        name='login'
+        name='token_refresh'
     ),
     re_path(
         r'^verify$',
         jwt_views.TokenVerifyView.as_view(),
-        name='login'
+        name='token_verify'
     )
 ]
 

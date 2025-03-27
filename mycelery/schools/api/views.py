@@ -27,7 +27,7 @@ class ListSchools(GenericAPIView):
     def get(self, request, *args, **kwargs):
         data = self.get_queryset()
         serializer = self.get_serializer(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
+        serializer.is_valid(raise_exception=False)
         return Response(serializer.data)
 
 
