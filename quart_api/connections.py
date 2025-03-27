@@ -2,7 +2,7 @@ import os
 import logging
 import redis
 from quart_api import debug_mode
-from pymemcache import Client
+# from pymemcache.client.base import Client
 
 
 class ConnectRedis:
@@ -53,4 +53,4 @@ class ConnectMemcache:
 
 connect_redis = ConnectRedis()
 
-connect_memcache = ConnectMemcache()
+# connect_memcache = ConnectMemcache()
