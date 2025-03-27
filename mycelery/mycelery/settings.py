@@ -39,14 +39,14 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     'daphne',
-    'whitenoise.runserver_nostatic',
+    # 'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     'django_celery_beat',
     'django_extensions',
 
@@ -57,7 +57,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -88,7 +88,7 @@ TEMPLATES = [
 ]
 
 # WSGI_APPLICATION = 'mycelery.wsgi.application'
-ASGI_APPLICATION = 'mycelery.wsgi.application'
+ASGI_APPLICATION = 'mycelery.asgi.application'
 
 
 # Database
@@ -193,10 +193,10 @@ else:
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'staticfiles'
+    BASE_DIR / 'static'
 ]
 
 
