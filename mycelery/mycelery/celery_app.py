@@ -38,14 +38,10 @@ app.conf.update(
 
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
-app.conf.beat_schedule = {
-    'query-sequences': {
-        'task': 'query_sequences',
-        'schedule': crontab(minute=1)
-    }
-}
 
-
-@app.task(bind=True)
-def debug_task(self):
-    print(f'Request: {self.request}')
+# app.conf.beat_schedule = {
+#     'query-sequences': {
+#         'task': 'query_sequences',
+#         'schedule': crontab(minute=1)
+#     }
+# }

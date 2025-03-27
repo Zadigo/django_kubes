@@ -13,12 +13,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
+env_path = BASE_DIR / '.env'
+if env_path.exists():
+    dotenv.load_dotenv(BASE_DIR / '.env')
+
 
 def get_debug():
-    env_path = BASE_DIR / '.env'
-    if env_path.exists():
-        dotenv.load_dotenv(BASE_DIR / '.env')
-
     debug_value = os.getenv('DEBUG')
     state = True if debug_value == '1' else False
     return state
@@ -38,6 +38,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -45,9 +46,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    
     'django_celery_beat',
+    'django_extensions',
 
+    'channels',
+    'import_export',
     'corsheaders',
 ]
 
@@ -83,7 +87,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'mycelery.wsgi.application'
+# WSGI_APPLICATION = 'mycelery.wsgi.application'
+ASGI_APPLICATION = 'mycelery.wsgi.application'
 
 
 # Database
@@ -132,16 +137,83 @@ USE_I18N = True
 USE_TZ = True
 
 
+# S3
+# https://forum.djangoproject.com/t/static-path-with-s3/28696/9
+# https://levelup.gitconnected.com/hosting-django-static-files-in-aws-using-s3-and-cloudfront-a-comprehensive-guide-2f8f5d0a845c
+
+USE_S3 = False
+
+if USE_S3:
+    AWS_LOCATION = os.getenv('AWS_LOCATION')
+
+    AWS_S3_FILE_OVERWRITE = False
+
+    AWS_DEFAULT_ACL = 'public-read'
+
+    AWS_QUERYSTRING_AUTH = False
+
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+
+    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+
+    AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
+
+    AWS_S3_ACCESS_KEY_ID = os.getenv('AWS_S3_ACCESS_KEY_ID')
+
+    AWS_S3_SECRET_ACCESS_KEY = os.getenv('AWS_S3_SECRET_ACCESS_KEY')
+
+    STORAGES = {
+        'default': {
+            'BACKEND': 'mycelery.custom_storages.MediaStorage'
+        },
+        'staticfiles': {
+            'BACKEND': 'mycelery.custom_storages.StaticStorage'
+        }
+    }
+
+    AWS_S3_OBJECT_PARAMETERS = {
+        'ACL': 'public-read',
+        'CacheControl': 'max-age=2592000'
+    }
+
+    AWS_CLOUDFRONT_DISTRIBUTION = os.getenv('AWS_CLOUDFRONT_DISTRIBUTION')
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+if USE_S3:
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
+
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+else:
+    MEDIA_URL = 'media/'
+
+    STATIC_URL = 'static/'
+
+MEDIA_ROOT = BASE_DIR / 'media'
 
 STATIC_ROOT = BASE_DIR / 'static'
 
-MEDIA_URL = 'media/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'staticfiles'
+]
 
-MEDIA_ROOT = BASE_DIR / 'media'
+
+# Whitenoise
+
+# STORAGES = {
+#     'staticfiles': {
+#         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+#     }
+# }
+
+# WHITENOISE_MIMETYPES = {
+#     '.js': 'text/javascript'
+# }
+
+mimetypes.add_type('text/plain', '.css')
+mimetypes.add_type('text/plain', '.js')
 
 
 # Default primary key field type
@@ -150,30 +222,23 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-if not DEBUG:
-    # Use Redis as backend for caching instead of
-    # the file system caching that we use for debugging
-    REDIS_PASSWORD = os.getenv('REDIS_PASSWORD')
+# Redis
 
-    REDIS_URL = f'redis://:{REDIS_PASSWORD}@redis:6379'
+REDIS_HOST = os.getenv('REDIS_HOST', '127.0.0.1')
 
-    RABBITMQ_HOST = os.getenv('RABBITMQ_HOST')
+REDIS_PASSWORD = os.getenv('REDIS_PASSWORD')
 
-    RABBITMQ_USER = os.getenv('RABBITMQ_DEFAULT_USER')
+REDIS_URL = f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:6379'
 
-    RABBITMQ_PASSWORD = os.getenv('RABBITMQ_DEFAULT_PASS')
+RABBITMQ_HOST = os.getenv('RABBITMQ_HOST', 'localhost')
 
-    CELERY_BROKER_URL = 'amqp://{user}:{password}@rabbitmq:5672'.format(
-        user=RABBITMQ_USER,
-        password=RABBITMQ_PASSWORD
-    )
+RABBITMQ_USER = os.getenv('RABBITMQ_DEFAULT_USER', 'guest')
 
-    CELERY_RESULT_BACKEND = f'redis://:{REDIS_PASSWORD}@redis:6379'
-else:
-    CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672'
+RABBITMQ_PASSWORD = os.getenv('RABBITMQ_DEFAULT_PASS', 'guest')
 
-    CELERY_RESULT_BACKEND = 'rpc://'
+CELERY_BROKER_URL = f'amqp://{RABBITMQ_USER}:{RABBITMQ_PASSWORD}@{RABBITMQ_HOST}:5672'
 
+CELERY_RESULT_BACKEND = REDIS_URL
 
 CELERY_ACCEPT_CONTENT = ['json']
 
@@ -192,19 +257,7 @@ if os.getenv('USES_HTTP_SCHEME', 'http') == 'https':
     SECURE_PROXY_SSL_HEADERSSL_REDIRECT = True
 
 
-STORAGES = {
-    'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-    }
-}
-
-# WHITENOISE_MIMETYPES = {
-#     '.js': 'text/javascript'
-# }
-
-mimetypes.add_type('text/plain', '.css')
-mimetypes.add_type('text/plain', '.js')
-
+# Logging
 
 LOGGING = {
     'version': 1,
@@ -275,6 +328,9 @@ CSRF_TRUSTED_ORIGINS = [
     'http://uptime.johnpm.fr',
 ]
 
+
+# Restframework
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -282,4 +338,23 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication'
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+}
+
+
+# Cache
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': REDIS_URL,
+        'TIMEOUT': 60 * 15,
+        'OPTIONS': {
+            'PASSWORD': REDIS_PASSWORD,
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient'
+        }
+    },
+    'memcache': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION': 'memcache:11211'
+    }
 }
