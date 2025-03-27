@@ -20,8 +20,14 @@ whitenoise = "*"
 channels = "*"
 daphne = "*"
 pandas = "*"
+drf-spectacular = "*"
+django-extensions = "*"
+django-import-export = "*"
+djangorestframework-simplejwt = "*"
+requests = "*"
+pymemcache = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.12"
+python_version = "3.13"
