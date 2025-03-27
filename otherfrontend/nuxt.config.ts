@@ -1,5 +1,67 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
-  devtools: { enabled: true }
+  devtools: { enabled: true },
+  ssr: true,
+  routeRules: {
+    '/': { ssr: true },
+    '/django/celery': { ssr: true },
+    '/django/kubes': { ssr: false }
+  },
+  modules: [
+    '@nuxt/eslint',
+    '@pinia/nuxt',
+    '@nuxtjs/tailwindcss',
+    '@nuxt/icon',
+    '@nuxtjs/i18n',
+    '@nuxtjs/google-fonts'
+  ],
+  css: [
+    '~/assets/css/main.css'
+  ],
+  runtimeConfig: {
+    public: {
+      prodDomain: '127.0.0.1'
+    }
+  },
+  i18n: {
+    baseUrl: './',
+    langDir: './locales',
+    defaultLocale: 'fr',
+    vueI18n: './i18n.config.ts',
+    locales: [
+      {
+        code: 'en',
+        language: 'en-US',
+        file: 'en-US.json',
+        dir: 'ltr',
+        name: 'English'
+      },
+      {
+        code: 'es',
+        language: 'es-ES',
+        file: 'es-ES.json',
+        dir: 'ltr',
+        name: 'Spanish'
+      },
+      {
+        code: 'fr',
+        language: 'fr-FR',
+        file: 'fr-FR.json',
+        dir: 'ltr',
+        name: 'Français'
+      }
+    ]
+  },
+  nitro: {
+    storage: {
+      redis: {
+        driver: 'redis',
+        host: '127.0.0.1',
+        port: 6379,
+        username: '',
+        password: 'django-local-testing'
+      }
+    }
+  }
 })
