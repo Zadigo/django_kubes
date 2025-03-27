@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, override_settings
 from django.urls import re_path, reverse
 from rest_framework.test import APITestCase
-from schools import consumers
+from schools import consumers, tasks
 
 
 class AuthenticationMixin(APITestCase):
@@ -89,4 +89,9 @@ class TestWebsocketEndpoints(TestCase):
 
 @override_settings(CELERY_TASK_ALWAYS_EAGER=True, CELERY_TASK_EAGER_PROPAGATES=True)
 class TestTasks(TestCase):
-    fixtures = ['/fixtures/users.json']
+    fixtures = ['fixtures/users']
+
+    def test_complicated_task(self):
+        t1 = tasks.run_complicated_task.apply()
+        result = t1.get()
+        self.assertIn('content', result)

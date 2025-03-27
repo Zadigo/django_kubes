@@ -409,7 +409,7 @@ CHANNEL_LAYERS = {
 
 
 # Fixtures
-# 
+#
 
 FIXTURE_DIRS = [
     '/fixtures/users.json'
