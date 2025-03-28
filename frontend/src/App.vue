@@ -5,7 +5,7 @@
         <div class="card shadow-sm">
           <div class="card-body">
             <h1 class="h4 text-center">
-              Welcome to Vite
+              {{ $t("Welcome to Vite") }}
             </h1>
           </div>
 
@@ -19,7 +19,7 @@
               {{ errorMessage }}
             </div>
 
-            <input v-model="eventData" type="text" class="form-control mb-3 p-3" placeholder="Test Rabbit MQ events..." @keypress.enter="handleTestRabbitMQEvent">
+            <input v-model="eventData" type="text" class="form-control mb-3 p-3" :placeholder="$t('Test Rabbit MQ events')" @keypress.enter="handleTestRabbitMQEvent">
 
             <div class="list-group">
               <a v-for="(item, i) in urls" :key="i" :href="item.url" class="list-group-item list-group-item-action p-3">
@@ -31,7 +31,7 @@
 
           <div class="card-footer d-flex gap-2">
             <button type="button" class="btn btn-secondary btn-rounded" @click="handleTestQuartBackend">
-              <IconLib icon="refresh" class="me-2" />
+              <IconLib icon="fa-solid:refresh" class="me-2" />
               Load rabbit 1
             </button>
 
@@ -39,12 +39,12 @@
               <div v-if="websocketOpened" class="spinner-grow me-2" style="width: 1rem; height: 1rem;" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
-              <IconLib v-else icon="refresh" class="me-2" />
+              <IconLib v-else icon="fa-solid:refresh" class="me-2" />
               Load rabbit 2
             </button>
 
             <button v-if="websocketOpened" type="button" class="btn btn-secondary btn-rounded" @click="ws.close(1000)">
-              <IconLib icon="close" class="me-2" />
+              <IconLib icon="fa-solid:close" class="me-2" />
               Close rabbit 1
             </button>
           </div>
@@ -55,13 +55,28 @@
 </template>
 
 <script setup lang="ts">
+import { useAxiosClient } from '@/plugins'
 import { useWebSocket } from '@vueuse/core'
-import { ref, computed } from 'vue'
+import { useSeoMeta } from '@unhead/vue'
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+type WebsocketData = {
+  state: boolean
+}
+
+useSeoMeta({
+  title: 'Home',
+  titleTemplate: '%s | Frontend',
+  description: 'Some simple description'
+})
+
+const { t } = useI18n()
 
 const urls = [
   {
     icon: 'fa-solid:link',
-    title: 'Main site',
+    title: t('Main site'),
     url: 'http://johnpm.fr'
   },
   {
@@ -70,10 +85,6 @@ const urls = [
     url: 'http://postgres.johnpm.fr'
   }
 ]
-
-type WebsocketData = {
-  state: boolean
-}
 
 const isLoading = ref(false)
 const showAlert = ref(false)
@@ -98,6 +109,9 @@ const ws = useWebSocket('http://api.johnpm.fr/ws/test', {
     showAlert.value = false
   }
 })
+
+const { client } = useAxiosClient()
+
 const eventData = ref<string>('')
 const errorMessage = ref<string>('')
 const showError = ref(false)
@@ -109,10 +123,13 @@ const websocketOpened = computed(() => {
 async function handleTestRabbitMQEvent() {
   try {
     isLoading.value = true
-    const response = await $django_client.post('/test')
+
+    const response = await client.post('/test')
+
     if (response.status === 200) {
       showAlert.value = true
     }
+
     isLoading.value = false
   } catch (e) {
     errorMessage.value = `Could not send event: ${e}`
@@ -123,7 +140,10 @@ async function handleTestRabbitMQEvent() {
 async function handleTestQuartBackend() {
   try {
     isLoading.value = true
-    const response = await $client.post('/test')
+
+    const { client } = useAxiosClient(null, 5000)
+    const response = await client.post('/test')
+
     if (response.status === 200) {
       showAlert.value = true
     }

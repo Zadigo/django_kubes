@@ -1,38 +1,45 @@
-/// <reference types="vitest" />
+/// <reference types='vitest' />
 
-import { resolve } from "path";
-import { defineConfig, loadEnv } from "vite";
+import { dirname, resolve } from 'path'
+import { defineConfig, loadEnv } from 'vite'
 
-import vue from "@vitejs/plugin-vue";
-import eslint from "vite-plugin-eslint";
+import vue from '@vitejs/plugin-vue'
+import eslint from 'vite-plugin-eslint'
+import vueI18n from '@intlify/unplugin-vue-i18n/vite'
+import { fileURLToPath } from 'url'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const root = process.cwd();
-  const env = loadEnv(mode, root);
-  process.env = { ...process.env, ...env };
+  const root = process.cwd()
+  const env = loadEnv(mode, root)
+  process.env = { ...process.env, ...env }
 
-  return {    
+  return {
     root,
     resolve: {
       alias: [
         {
-          find: "@",
-          replacement: resolve(__dirname, "src"),
+          find: '@',
+          replacement: resolve(__dirname, 'src')
         },
         {
-          find: "src",
-          replacement: resolve(__dirname, "src"),
-        },
-      ],
+          find: 'src',
+          replacement: resolve(__dirname, 'src')
+        }
+      ]
     },
     plugins: [
-      vue(), 
-      eslint()
+      vue(),
+      eslint(),
+      vueI18n({
+        include: resolve(dirname(fileURLToPath(import.meta.url)), './src/locales/**'),
+        fullInstall: false,
+        compositionOnly: true
+      })
     ],
     test: {
       globals: true,
-      environment: "happy-dom",
-    },
-  };
-});
+      environment: 'happy-dom'
+    }
+  }
+})
