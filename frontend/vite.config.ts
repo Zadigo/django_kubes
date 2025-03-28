@@ -2,11 +2,12 @@
 
 import { dirname, resolve } from 'path'
 import { defineConfig, loadEnv } from 'vite'
+import { fileURLToPath } from 'url'
 
 import vue from '@vitejs/plugin-vue'
 import eslint from 'vite-plugin-eslint'
 import vueI18n from '@intlify/unplugin-vue-i18n/vite'
-import { fileURLToPath } from 'url'
+import unheadAddons from '@unhead/addons/vite'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -31,6 +32,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       vue(),
       eslint(),
+      unheadAddons(),
       vueI18n({
         include: resolve(dirname(fileURLToPath(import.meta.url)), './src/locales/**'),
         fullInstall: false,
