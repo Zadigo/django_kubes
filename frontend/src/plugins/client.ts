@@ -29,8 +29,12 @@ export function inProduction() {
 export function getDomain(altDomain?: string | null | undefined, websocket: boolean = false, port: number = 8000): string {
   let domain = '127.0.0.1'
 
+  if (altDomain && altDomain.startsWith('http')) {
+    throw new Error('Domain should not start with http:// or https://')
+  }
+
   if (inProduction()) {
-    domain = altDomain || useRuntimeConfig().public.prodDomain
+    domain = altDomain || import.meta.env.VITE_PROD_URL
   }
 
   let loc = websocket ? 'ws' : 'http'
