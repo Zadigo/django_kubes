@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { Icon } from '@iconify/vue'
 
 import App from './App.vue'
 import installPlugins from './plugins'
@@ -14,5 +14,5 @@ const pinia = createPinia()
 const app = createApp(App)
 app.use(pinia)
 app.use(installPlugins())
-app.component('FontAwesomeIcon', FontAwesomeIcon)
+app.component('IconLib', Icon)
 app.mount('#app')

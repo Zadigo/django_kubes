@@ -26,7 +26,10 @@ export default defineConfig(({ mode }) => {
         },
       ],
     },
-    plugins: [vue(), eslint()],
+    plugins: [
+      vue(), 
+      eslint()
+    ],
     test: {
       globals: true,
       environment: "happy-dom",

@@ -19,11 +19,11 @@
               {{ errorMessage }}
             </div>
 
-            <input v-model="eventData" type="text" class="form-control mb-3 p-3" placeholder="Test Rabbit MQ events..." @keypress.enter="handleTestRabbitMQEvent" />
-            
+            <input v-model="eventData" type="text" class="form-control mb-3 p-3" placeholder="Test Rabbit MQ events..." @keypress.enter="handleTestRabbitMQEvent">
+
             <div class="list-group">
               <a v-for="(item, i) in urls" :key="i" :href="item.url" class="list-group-item list-group-item-action p-3">
-                <font-awesome-icon :icon="item.icon" class="me-2" />
+                <IconLib :icon="item.icon" class="me-2" />
                 {{ item.title }}
               </a>
             </div>
@@ -31,7 +31,7 @@
 
           <div class="card-footer d-flex gap-2">
             <button type="button" class="btn btn-secondary btn-rounded" @click="handleTestQuartBackend">
-              <font-awesome-icon icon="refresh" class="me-2" />
+              <IconLib icon="refresh" class="me-2" />
               Load rabbit 1
             </button>
 
@@ -39,12 +39,12 @@
               <div v-if="websocketOpened" class="spinner-grow me-2" style="width: 1rem; height: 1rem;" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
-              <font-awesome-icon v-else icon="refresh" class="me-2" />
+              <IconLib v-else icon="refresh" class="me-2" />
               Load rabbit 2
             </button>
-            
+
             <button v-if="websocketOpened" type="button" class="btn btn-secondary btn-rounded" @click="ws.close(1000)">
-              <font-awesome-icon icon="close" class="me-2" />
+              <IconLib icon="close" class="me-2" />
               Close rabbit 1
             </button>
           </div>
@@ -54,18 +54,18 @@
   </div>
 </template>
 
-<script lang="ts">
-import { useWebSocket } from '@vueuse/core';
-import { defineComponent, ref } from 'vue';
+<script setup lang="ts">
+import { useWebSocket } from '@vueuse/core'
+import { ref, computed } from 'vue'
 
 const urls = [
   {
-    icon: 'link',
+    icon: 'fa-solid:link',
     title: 'Main site',
     url: 'http://johnpm.fr'
   },
   {
-    icon: 'database',
+    icon: 'fa-solid:database',
     title: 'Postgres',
     url: 'http://postgres.johnpm.fr'
   }
@@ -75,92 +75,71 @@ type WebsocketData = {
   state: boolean
 }
 
-export default defineComponent({
-  name: 'App',
-  setup() {
-    const isLoading = ref(false)
-    const showAlert  = ref(false)
-    const isWebsocket = ref(false)
-    const websocketCounter = ref<WebsocketData[]>([])
-    const { open, close, data, status, send } = useWebSocket('http://api.johnpm.fr/ws/test', {
-      immediate: false,
-      onConnected () {
-        isWebsocket.value = true
-        showAlert.value = true
-      },
-      onMessage () {
-        websocketCounter.value.push(JSON.parse(data.value))
-      },
-      onError() {
-        isWebsocket.value = false
-        showAlert.value = false
-      },
-      onDisconnected() {
-        isWebsocket.value = false
-        showAlert.value = false
-      }
-    })
-    const eventData = ref<string>('')
-    const errorMessage = ref<string>('')
-    const showError = ref(false)
+const isLoading = ref(false)
+const showAlert = ref(false)
+const isWebsocket = ref(false)
+const websocketCounter = ref<WebsocketData[]>([])
 
-    return {
-      ws: {
-        open,
-        close,
-        status: status,
-        send
-      },
-      showError,
-      errorMessage,
-      websocketCounter,
-      showAlert,
-      eventData,
-      isWebsocket,
-      isLoading,
-      urls
-    }
+const ws = useWebSocket('http://api.johnpm.fr/ws/test', {
+  immediate: false,
+  onConnected() {
+    isWebsocket.value = true
+    showAlert.value = true
   },
-  computed: {
-    websocketOpened() {
-      return this.ws.status.value === 'OPEN'
-    }
+  onMessage(_ws, event) {
+    websocketCounter.value.push(JSON.parse(event.data))
   },
-  methods: {
-    async handleTestRabbitMQEvent() {
-      try {
-        this.isLoading = true
-        const response = await this.$django_client.post('/test')
-        if (response.status === 200) {
-          this.showAlert = true
-        }
-        this.isLoading = false
-      } catch (e) {
-        this.errorMessage = `Could not send event: ${e}`
-        this.showError = true
-      }
-    },
-    async handleTestQuartBackend() {
-      try {
-        this.isLoading = true
-        const response = await this.$client.post('/test')
-        if (response.status === 200) {
-          this.showAlert = true
-        }
-        this.isLoading = false
-      } catch (e) {
-        this.errorMessage = `Could not contact quart API: ${e}`
-        this.showError = true
-      }
-    },
-    async handleTestQuartWebsocket() {
-      try {
-        this.ws.open()
-      } catch (e) {
-        this.errorMessage = `Could not connect to websocket: ${e}`
-        this.showError = true
-      }
-    }
+  onError() {
+    isWebsocket.value = false
+    showAlert.value = false
+  },
+  onDisconnected() {
+    isWebsocket.value = false
+    showAlert.value = false
   }
 })
+const eventData = ref<string>('')
+const errorMessage = ref<string>('')
+const showError = ref(false)
+
+const websocketOpened = computed(() => {
+  return ws.status.value === 'OPEN'
+})
+
+async function handleTestRabbitMQEvent() {
+  try {
+    isLoading.value = true
+    const response = await $django_client.post('/test')
+    if (response.status === 200) {
+      showAlert.value = true
+    }
+    isLoading.value = false
+  } catch (e) {
+    errorMessage.value = `Could not send event: ${e}`
+    showError.value = true
+  }
+}
+
+async function handleTestQuartBackend() {
+  try {
+    isLoading.value = true
+    const response = await $client.post('/test')
+    if (response.status === 200) {
+      showAlert.value = true
+    }
+    isLoading.value = false
+  } catch (e) {
+    errorMessage.value = `Could not contact quart API: ${e}`
+    showError.value = true
+  }
+}
+
+async function handleTestQuartWebsocket() {
+  try {
+    ws.open()
+  } catch (e) {
+    errorMessage.value = `Could not connect to websocket: ${e}`
+    showError.value = true
+  }
+}
 </script>
