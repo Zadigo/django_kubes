@@ -1,11 +1,17 @@
-import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { mount } from '@vue/test-utils'
+import { describe, expect, it, vi } from 'vitest'
 
 import App from '../src/App.vue'
 
 describe('App component', () => {
-  it.todo('should render correctly', async () => {
-    const { getByText } = render(App)
-    expect(getByText('Bienvenue sur Vite')).toBeTruthy()
+  it('should render correctly', async () => {
+    const wrapper = mount(App, {
+      global: {
+        mocks: {
+          useSeoMeta: vi.fn()
+        }
+      }
+    })
+    expect(wrapper.text()).toContain('Bienvenue sur Vite')
   })
 })
