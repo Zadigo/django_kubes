@@ -25,7 +25,7 @@ services:
       - traefik.http.routers.main_site.entrypoints=websecure
       - traefik.http.routers.main_site.rule=Host(`johnpm.fr`)
       - traefik.http.routers.main_site.tls=true
-      - traefik.http.routers.main_site.tls.certresolver=production
+      - traefik.http.routers.main_site.tls.certresolver=staging
       - traefik.http.services.main_site-service.loadbalancer.server.port=8000
       - traefik.http.routers.main_site.middlewares=https-redirect
       - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
@@ -45,7 +45,7 @@ services:
       - traefik.http.routers.quart.entrypoints=websecure
       - traefik.http.routers.quart.rule=Host(`api.johnpm.fr`)
       - traefik.http.routers.quart.tls=true
-      - traefik.http.routers.quart.tls.certresolver=production
+      - traefik.http.routers.quart.tls.certresolver=staging
       - traefik.http.services.quart-service.loadbalancer.server.port=5000
       - traefik.http.routers.quart.middlewares=https-redirect
       - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
@@ -68,15 +68,15 @@ services:
       - traefik.http.routers.frontend.entrypoints=websecure
       - traefik.http.routers.frontend.rule=Host(`app.johnpm.fr`)
       - traefik.http.routers.frontend.tls=true
-      - traefik.http.routers.frontend.tls.certresolver=production
+      - traefik.http.routers.frontend.tls.certresolver=staging
       - traefik.http.services.frontend-service.loadbalancer.server.port=80
       - traefik.http.routers.frontend.middlewares=https-redirect
       - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
       - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
     volumes:
       - ./frontend/dist/:/var/www/dist/
-      - ~/var/frontend_access.log:/var/log/nginx/access.log
-      - ~/var/frontend_error.log:/var/log/nginx/error.log
+      # - ~/var/frontend_access.log:/var/log/nginx/access.log
+      # - ~/var/frontend_error.log:/var/log/nginx/error.log
     networks:
       - kubes_network
 
@@ -88,7 +88,7 @@ services:
       - traefik.http.routers.otherfrontend.entrypoints=websecure
       - traefik.http.routers.otherfrontend.rule=Host(`app2.johnpm.fr`)
       - traefik.http.routers.otherfrontend.tls=true
-      - traefik.http.routers.otherfrontend.tls.certresolver=production
+      - traefik.http.routers.otherfrontend.tls.certresolver=staging
       - traefik.http.services.otherfrontend-service.loadbalancer.server.port=3000
       - traefik.http.routers.otherfrontend.middlewares=https-redirect
       - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
@@ -128,7 +128,7 @@ services:
       - traefik.http.routers.pgadmin.entrypoints=websecure
       - traefik.http.routers.pgadmin.rule=Host(`pgadmin.johnpm.fr`)
       - traefik.http.routers.pgadmin.tls=true
-      - traefik.http.routers.pgadmin.tls.certresolver=production
+      - traefik.http.routers.pgadmin.tls.certresolver=staging
       - traefik.http.services.pgadmin-service.loadbalancer.server.port=80
       - traefik.http.routers.pgadmin.middlewares=https-redirect
       - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
@@ -304,7 +304,7 @@ services:
       - traefik.http.routers.main_site.entrypoints=websecure
       - traefik.http.routers.main_site.rule=Host(`johnpm.fr`)
       - traefik.http.routers.main_site.tls=true
-      - traefik.http.routers.main_site.tls.certresolver=production
+      - traefik.http.routers.main_site.tls.certresolver=staging
       - traefik.http.services.main_site-service.loadbalancer.server.port=8010
       - traefik.http.routers.main_site.middlewares=https-redirect
       - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
@@ -320,9 +320,9 @@ services:
     networks:
       - kubes_network
 
-  celery:
+  second_site_celery:
     build: ./mycelery
-    container_name: celery_kubes
+    container_name: app_second_site_celery
     command: celery -A mycelery.celery_app worker --loglevel=info --logfile=celery.log
     env_file:
       - ./docker/environment/second_site.env
@@ -336,9 +336,9 @@ services:
     networks:
       - kubes_network
   
-  celerybeat:
+  second_site_beat:
     build: ./mycelery
-    container_name: celery_beat_kubes
+    container_name: app_second_site_beat
     command: celery -A mycelery.celery_app beat --loglevel=info
     env_file:
       - ./docker/environment/second_site.env
@@ -349,9 +349,9 @@ services:
     networks:
       - kubes_network
 
-  flower:
+  app_second_site_flower:
     build: ./mycelery
-    container_name: flower_kubes
+    container_name: app_second_site_flower
     command: celery -A mycelery.celery_app flower --loglevel=info
     labels:
       - "traefik.enable=true"
