@@ -4,7 +4,7 @@
       <div class="col-md-8 offset-md-2">
         <div class="card shadow-sm">
           <div class="card-body">
-            <h1 class="h4 text-center">
+            <h1 class="h4 text-center" @click="() => gtag('event', 'something', '')">
               {{ $t("Welcome to Vite") }}
             </h1>
           </div>
