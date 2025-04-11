@@ -25,6 +25,7 @@
     "globals": "^16.0.0",
     "mdb-ui-kit": "^7.2.0",
     "pinia": "^2.1.7",
+    "universal-cookie": "^8.0.1",
     "vue": "^3.4.37",
     "vue-i18n": "10",
     "vuefire": "^3.2.1",

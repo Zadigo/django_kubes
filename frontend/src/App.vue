@@ -4,7 +4,7 @@
       <div class="col-md-8 offset-md-2">
         <div class="card shadow-sm">
           <div class="card-body">
-            <h1 class="h4 text-center" @click="() => gtag('event', 'something', '')">
+            <h1 class="h4 text-center">
               {{ $t("Welcome to Vite") }}
             </h1>
           </div>
@@ -29,23 +29,32 @@
             </div>
           </div>
 
+          <div class="card-body">
+            <LoginBlock />
+          </div>
+
           <div class="card-footer d-flex gap-2">
             <button type="button" class="btn btn-secondary btn-rounded" @click="handleTestQuartBackend">
-              <IconLib icon="fa-solid:refresh" class="me-2" />
-              Load rabbit 1
+              <IconLib icon="fa-solid:link" class="me-2" />
+              Quart
             </button>
 
             <button :disabled="websocketOpened" type="button" class="btn btn-secondary btn-rounded" @click="handleTestQuartWebsocket">
               <div v-if="websocketOpened" class="spinner-grow me-2" style="width: 1rem; height: 1rem;" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
-              <IconLib v-else icon="fa-solid:refresh" class="me-2" />
-              Load rabbit 2
+              <IconLib v-else icon="fa-solid:link" class="me-2" />
+              Django WS
             </button>
 
             <button v-if="websocketOpened" type="button" class="btn btn-secondary btn-rounded" @click="ws.close(1000)">
               <IconLib icon="fa-solid:close" class="me-2" />
               Close rabbit 1
+            </button>
+
+            <button type="button" class="btn btn-secondary btn-rounded" @click="handleTestAuthentication">
+              <IconLib icon="fa-solid:link" class="me-2" />
+              Test authentication
             </button>
           </div>
         </div>
@@ -55,11 +64,14 @@
 </template>
 
 <script setup lang="ts">
-import { useAxiosClient } from '@/plugins'
+import { useAuthenticatedAxiosClient, useAxiosClient } from '@/plugins'
 import { useWebSocket } from '@vueuse/core'
 import { useSeoMeta } from '@unhead/vue'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useCookies } from '@vueuse/integrations/useCookies'
+
+import LoginBlock from './components/LoginBlock.vue'
 
 type WebsocketData = {
   state: boolean
@@ -110,6 +122,7 @@ const ws = useWebSocket('http://api.johnpm.fr/ws/test', {
   }
 })
 
+const { get } = useCookies(['access', 'refresh'])
 const { client } = useAxiosClient()
 
 const eventData = ref<string>('')
@@ -159,6 +172,23 @@ async function handleTestQuartWebsocket() {
     ws.open()
   } catch (e) {
     errorMessage.value = `Could not connect to websocket: ${e}`
+    showError.value = true
+  }
+}
+
+async function handleTestAuthentication() {
+  try {
+    const access = get('access')
+    const refresh = get('refresh')
+
+    const { authenticatedClient: client } = useAuthenticatedAxiosClient(access, refresh)
+    const response = await client.get('/schools/v1/test-authenticated')
+
+    if (response.status === 200) {
+      showAlert.value = true
+    }
+  } catch (e) {
+    errorMessage.value = `Could not contact quart API: ${e}`
     showError.value = true
   }
 }
