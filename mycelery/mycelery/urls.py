@@ -66,13 +66,13 @@ urlpatterns = [
         include('schools.api.urls')
     ),
     path(
+        'admin/',
+        admin.site.urls
+    ),
+    path(
         '',
         views.HomeView.as_view(),
         name='home'
-    ),
-    path(
-        'admin/',
-        admin.site.urls
     )
 ]
 

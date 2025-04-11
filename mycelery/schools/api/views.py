@@ -36,3 +36,15 @@ class School(GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         return Response({'status': True})
+
+
+class TestAuthenticated(GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        return Response({'status': True})
+
+
+class TestNoneAuthenticated(GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        return Response({'status': True})
