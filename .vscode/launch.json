@@ -1,0 +1,77 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        },
+        {
+            "name": "Django: Website",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}\\mycelery\\manage.py",
+            "cwd": "${workspaceFolder}\\mycelery",
+            "env": {},
+            "args": [
+                "runserver"
+            ],
+            "django": true
+        },
+        {
+            "type": "msedge",
+            "request": "launch",
+            "name": "vuejs:edge",
+            "url": "http://localhost:5173/",
+            "webRoot": "${workspaceFolder}/frontend/",
+            "preLaunchTask": "frontend:start",
+            "vueComponentPaths": [
+                "${workspaceFolder}/frontend/src/**/*.vue"
+            ],
+            "sourceMapPathOverrides": {
+                "/@fs/*": "${workspaceFolder}/*",
+                "/*": "${workspaceFolder}/*",
+                "/src/*": "${workspaceFolder}/frontend/src/*",
+                "vite:///src/*": "${workspaceFolder}/frontend/src/*"
+            },
+            "skipFiles": [
+                "${workspaceFolder}/frontend/node_modules/**/*.js",
+                "<node_internals>/**"
+            ]
+        },
+        {
+            "type": "msedge",
+            "request": "launch",
+            "name": "nuxtjs:edge",
+            "url": "http://localhost:3000/",
+            "webRoot": "${workspaceFolder}/otherfrontend/",
+            "preLaunchTask": "otherfrontend:start",
+            "vueComponentPaths": [
+                "${workspaceFolder}/otherfrontend/pages/**/*.vue",
+                "${workspaceFolder}/otherfrontend/components/**/*.vue",
+                "${workspaceFolder}/otherfrontend/layouts/**/*.vue"
+            ],
+            "sourceMapPathOverrides": {
+                "webpack:///./~/*": "${workspaceFolder}/otherfrontend/node_modules/*",
+                "webpack:///./*": "${workspaceFolder}/otherfrontend/*",
+                "webpack:///*": "*",
+                "webpack:///src/*": "${workspaceFolder}/otherfrontend/*",
+                "nuxt:////*": "${workspaceFolder}/otherfrontend/*",
+                "/_nuxt/*": "${workspaceFolder}/otherfrontend/.nuxt/*"
+            },
+            "skipFiles": [
+                "${workspaceFolder}/otherfrontend/node_modules/**/*.js",
+                "<node_internals>/**"
+            ]
+        }
+    ]
+}

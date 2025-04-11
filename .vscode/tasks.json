@@ -1,0 +1,32 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "npm",
+            "label": "frontend:start",
+            "script": "dev",
+            "detail": "Starts the frontend dashboard ${file}",
+            "options": {
+                "cwd": "${workspaceFolder}/frontend"
+            },
+            "isBackground": true,
+            "problemMatcher": [
+                "$vite",
+                "$eslint-stylish"
+            ]
+        },
+        {
+            "type": "npm",
+            "label": "otherfrontend:start",
+            "script": "dev",
+            "detail": "Starts the frontend dashboard ${file}",
+            "options": {
+                "cwd": "${workspaceFolder}/otherfrontend"
+            },
+            "isBackground": true,
+            "problemMatcher": [
+                "$eslint-stylish"
+            ]
+        }
+    ]
+}
