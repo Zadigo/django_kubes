@@ -3,11 +3,20 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   ssr: true,
+  sourcemap: true,
+
   routeRules: {
     '/': { ssr: true },
     '/django/celery': { ssr: true },
     '/django/kubes': { ssr: false }
   },
+
+  vite: {
+    build: {
+      sourcemap: true
+    }
+  },
+  
   modules: [
     '@nuxt/eslint',
     '@pinia/nuxt',
@@ -17,9 +26,11 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts',
     '@vueuse/nuxt'
   ],
+  
   css: [
     '~/assets/css/main.css'
   ],
+  
   runtimeConfig: {
     public: {
       prodDomain: '127.0.0.1',
@@ -36,11 +47,13 @@ export default defineNuxtConfig({
       firebaseProjectId: process.env.NUXT_FIREBASE_PROJECT_ID,
     }
   },
+
   eslint: {
     config: {
       stylistic: true
     }
   },
+  
   googleFonts: {
     families: {
       Roboto: {
@@ -48,6 +61,7 @@ export default defineNuxtConfig({
       }
     }
   },
+  
   i18n: {
     baseUrl: './',
     langDir: './locales',
@@ -77,6 +91,7 @@ export default defineNuxtConfig({
       }
     ]
   },
+  
   nitro: {
     storage: {
       redis: {
