@@ -3,9 +3,9 @@
     "tasks": [
         {
             "type": "npm",
-            "label": "frontend:start",
             "script": "dev",
-            "detail": "Starts the frontend dashboard ${file}",
+            "label": "npm: dev - frontend",
+            "detail": "Starts Vite",
             "options": {
                 "cwd": "${workspaceFolder}/frontend"
             },

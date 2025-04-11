@@ -33,7 +33,7 @@
             "name": "vuejs:edge",
             "url": "http://localhost:5173/",
             "webRoot": "${workspaceFolder}/frontend/",
-            "preLaunchTask": "frontend:start",
+            "preLaunchTask": "npm: dev - frontend",
             "vueComponentPaths": [
                 "${workspaceFolder}/frontend/src/**/*.vue"
             ],
