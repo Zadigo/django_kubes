@@ -1,8 +1,9 @@
-from datetime import timedelta
-import os
-import dotenv
-from pathlib import Path
 import mimetypes
+import os
+from datetime import timedelta
+from pathlib import Path
+
+import dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -340,6 +341,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 # Restframework
 # https://www.django-rest-framework.org/
+# https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
@@ -351,13 +353,15 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1440),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
     'SLIDING_TOKEN_LIFETIME': timedelta(days=30),
     'SLIDING_TOKEN_REFRESH_LIFETIME_LATE_USER': timedelta(days=1),
     'SLIDING_TOKEN_LIFETIME_LATE_USER': timedelta(days=30),
     'UPDATE_LAST_LOGIN': True,
-    'AUTH_HEADER_TYPES': ['Token']
+    'AUTH_HEADER_TYPES': ['Token'],
+    'AUDIENCE': 'mycelery',
+    'ISSUER': 'mycelery'
 }
 
 
