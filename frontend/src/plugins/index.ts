@@ -1,5 +1,5 @@
 import { App } from 'vue'
-import { useAxiosClient } from './client'
+import { useAuthenticatedAxiosClient } from './client'
 
 export * from './client'
 export * from './VueAnalytics'
@@ -9,7 +9,7 @@ import { createAnalytics } from './VueAnalytics'
 export default function installPlugins() {
   return {
     install(app: App) {
-      const { client } = useAxiosClient()
+      const { authenticatedClient: client } = useAuthenticatedAxiosClient()
       app.config.globalProperties.$djangoClient = client
 
       const plugin = createAnalytics({
