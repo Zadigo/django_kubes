@@ -69,7 +69,6 @@ import { useWebSocket } from '@vueuse/core'
 import { useSeoMeta } from '@unhead/vue'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useCookies } from '@vueuse/integrations/useCookies'
 
 import LoginBlock from './components/LoginBlock.vue'
 
@@ -122,7 +121,6 @@ const ws = useWebSocket('http://api.johnpm.fr/ws/test', {
   }
 })
 
-const { get } = useCookies(['access', 'refresh'])
 const { client } = useAxiosClient()
 
 const eventData = ref<string>('')
@@ -178,10 +176,7 @@ async function handleTestQuartWebsocket() {
 
 async function handleTestAuthentication() {
   try {
-    const access = get('access')
-    const refresh = get('refresh')
-
-    const { authenticatedClient: client } = useAuthenticatedAxiosClient(access, refresh)
+    const { authenticatedClient: client } = useAuthenticatedAxiosClient()
     const response = await client.get('/schools/v1/test-authenticated')
 
     if (response.status === 200) {

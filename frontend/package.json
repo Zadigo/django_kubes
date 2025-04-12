@@ -20,6 +20,7 @@
     "@vueuse/integrations": "^10.9.0",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
+    "buffer": "^6.0.3",
     "dayjs": "^1.11.10",
     "eslint-plugin-vue": "^9.22.0",
     "globals": "^16.0.0",
