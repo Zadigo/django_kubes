@@ -15,11 +15,8 @@
 </template>
 
 <script setup lang="ts">
-import { type LoginApiResponse, useAxiosClient } from '@/plugins'
-import { useCookies } from '@vueuse/integrations/useCookies'
+import { useAxiosClient } from '@/plugins'
 import { ref } from 'vue'
-
-const { set } = useCookies(['access', 'refresh'])
 
 const showError = ref(false)
 const errorMessage = ref<string>('')
@@ -27,17 +24,12 @@ const requestData = ref<{ username: string, password: string }>({ username: '', 
 
 async function handleLogin() {
   try {
-    const { authenticatedClient: client } = useAxiosClient()
-    const response = await client.post<LoginApiResponse>('/auth/v1/token', {
-      username: requestData.value.username,
-      password: requestData.value.password
+    const { login } = useAxiosClient()
+    login('/auth/v1/token', requestData.value, (payload) => {
+      console.log(payload.value)
+      requestData.value.username = ''
+      requestData.value.password = ''
     })
-
-    set('access', response.data.access)
-    set('refresh', response.data.refresh)
-
-    requestData.value.username = ''
-    requestData.value.password = ''
   } catch (e) {
     errorMessage.value = `Could not contact quart API: ${e}`
     showError.value = true
