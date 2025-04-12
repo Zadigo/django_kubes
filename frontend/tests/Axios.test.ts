@@ -1,6 +1,24 @@
-import type { AxiosInstance } from 'axios'
+import { type AxiosInstance } from 'axios'
 import { afterEach, beforeEach, describe, expect, expectTypeOf, it, vi } from 'vitest'
 import { createSimpleClient, getDomain, inProduction, useAuthenticatedAxiosClient, useAxiosClient } from '../src/plugins'
+
+// vi.mock('axios')
+
+// vi.mock('vueuse', () => {
+//   return {
+//     useCookies: () => {
+//       return {
+//         get: vi.fn(() => 'refresh-token'),
+//         set: vi.fn()
+//       }
+//     },
+//     useLocalStorage: () => {
+//       return {
+//         get: vi.fn(() => 'access-token')
+//       }
+//     }
+//   }
+// })
 
 describe('test development Axios modules', () => {
   beforeEach(() => {
@@ -39,7 +57,7 @@ describe('test development Axios modules', () => {
   })
 
   it('composable useAuthenticatedAxiosClient should return client', () => {
-    const { authenticatedClient } = useAuthenticatedAxiosClient('', '')
+    const { authenticatedClient } = useAuthenticatedAxiosClient()
     expect(authenticatedClient).toHaveProperty('get')
     expect(authenticatedClient).toHaveProperty('post')
     expectTypeOf(authenticatedClient).toEqualTypeOf<AxiosInstance>()
@@ -69,3 +87,46 @@ describe('test production Axios modules', () => {
     await expect(proxyRequest()).resolves.toEqual(expectedData)
   })
 })
+
+// describe('test authenticated Axios modules', () => {
+//   beforeEach(() => {
+//     vi.stubEnv('NODE_ENV', 'production')
+//     vi.stubEnv('VITE_PROD_URL', 'example.com')
+//   })
+
+//   afterEach(() => {
+//     vi.unstubAllEnvs()
+//     vi.clearAllMocks()
+//   })
+
+//   it('client should resolve', async () => {
+//     const { authenticatedClient } = useAuthenticatedAxiosClient()
+//     const expectedData: JWTPayload = {
+//       iat: 0,
+//       exp: 0,
+//       user_id: 0,
+//       aud: 'string',
+//       iss: 'string',
+//       token_type: 'string',
+//       jti: 'string'
+//     }
+
+//     async function proxyRequest() {
+//       const mockedAxios = vi.mocked(axios)
+//       mockedAxios.create.mockReturnValue(authenticatedClient)
+
+//       mockedAxios.interceptors.request.use.mockImplementation(
+//         (config: AxiosRequestConfig) => config
+//       )
+
+//       mockedAxios.interceptors.response.use.mockImplementation(
+//         (response: AxiosResponse) => response
+//       )
+
+//       const response = await authenticatedClient.get('/auth/v1/token')
+//       return response.data
+//     }
+
+//     await expect(proxyRequest()).resolves.toEqual(expectedData)
+//   })
+// })
