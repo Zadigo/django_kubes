@@ -13,7 +13,7 @@ importers:
         version: 13.0.0(vue@3.5.13(typescript@5.8.2))
       '@vueuse/integrations':
         specifier: ^13.0.0
-        version: 13.0.0(axios@1.8.4)(fuse.js@7.1.0)(vue@3.5.13(typescript@5.8.2))
+        version: 13.0.0(axios@1.8.4)(fuse.js@7.1.0)(universal-cookie@8.0.1)(vue@3.5.13(typescript@5.8.2))
       axios:
         specifier: ^1.8.4
         version: 1.8.4
@@ -29,6 +29,9 @@ importers:
       pinia:
         specifier: ^3.0.1
         version: 3.0.1(typescript@5.8.2)(vue@3.5.13(typescript@5.8.2))
+      universal-cookie:
+        specifier: ^8.0.1
+        version: 8.0.1
       vue:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.8.2)
@@ -4263,6 +4266,9 @@ packages:
     resolution: {integrity: sha512-oVUL7PSlyVV3QRhsdcyYEMaDX8HJyS/CnUonEJTYA3//bWO+o/4gG8F7auGWWWkrrxBQBYOO8DKe+C53ktpRXw==}
     engines: {node: '>=18.12.0'}
 
+  universal-cookie@8.0.1:
+    resolution: {integrity: sha512-B6ks9FLLnP1UbPPcveOidfvB9pHjP+wekP2uRYB9YDfKVpvcjKgy1W5Zj+cEXJ9KTPnqOKGfVDQBmn8/YCQfRg==}
+
   universalify@2.0.1:
     resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}
     engines: {node: '>= 10.0.0'}
@@ -6594,7 +6600,7 @@ snapshots:
       '@vueuse/shared': 13.0.0(vue@3.5.13(typescript@5.8.2))
       vue: 3.5.13(typescript@5.8.2)
 
-  '@vueuse/integrations@13.0.0(axios@1.8.4)(fuse.js@7.1.0)(vue@3.5.13(typescript@5.8.2))':
+  '@vueuse/integrations@13.0.0(axios@1.8.4)(fuse.js@7.1.0)(universal-cookie@8.0.1)(vue@3.5.13(typescript@5.8.2))':
     dependencies:
       '@vueuse/core': 13.0.0(vue@3.5.13(typescript@5.8.2))
       '@vueuse/shared': 13.0.0(vue@3.5.13(typescript@5.8.2))
@@ -6602,6 +6608,7 @@ snapshots:
     optionalDependencies:
       axios: 1.8.4
       fuse.js: 7.1.0
+      universal-cookie: 8.0.1
 
   '@vueuse/metadata@13.0.0': {}
 
@@ -9475,6 +9482,10 @@ snapshots:
       tinyglobby: 0.2.12
       unplugin: 2.2.2
       unplugin-utils: 0.2.4
+
+  universal-cookie@8.0.1:
+    dependencies:
+      cookie: 1.0.2
 
   universalify@2.0.1: {}
 

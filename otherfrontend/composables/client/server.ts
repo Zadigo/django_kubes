@@ -40,7 +40,7 @@ export function useServerAxiosClient(access?: string | undefined, refresh?: stri
 
             try {
               const authClient = axios.create({ baseURL: getDomain() })
-              const response = await authClient.post<RefreshApiResposne>('/auth/v1/refresh', { refresh: refresh })
+              const response = await authClient.post<RefreshApiResposne>('/auth/v1/refresh/', { refresh })
 
               if (refreshCallback) {
                 refreshCallback(response.data.access)
@@ -60,7 +60,7 @@ export function useServerAxiosClient(access?: string | undefined, refresh?: stri
       }
     )
 
-    return client
+    return newClient
   }
 
   const authenticatedClient = addInterceptors(client)

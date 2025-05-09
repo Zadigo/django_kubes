@@ -43,19 +43,23 @@ jwtpatterns = [
 
 urlpatterns = [
     re_path(
-        r'^api/schema/redoc$',
+        r'^api/schema/$',
         drf_views.SpectacularAPIView.as_view(),
+        name='schema'
+    ),
+    re_path(
+        r'^api/schema/redoc$',
+        drf_views.SpectacularRedocView.as_view(),
         name='redoc'
     ),
     re_path(
         r'^api/schema/swagger-ui$',
         drf_views.SpectacularSwaggerView.as_view(),
-        name='swagger'
+        name='swagger-ui'
     ),
     path(
         'api/rest/',
-        include('rest_framework.urls'),
-        name='rest_framework'
+        include('rest_framework.urls')
     ),
     path(
         'auth/v1/',

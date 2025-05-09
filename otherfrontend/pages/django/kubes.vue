@@ -19,9 +19,11 @@ useHead({
   title: 'Kubes'
 })
 
-const { data } = useFetch('/api/celebrities', {
+const { data } = useFetch('/api/schools', {
   transform(data: TestApiResponse) {
     return data
   }
 })
+
+useFetch('/api/authenticated')
 </script>

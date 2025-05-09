@@ -1,4 +1,5 @@
 import { reactify } from '@vueuse/core'
+import { useCookies } from '@vueuse/integrations/useCookies'
 import axios, { AxiosError, type AxiosInstance, type InternalAxiosRequestConfig } from 'axios'
 import { Buffer } from 'buffer'
 import type { ComputedRef } from 'vue'
@@ -51,7 +52,7 @@ export function getDomain(altDomain?: string | null | undefined, websocket: bool
   if (inProduction()) {
     // Use the alternative domain (which is the production domain)
     // only in production. Locally, we use 127.0.0.1 or localhost
-    domain = altDomain || useRuntimeConfig().public.prodDomain
+    domain = altDomain || import.meta.env.VITE_PROD_URL
   }
 
   let loc = websocket ? 'ws' : 'http'
@@ -142,13 +143,13 @@ function authenticationInterceptors(client: AxiosInstance, access?: string | nul
           originalRequest._retry = true
 
           try {
-            const access = useCookie('access', { secure: true, sameSite: 'strict' })
-            const refresh = useCookie('refresh', { secure: true, sameSite: 'strict' })
+            const { get, set } = useCookies(['access', 'refresh'])
+            const refresh = get<string | undefined>('refresh')
 
             const authClient = axios.create({ baseURL: getDomain() })
-            const response = await authClient.post<RefreshApiResposne>('/auth/v1/refresh', { refresh: refresh.value })
+            const response = await authClient.post<RefreshApiResposne>('/auth/v1/refresh/', { refresh })
 
-            access.value = response.data.access
+            set('access', response.data.access, { secure: true, sameSite: 'strict' })
 
             if (refreshCallback) {
               refreshCallback(response.data.access)
@@ -190,9 +191,8 @@ export function useAxiosClient(altDomain?: string | null | undefined, port: numb
   const client = createSimpleClient(altDomain, port)
   const authenticatedClient = authenticationInterceptors(client)
 
-  const access = useCookie('access', { secure: true, sameSite: 'strict' })
-  const refresh = useCookie('refresh', { secure: true, sameSite: 'strict' })
-  
+  const { set } = useCookies(['access', 'refresh'])
+
   /**
    * Function used to login a user and store the access and refresh tokens
    * in the cookies. The access token is used to authenticate the user
@@ -205,8 +205,8 @@ export function useAxiosClient(altDomain?: string | null | undefined, port: numb
   async function login(endpoint: string, data: { username: string, password: string }, callback?: (payload: ComputedRef<JWTPayload>) => void) {
     const response = await client.post<LoginApiResponse>(endpoint, data)
 
-    access.value = response.data.access
-    refresh.value = response.data.refresh
+    set('access', response.data.access, { secure: true, sameSite: 'strict' })
+    set('refresh', response.data.refresh, { secure: true, sameSite: 'strict' })
 
     const userData = reactify(parseJwt)(response.data.access)
 
@@ -222,8 +222,8 @@ export function useAxiosClient(altDomain?: string | null | undefined, port: numb
    * @param callback Callback function used to redirect the user after logout
    */
   async function logout(callback?: () => void) {
-    access.value = undefined
-    refresh.value = undefined
+    set('access', '', { secure: true, sameSite: 'strict' })
+    set('refresh', '', { secure: true, sameSite: 'strict' })
 
     if (callback) {
       callback()
@@ -249,8 +249,8 @@ export function useAxiosClient(altDomain?: string | null | undefined, port: numb
 export function useAuthenticatedAxiosClient(access?: string | null | undefined, altDomain?: string | null | undefined, port: number = 8000) {
   const { client } = useAxiosClient(altDomain, port)
 
-  const cachedAccessToken = useCookie('acess')
-  const accessToken = access || cachedAccessToken.value
+  const { get } = useCookies(['access'])
+  const accessToken = access || get<string | undefined>('access')
 
   const authenticatedClient = authenticationInterceptors(client, accessToken)
 
