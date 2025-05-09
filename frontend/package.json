@@ -15,6 +15,7 @@
   "dependencies": {
     "@date-io/dayjs": "^3.2.0",
     "@intlify/unplugin-vue-i18n": "^6.0.8",
+    "@sentry/vite-plugin": "^3.4.0",
     "@sentry/vue": "^9.17.0",
     "@stylistic/eslint-plugin": "^4.2.0",
     "@tailwindcss/vite": "^4.1.6",

@@ -192,8 +192,30 @@ async function handleTestAuthentication() {
   }
 }
 
-const { open, getStore } = useIndexDatabase()
-open()
-console.log(getStore('celebrities', 'readonly'))
+// const { getStore, open, add } = useIndexDatabase('myDb', 1, [
+//   {
+//     name: 'celebrities',
+//     keyPath: 'id',
+//     autoIncrement: true,
+//     indexes: [
+//       { name: 'celebrityId', keyPath: 'celebrityId', options: { unique: true } },
+//       { name: 'name', keyPath: 'name' }
+//     ]
+//   }
+// ])
 
+// async function google() {
+//   await open()
+//   console.log('setup', getStore('test-db', 'readonly'))
+//   add('celebrities')
+// }
+
+// google()
+
+// const { state, isReady } = useAsyncState(async () => {
+//   await open()
+//   console.log('getStore', getStore('test-db', 'readonly'))
+//   await add()
+// }, null, { immediate: true })
+// console.log('state', state.value, isReady.value)
 </script>

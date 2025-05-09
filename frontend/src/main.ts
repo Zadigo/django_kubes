@@ -4,6 +4,7 @@ import { Icon } from '@iconify/vue'
 import { createHead } from '@unhead/vue/client'
 import { createI18n } from 'vue-i18n'
 import { useStorage } from '@vueuse/core'
+import * as Sentry from '@sentry/vue'
 
 import App from './App.vue'
 import installPlugins from './plugins'
@@ -30,6 +31,12 @@ const i18n = createI18n({
   legacy: false,
   locale: locale.value,
   messages
+})
+
+Sentry.init({
+  app,
+  dsn: 'https://0d7b530ddb3190e1554ef2a5775f7889@o307076.ingest.us.sentry.io/4509289181544448',
+  sendDefaultPii: true
 })
 
 app.use(pinia)

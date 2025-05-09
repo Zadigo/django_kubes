@@ -5,6 +5,7 @@ import { defineConfig, loadEnv } from 'vite'
 import { fileURLToPath } from 'url'
 import { VitePWA } from 'vite-plugin-pwa'
 import { unheadVueComposablesImports } from '@unhead/vue'
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 import vue from '@vitejs/plugin-vue'
 import eslint from 'vite-plugin-eslint'
@@ -13,7 +14,6 @@ import unheadAddons from '@unhead/addons/vite'
 import unpluginViteComponents from 'unplugin-vue-components/vite'
 import tailwind from '@tailwindcss/vite'
 import autoImport from 'unplugin-auto-import/vite'
-
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -40,6 +40,11 @@ export default defineConfig(({ mode }) => {
       eslint(),
       unheadAddons(),
       tailwind(),
+      sentryVitePlugin({
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+        org: 'jpm-holdings',
+        project: 'javascript-vue'
+      }),
       unpluginViteComponents({
         deep: true,
         dts: 'src/types/components.d.ts',
