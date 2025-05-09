@@ -64,14 +64,6 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthenticatedAxiosClient, useAxiosClient } from '@/plugins'
-import { useWebSocket } from '@vueuse/core'
-import { useSeoMeta } from '@unhead/vue'
-import { computed, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
-
-import LoginBlock from './components/LoginBlock.vue'
-
 type WebsocketData = {
   state: boolean
 }
@@ -97,9 +89,9 @@ const urls = [
   }
 ]
 
-const isLoading = ref(false)
-const showAlert = ref(false)
-const isWebsocket = ref(false)
+const isLoading = ref<boolean>(false)
+const showAlert = ref<boolean>(false)
+const isWebsocket = ref<boolean>(false)
 const websocketCounter = ref<WebsocketData[]>([])
 
 const ws = useWebSocket('http://api.johnpm.fr/ws/test', {
@@ -125,12 +117,15 @@ const { client } = useAxiosClient()
 
 const eventData = ref<string>('')
 const errorMessage = ref<string>('')
-const showError = ref(false)
+const showError = ref<boolean>(false)
 
 const websocketOpened = computed(() => {
   return ws.status.value === 'OPEN'
 })
 
+/**
+ *
+ */
 async function handleTestRabbitMQEvent() {
   try {
     isLoading.value = true
@@ -148,6 +143,9 @@ async function handleTestRabbitMQEvent() {
   }
 }
 
+/**
+ *
+ */
 async function handleTestQuartBackend() {
   try {
     isLoading.value = true
@@ -165,6 +163,9 @@ async function handleTestQuartBackend() {
   }
 }
 
+/**
+ *
+ */
 async function handleTestQuartWebsocket() {
   try {
     ws.open()
@@ -174,6 +175,9 @@ async function handleTestQuartWebsocket() {
   }
 }
 
+/**
+ *
+ */
 async function handleTestAuthentication() {
   try {
     const { authenticatedClient: client } = useAuthenticatedAxiosClient()
@@ -187,4 +191,9 @@ async function handleTestAuthentication() {
     showError.value = true
   }
 }
+
+const { open, getStore } = useIndexDatabase()
+open()
+console.log(getStore('celebrities', 'readonly'))
+
 </script>

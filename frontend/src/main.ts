@@ -17,7 +17,15 @@ const app = createApp(App)
 
 const locale = useStorage('locale', 'fr-FR')
 const pinia = createPinia()
-const head = createHead()
+const head = createHead({
+  init: [
+    {
+      title: '...',
+      titleTemplate: '%s | Vite',
+      htmlAttrs: { lang: 'fr' }
+    }
+  ]
+})
 const i18n = createI18n({
   legacy: false,
   locale: locale.value,

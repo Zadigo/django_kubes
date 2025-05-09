@@ -1,13 +1,10 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "baseUrl": "./",
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "types": [
-      "@intlify/unplugin-vue-i18n/messages"
-    ],
     "paths": {
       "@/*": [
         "src/*"
@@ -18,7 +15,11 @@
     }
   },
   "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }

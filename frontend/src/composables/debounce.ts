@@ -2,7 +2,7 @@
  * A custom hook that provides a debounce function to limit the
  * rate at which a function can be called
  */
-export function useDebounce() {
+export function useSimpleDebounce() {
   /**
     * A function that creates a debounced version of the provided function
     *

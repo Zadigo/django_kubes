@@ -4,6 +4,7 @@ import type { School } from '~/types'
 export default defineCachedEventHandler(async event => {
     const access = getCookie(event, 'access')
     const refresh = getCookie(event, 'refresh')
+    
     const { client } = useServerAxiosClient(access, refresh, (token) => {
         setCookie(event, 'access', token)
     }, () => {
