@@ -8,7 +8,10 @@ export default {
   ],
   theme: {
     extend: {
-      fontFamily: {},
+      fontFamily: {
+        sans: 'var(--font-sans)',
+        mono: 'var(--font-mono)'
+      },
       colors: {},
       screens: {}
     }
