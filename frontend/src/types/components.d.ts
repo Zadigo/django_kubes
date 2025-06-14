@@ -9,10 +9,11 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BootstrapWrapper: typeof import('./../components/BootstrapWrapper.vue')['default']
-    Card: typeof import('./../components/volt/Card.vue')['default']
+    Card: typeof import('../components/volt/VoltCard.vue')['default']
     LoginBlock: typeof import('./../components/LoginBlock.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    VoltCard: typeof import('./../components/volt/VoltCard.vue')['default']
     VoltWrapper: typeof import('./../components/VoltWrapper.vue')['default']
   }
 }

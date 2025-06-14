@@ -1,13 +1,13 @@
 <template>
   <section id="volt">
-    <div class="px-20">
-      <Card>
+    <div class="px-20 max-w-xl mx-auto">
+      <VoltCard>
         <template #content>
-          <div class="text-5xl">
+          <div class="text-5xl font-bold text-center">
             Volt
           </div>
         </template>
-      </Card>
+      </VoltCard>
     </div>
   </section>
 </template>

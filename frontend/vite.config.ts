@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url'
 import { VitePWA } from 'vite-plugin-pwa'
 import { unheadVueComposablesImports } from '@unhead/vue'
 import { sentryVitePlugin } from '@sentry/vite-plugin'
+import { PrimeVueResolver } from 'unplugin-vue-components/resolvers'
 
 import vue from '@vitejs/plugin-vue'
 import eslint from 'vite-plugin-eslint'
@@ -48,6 +49,11 @@ export default defineConfig(({ mode }) => {
       unpluginViteComponents({
         deep: true,
         dts: 'src/types/components.d.ts',
+        resolvers: [
+          PrimeVueResolver({
+            prefix: 'Volt'
+          })
+        ],
         dirs: [
           'src/components',
           'src/layouts'
