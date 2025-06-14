@@ -5,7 +5,7 @@
         <div class="card shadow-sm">
           <div class="card-body">
             <h1 class="h4 text-center">
-              {{ $t("Welcome to Vite") }}
+              Welcome to Vite
             </h1>
           </div>
 
@@ -19,7 +19,7 @@
               {{ errorMessage }}
             </div>
 
-            <input v-model="eventData" type="text" class="form-control mb-3 p-3" :placeholder="$t('Test Rabbit MQ events')" @keypress.enter="handleTestRabbitMQEvent">
+            <input v-model="eventData" type="text" class="form-control mb-3 p-3" placeholder="Test Rabbit MQ events" @keypress.enter="handleTestRabbitMQEvent">
 
             <div class="list-group">
               <a v-for="(item, i) in urls" :key="i" :href="item.url" class="list-group-item list-group-item-action p-3">

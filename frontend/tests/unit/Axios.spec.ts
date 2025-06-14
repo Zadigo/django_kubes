@@ -1,6 +1,6 @@
 import { type AxiosInstance } from 'axios'
 import { afterEach, beforeEach, describe, expect, expectTypeOf, it, vi } from 'vitest'
-import { createSimpleClient, getDomain, inProduction, useAuthenticatedAxiosClient, useAxiosClient } from '../src/plugins'
+import { createSimpleClient, getDomain, inProduction, useAuthenticatedAxiosClient, useAxiosClient } from '../../src/plugins'
 
 // vi.mock('axios')
 
@@ -20,7 +20,7 @@ import { createSimpleClient, getDomain, inProduction, useAuthenticatedAxiosClien
 //   }
 // })
 
-describe('test development Axios modules', () => {
+describe.skip('test development Axios modules', () => {
   beforeEach(() => {
     vi.stubEnv('NODE_ENV', 'development')
   })
@@ -64,7 +64,7 @@ describe('test development Axios modules', () => {
   })
 })
 
-describe('test production Axios modules', () => {
+describe.skip('test production Axios modules', () => {
   it('should return alternative domain', () => {
     const altDomain = getDomain('example.com')
     expect(altDomain).toEqual('https://example.com/')

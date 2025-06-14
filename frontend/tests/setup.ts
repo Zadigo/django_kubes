@@ -6,6 +6,9 @@ vi.mock('vue-i18n', () => ({
   })
 }))
 
-vi.mock('@unhead/vue', () => ({
-  useSeoMeta: vi.fn()
-}))
+vi.mock('@unhead/vue', () => {
+  return {
+    useHead: vi.fn(),
+    useSeoMeta: vi.fn()
+  }
+})
