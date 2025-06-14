@@ -13,6 +13,7 @@ declare module 'vue' {
     LoginBlock: typeof import('./../components/LoginBlock.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    VoltButton: typeof import('./../components/volt/VoltButton.vue')['default']
     VoltCard: typeof import('./../components/volt/VoltCard.vue')['default']
     VoltWrapper: typeof import('./../components/VoltWrapper.vue')['default']
   }

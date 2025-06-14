@@ -10,6 +10,10 @@
           <p class="leading-7 font-light">
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corrupti culpa, eligendi nesciunt quae corporis a, illo reprehenderit sunt iste praesentium facilis pariatur nisi, repellat blanditiis laborum quam. Aperiam, facere totam?
           </p>
+
+          <VoltButton class="mt-5">
+            Press me
+          </VoltButton>
         </template>
       </VoltCard>
     </div>
