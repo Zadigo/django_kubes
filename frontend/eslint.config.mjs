@@ -11,7 +11,7 @@ export default defineConfig([
     '**/*.d.ts',
     '**/coverage/**',
     '**/dist/**',
-    '**/src/volt/**',
+    '**/src/components/volt/**',
     '**/src/components/ui/**'
   ]),
 
@@ -33,7 +33,10 @@ export default defineConfig([
       languageOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
-        globals: globals.browser,
+        globals: {
+          ...globals.browser,
+          ...globals.node
+        },
         parserOptions: {
           parser: typescriptEslint.parser,
           projectService: true,

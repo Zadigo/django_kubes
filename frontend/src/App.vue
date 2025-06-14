@@ -1,66 +1,8 @@
 <template>
-  <div class="container">
-    <div class="row my-5">
-      <div class="col-md-8 offset-md-2">
-        <div class="card shadow-sm">
-          <div class="card-body">
-            <h1 class="h4 text-center">
-              Welcome to Vite
-            </h1>
-          </div>
-
-          <div class="card-body">
-            <div v-if="showAlert" class="alert alert-success">
-              <span v-if="isWebsocket">Rabbit loaded via websocket</span>
-              <span v-else>Rabbit loaded via API</span>
-            </div>
-
-            <div v-if="showError" class="alert alert-danger">
-              {{ errorMessage }}
-            </div>
-
-            <input v-model="eventData" type="text" class="form-control mb-3 p-3" placeholder="Test Rabbit MQ events" @keypress.enter="handleTestRabbitMQEvent">
-
-            <div class="list-group">
-              <a v-for="(item, i) in urls" :key="i" :href="item.url" class="list-group-item list-group-item-action p-3">
-                <IconLib :icon="item.icon" class="me-2" />
-                {{ item.title }}
-              </a>
-            </div>
-          </div>
-
-          <div class="card-body">
-            <LoginBlock />
-          </div>
-
-          <div class="card-footer d-flex gap-2">
-            <button type="button" class="btn btn-secondary btn-rounded" @click="handleTestQuartBackend">
-              <IconLib icon="fa-solid:link" class="me-2" />
-              Quart
-            </button>
-
-            <button :disabled="websocketOpened" type="button" class="btn btn-secondary btn-rounded" @click="handleTestQuartWebsocket">
-              <div v-if="websocketOpened" class="spinner-grow me-2" style="width: 1rem; height: 1rem;" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-              <IconLib v-else icon="fa-solid:link" class="me-2" />
-              Django WS
-            </button>
-
-            <button v-if="websocketOpened" type="button" class="btn btn-secondary btn-rounded" @click="ws.close(1000)">
-              <IconLib icon="fa-solid:close" class="me-2" />
-              Close rabbit 1
-            </button>
-
-            <button type="button" class="btn btn-secondary btn-rounded" @click="handleTestAuthentication">
-              <IconLib icon="fa-solid:link" class="me-2" />
-              Test authentication
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <section id="site">
+    <BootstrapWrapper @rabbit-mq="handleTestRabbitMQEvent" @quart="handleTestQuartBackend" @quart-ws="handleTestQuartWebsocket" @login="handleTestAuthentication" />
+    <VoltWrapper />
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -73,21 +15,6 @@ useSeoMeta({
   titleTemplate: '%s | Frontend',
   description: 'Some simple description'
 })
-
-const { t } = useI18n()
-
-const urls = [
-  {
-    icon: 'fa-solid:link',
-    title: t('Main site'),
-    url: 'http://johnpm.fr'
-  },
-  {
-    icon: 'fa-solid:database',
-    title: 'Postgres',
-    url: 'http://postgres.johnpm.fr'
-  }
-]
 
 const isLoading = ref<boolean>(false)
 const showAlert = ref<boolean>(false)
@@ -122,6 +49,9 @@ const showError = ref<boolean>(false)
 const websocketOpened = computed(() => {
   return ws.status.value === 'OPEN'
 })
+
+provide('websocketOpened', websocketOpened)
+provide('eventData', eventData)
 
 /**
  *

@@ -4,14 +4,15 @@ import { Icon } from '@iconify/vue'
 import { createHead } from '@unhead/vue/client'
 import { createI18n } from 'vue-i18n'
 import { useStorage } from '@vueuse/core'
-import * as Sentry from '@sentry/vue'
 
 import App from './App.vue'
 import installPlugins from './plugins'
 import messages from '@intlify/unplugin-vue-i18n/messages'
+import PrimeVue from 'primevue/config' // Optional: Volt
+import * as Sentry from '@sentry/vue'
 
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'mdb-ui-kit/css/mdb.min.css'
+// import 'bootstrap/dist/css/bootstrap.min.css' // Optional: Bootstrap
+// import 'mdb-ui-kit/css/mdb.min.css' // Optional: Bootstrap
 import './style.css'
 
 const app = createApp(App)
@@ -42,6 +43,7 @@ Sentry.init({
 app.use(pinia)
 app.use(head)
 app.use(i18n)
+app.use(PrimeVue, { unstyled: true }) // Optional: Volt
 app.use(installPlugins())
 app.component('IconLib', Icon)
 app.mount('#app')
