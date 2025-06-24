@@ -45,10 +45,10 @@
           <VoltInputText id="username" v-model="requestData.username" type="email" autocomplete="username" placeholder="Username" required />
           <VoltInputText id="password" v-model="requestData.password" type="password" autocomplete="current-password" placeholder="Password" required />
 
-          <VoltButton type="button" @click="handleLogin">
+          <VoltButton @click="handleLogin">
             {{ $t("Test login") }}
           </VoltButton>
-          <VoltButton v-if="authenticated" type="button" @click="handleLogout">
+          <VoltButton v-if="authenticated" @click="handleLogout">
             {{ $t("Logout") }}
           </VoltButton>
         </form>
@@ -69,6 +69,9 @@ const requestData = ref<{ username: string, password: string }>({
   password: ''
 })
 
+/**
+ *
+ */
 async function handleLogin() {
   try {
     const data = await login(requestData.value.username, requestData.value.password)
@@ -78,6 +81,9 @@ async function handleLogin() {
   }
 }
 
+/**
+ *
+ */
 async function handleLogout() {
   await logout()
 }
