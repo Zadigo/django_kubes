@@ -56,11 +56,8 @@
 </template>
 
 <script setup lang="ts">
-import { useAxiosClient } from '~/composables/client'
-
 useHead({ title: 'Home' })
 
-const { login, logout } = useAxiosClient()
 const authenticated = useState('authenticated', () => false)
 
 const requestData = ref<{ username: string, password: string }>({

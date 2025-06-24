@@ -1,17 +1,17 @@
 <template>
   <VoltCtonainer id="school" class="w-4/6">
     <div class="py-5">
-      <button v-if="websocketConnected" type="button" class="text-white uppercase bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" @click="getSchools">
+      <VoltButton v-if="websocketConnected" @click="getSchools">
         {{ $t("Get schools") }}
-      </button>
+      </VoltButton>
       
-      <button v-if="websocketConnected" type="button" class="text-white uppercase bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" @click="ws.close()">
+      <VoltButton v-if="websocketConnected" @click="ws.close()">
         {{ $t("Disconnect to websocket") }}
-      </button>
+      </VoltButton>
 
-      <button v-else type="button" class="text-white uppercase bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" @click="ws.open()">
+      <VoltButton v-else @click="ws.open()">
           {{ $t("Connect to websocket") }}
-      </button>
+      </VoltButton>
     </div>
 
     <div class="grid grid-cols-4 grid-rows-1 gap-2">
@@ -30,7 +30,6 @@
 
 <script setup lang="ts">
 import { useWebSocket } from '@vueuse/core'
-import { getWebsocketUrl } from '~/composables/client'
 import type { School } from '~/types'
 
 interface WebsocketMessage {
@@ -42,7 +41,7 @@ useHead({
   title: 'Celery'
 })
 
-const { $djangoClient } = useNuxtApp()
+const { $client } = useNuxtApp()
 
 const { data } = useFetch('/api/schools', {
   transform(data: School[]) {
@@ -56,23 +55,19 @@ if (data.value) {
   items.value = data.value
 }
 
+const { sendMessage, parseMessage } = useWebsocketUtilities()
 
-function sendMessage(action: string, data?: Record<string, string>) {
-  const template = { action }
-  if (data) {
-    Object.assign(template, data)
-  }
-  return JSON.stringify(template)
-}
-
-const ws = useWebSocket<School[]>(getWebsocketUrl('ws/government'), {
+/**
+ *
+ */
+const ws = useWebSocket<School[]>('ws://127.0.0.1:8000/ws/government', {
   immediate: false,
   onConnected() {
     console.log('Connected')
   },
   onMessage(_ws, event) {
-    const data = JSON.parse(event.data) as WebsocketMessage
-    
+    const data = parseMessage<WebsocketMessage>(event.data)
+
     if (data.action === 'connection') {
       // Do something
     }
@@ -91,15 +86,23 @@ const websocketConnected = computed(() =>  {
   return ws.status.value === 'OPEN'
 })
 
+/**
+ *
+ */
 async function getProtectedData() {
   try {
-    const response = await $djangoClient.get<School>('schools/v1/1')
-    console.log(response.data)
+    const response = await $client<School>('schools/v1/1', {
+      method: 'GET'
+    })  
+    console.log(response)
   } catch (e) {
     console.error(e)
   }
 }
 
+/**
+ *
+ */
 async function getSchools() {
   const data = sendMessage('start_requests')
   ws.send(data)
