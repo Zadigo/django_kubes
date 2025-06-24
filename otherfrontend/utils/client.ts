@@ -1,4 +1,9 @@
-import type { LoginApiResponse, TokenRefreshApiResponse } from '~/types'
+export interface LoginApiResponse {
+  access: string
+  refresh: string
+}
+
+export type TokenRefreshApiResponse = Pick<LoginApiResponse, 'access'>
 
 /**
  * Helper function used to ask for a new access
@@ -19,7 +24,9 @@ export async function refreshAccessToken(refresh: string) {
 }
 
 /**
- * Function used to login the user in the frontend 
+ * Function used to login the user in the frontend
+ * @param email User's email address
+ * @param password User's password
  */
 export async function login(email: string, password: string) {
   if (import.meta.server) {

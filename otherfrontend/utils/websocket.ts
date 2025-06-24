@@ -1,4 +1,6 @@
-
+/**
+ *
+ */
 export function useWebsocketUtilities() {
   /**
    * Return the url to use with the websocket
@@ -27,12 +29,25 @@ export function useWebsocketUtilities() {
     }
   }
 
+  /**
+   * Send data to the websocket 
+   * @param data Data to be sent
+   */
   function sendMessage<T>(data: T) {
-    return JSON.stringify(data)
+    if (import.meta.client) {
+      return JSON.stringify(data)
+    }
   }
 
-  function parseMessage<T>(data: string): T {
-    return JSON.parse(data)
+  /**
+   * Parse data from the websocket
+   * @param data Data to be received
+   * @returns 
+   */
+  function parseMessage<T>(data: string): T | undefined {
+    if (import.meta.client) {
+      return JSON.parse(data)
+    }
   }
   
   return {
