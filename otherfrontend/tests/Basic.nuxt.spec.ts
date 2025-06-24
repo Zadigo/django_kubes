@@ -4,8 +4,8 @@ import index from '../pages/index.vue'
 import primevue from './mocks/primevue'
 import firebasePlugin from './mocks/firebasePlugin'
 
-describe('basic test', () => {
-  it('to run basic test', async () => {
+describe('Index Page', () => {
+  it('should mount correctly', async () => {
     const component = await mountSuspended(index, {
       global: {
         plugins: [primevue, firebasePlugin]
