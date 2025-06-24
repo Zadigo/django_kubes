@@ -67,19 +67,13 @@ const requestData = ref<{ username: string, password: string }>({
 
 async function handleLogin() {
   try {
-    login('/auth/v1/token', requestData.value, () => {
-      authenticated.value = true
-      requestData.value.username = ''
-      requestData.value.password = ''
-    })
+    await login(requestData.value.username, requestData.value.password)
   } catch (e) {
     console.error(e)
   }
 }
 
 async function handleLogout() {
-  logout(() => {
-    authenticated.value = false
-  })
+  await logout()
 }
 </script>
