@@ -1,20 +1,34 @@
-import { useServerAxiosClient } from '~/composables/client'
+import { FetchError } from 'ofetch'
 import type { School } from '~/types'
+import { refreshAccessToken } from '~/utils'
 
 export default defineCachedEventHandler(async event => {
-    const access = getCookie(event, 'access')
-    const refresh = getCookie(event, 'refresh')
+  const access = getCookie(event, 'access')
+  const refresh = getCookie(event, 'refresh')
 
-    const { client } = useServerAxiosClient(access, refresh, (token) => {
-        setCookie(event, 'access', token)
-    }, () => {
-        deleteCookie(event, 'access')
-        deleteCookie(event, 'refresh')
+  try {
+    const data = await $fetch<School>(`/schools/v1/test-authenticated`, {
+      baseURL: useRuntimeConfig().public.prodDomain,
+      method: 'GET',
+      headers: [
+        ['Authorization', access ? `Token ${access}` : '']
+      ]
     })
-
-    const response = await client.get<School[]>('/schools/v1/test-authenticated')
-    return response.data
+    return data
+  } catch (e) {
+    if (e instanceof FetchError) {
+      if (e.status === 401 && refresh) {
+        const { access } = await refreshAccessToken(refresh)
+        setCookie(event, 'access', access)
+      } else {
+        throw createError({
+          statusCode: e.status || 500,
+          message: e.message
+        })
+      }
+    }
+  }
 }, {
-    base: 'redis',
-    maxAge: 10
+  base: 'redis',
+  maxAge: 10
 })

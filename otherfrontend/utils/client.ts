@@ -8,6 +8,7 @@ export type TokenRefreshApiResponse = Pick<LoginApiResponse, 'access'>
 /**
  * Helper function used to ask for a new access
  * token for the user
+ * @param refresh Referesh token
  */
 export async function refreshAccessToken(refresh: string) {
   const response = await $fetch<TokenRefreshApiResponse>('/auth/v1/refresh/token/', {
