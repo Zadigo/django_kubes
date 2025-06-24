@@ -1,3 +1,5 @@
+export * from './accounts'
+
 export interface School {
     objectid: string
     name: string
