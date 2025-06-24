@@ -93,8 +93,8 @@ services:
       - traefik.http.routers.otherfrontend.middlewares=https-redirect
       - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
       - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
-    # ports:
-    #   - 3000:3000
+    ports:
+      - 3000:3000
     networks:
       - kubes_network
 
@@ -316,7 +316,7 @@ services:
     volumes:
       - ./mycelery:/code
     depends_on:
-      - celery
+      - second_site_celery
     networks:
       - kubes_network
 
@@ -330,7 +330,7 @@ services:
       - ./docker/environment/redis.env
     depends_on:
       - rabbitmq
-      - celerybeat
+      - second_site_beat
     volumes:
       - ./mycelery:/code
     networks:
@@ -364,6 +364,8 @@ services:
       - ./docker/environment/redis.env
     ports:
       - 5555:80
+    depends_on:
+      - second_site_celery
     volumes:
       - ./mycelery:/code
     networks:
