@@ -10,6 +10,6 @@ describe('basic test', () => {
         plugins: [primevue]
       }
     })
-    expect(component.text()).toMatchInlineSnapshot("Bienvenu ! Django #1 Celery  Django #2 Kubes  FR  EN  ES Test se connecter")
+    expect(component.text()).toMatchInlineSnapshot('"Bienvenu ! Django #1 Celery  Django #2 Kubes  FR  EN  ES Test se connecter"')
   })
 })
