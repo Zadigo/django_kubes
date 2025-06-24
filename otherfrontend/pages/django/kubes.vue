@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import type { TestApiResponse } from '~/types';
+import type { TestApiResponse } from '~/types'
 
 useHead({
   title: 'Kubes'

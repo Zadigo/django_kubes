@@ -29,9 +29,9 @@
 </template>
 
 <script setup lang="ts">
-import { useWebSocket } from '@vueuse/core';
-import { getWebsocketUrl } from '~/composables/client';
-import type { School } from '~/types';
+import { useWebSocket } from '@vueuse/core'
+import { getWebsocketUrl } from '~/composables/client'
+import type { School } from '~/types'
 
 interface WebsocketMessage {
   action: 'connection' | 'disconnection' | 'update'

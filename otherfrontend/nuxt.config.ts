@@ -1,3 +1,5 @@
+import tailwindcss from '@tailwindcss/vite'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
@@ -5,13 +7,20 @@ export default defineNuxtConfig({
   ssr: true,
   sourcemap: true,
 
+  site: {
+    url: process.env.NUXT_SITE_URL || 'http://localhost:3000'
+  },
+
   routeRules: {
-    '/': { ssr: true },
-    '/django/celery': { ssr: true },
+    '/': { swr: true },
+    '/django/celery': { swr: true },
     '/django/kubes': { ssr: false }
   },
 
   vite: {
+    plugins: [
+      tailwindcss()
+    ],
     build: {
       sourcemap: true
     }
@@ -20,7 +29,6 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
     '@pinia/nuxt',
-    '@nuxtjs/tailwindcss',
     '@nuxt/icon',
     '@nuxtjs/i18n',
     '@nuxtjs/google-fonts',
@@ -28,12 +36,12 @@ export default defineNuxtConfig({
   ],
   
   css: [
-    '~/assets/css/main.css'
+    '~/assets/css/tailwind.css'
   ],
   
   runtimeConfig: {
     public: {
-      prodDomain: '127.0.0.1',
+      prodDomain: process.env.NUXT_PRODUCTION_DOMAIN || 'http://localhost:3000',
       djangoProdDomain: process.env.NUXT_DJANGO_PROD_DOMAIN,
       
       // Firebase
@@ -44,7 +52,7 @@ export default defineNuxtConfig({
       firebaseAppId: process.env.NUXT_FIREBASE_APP_ID,
       firebaseMeasurementId: process.env.NUXT_FIREBASE_MEASUREMENT_ID,
       firebaseMessageSenderId: process.env.NUXT_FIREBASE_MESSAGE_SENDER_ID,
-      firebaseProjectId: process.env.NUXT_FIREBASE_PROJECT_ID,
+      firebaseProjectId: process.env.NUXT_FIREBASE_PROJECT_ID
     }
   },
 
@@ -96,10 +104,10 @@ export default defineNuxtConfig({
     storage: {
       redis: {
         driver: 'redis',
-        host: '127.0.0.1',
+        host: process.env.NUXT_REDIS_HOST,
         port: 6379,
         username: '',
-        password: 'django-local-testing'
+        password: process.env.NUXT_REDIS_PASSWORD
       }
     }
   }

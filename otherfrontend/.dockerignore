@@ -17,6 +17,8 @@
 !components/
 !layouts/
 !pages/
+!data/
+!i18n/
 !middleware/
 !store/
 !static/
