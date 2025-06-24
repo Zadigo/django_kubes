@@ -1,5 +1,5 @@
 <template>
-  <section id="school" class="w-4/6">
+  <VoltCtonainer id="school" class="w-4/6">
     <div class="py-5">
       <button v-if="websocketConnected" type="button" class="text-white uppercase bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" @click="getSchools">
         {{ $t("Get schools") }}
@@ -25,7 +25,7 @@
         </a>
       </div>
     </div>
-  </section>
+  </VoltCtonainer>
 </template>
 
 <script setup lang="ts">

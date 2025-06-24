@@ -32,7 +32,8 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@nuxtjs/i18n',
     '@nuxtjs/google-fonts',
-    '@vueuse/nuxt'
+    '@vueuse/nuxt',
+    '@nuxt/fonts'
   ],
   
   css: [
@@ -61,13 +62,19 @@ export default defineNuxtConfig({
       stylistic: true
     }
   },
-  
-  googleFonts: {
-    families: {
-      Roboto: {
-        wght: '100..700'
+
+  fonts: {
+    provider: 'google',
+    families: [
+      {
+        name: 'Manrope',
+        weight: '200..800'
+      },
+      {
+        name: 'Merriweather',
+        weight: '300..900'
       }
-    }
+    ]
   },
   
   i18n: {

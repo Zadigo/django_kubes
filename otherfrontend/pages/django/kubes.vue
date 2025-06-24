@@ -1,15 +1,25 @@
 <template>
-  <section id="school" class="w-full md:w-2/6">
-    <div class="block w-full p-6 bg-white rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
-      <h3 class="text-2xl font-bold uppercase text-center">
-        Second Django website
-      </h3>
-      
-      <p class="font-light text-center mt-5">
-        {{ data }}
-      </p>
-    </div>
-  </section>
+  <VoltContainer id="school" class="md:w-4/6 my-20">
+    <VoltCard>
+      <template #content>
+        <div class="flex items-center justify-center gap-5">
+          <VoltButton as-child>
+            <NuxtLink to="/">
+              Back
+            </NuxtLink>
+          </VoltButton>
+          
+          <h3 class="text-2xl font-bold uppercase text-center">
+            Second Django website
+          </h3>
+        </div>
+        
+        <p class="font-light text-center mt-5">
+          {{ data }}
+        </p>
+      </template>
+    </VoltCard>
+  </VoltContainer>
 </template>
 
 <script setup lang="ts">
