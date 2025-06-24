@@ -39,6 +39,8 @@
 
     <VoltCard>
       <template #content>
+        {{ isAuthenticated }}
+        
         <form class="flex flex-col gap-3">
           <VoltInputText id="username" v-model="requestData.username" type="email" autocomplete="username" placeholder="Username" required />
           <VoltInputText id="password" v-model="requestData.password" type="password" autocomplete="current-password" placeholder="Password" required />
@@ -58,6 +60,8 @@
 <script setup lang="ts">
 useHead({ title: 'Home' })
 
+const authStore = useAuthentication()
+const { accessToken, isAuthenticated } = storeToRefs(authStore)
 const authenticated = useState('authenticated', () => false)
 
 const requestData = ref<{ username: string, password: string }>({
@@ -67,7 +71,8 @@ const requestData = ref<{ username: string, password: string }>({
 
 async function handleLogin() {
   try {
-    await login(requestData.value.username, requestData.value.password)
+    const data = await login(requestData.value.username, requestData.value.password)
+    accessToken.value = data.access
   } catch (e) {
     console.error(e)
   }

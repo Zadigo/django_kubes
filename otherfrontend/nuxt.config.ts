@@ -21,9 +21,9 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss()
     ],
-    build: {
-      sourcemap: true
-    }
+    // build: {
+    //   sourcemap: true
+    // }
   },
   
   modules: [
@@ -82,6 +82,11 @@ export default defineNuxtConfig({
     langDir: './locales',
     defaultLocale: 'fr',
     // vueI18n: './i18n.config.ts',
+    bundle: {
+      // TODO: Remove on major update of i18n
+      // https://github.com/nuxt-modules/i18n/issues/3435
+      optimizeTranslationDirective: false
+    },
     locales: [
       {
         code: 'en',
