@@ -93,6 +93,8 @@ services:
       - traefik.http.routers.otherfrontend.middlewares=https-redirect
       - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
       - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
+    env_file:
+      - ./docker/environment/test-env.env
     ports:
       - 3000:3000
     networks:
