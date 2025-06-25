@@ -1,7 +1,7 @@
 {
     "Test login": "Test se connecter",
     "Logout": "Se déconnecter",
-    "Welcome!": "Bienvenu !",
+    "Welcome!": "Bienvenue !",
     "Connect to websocket": "Se connecter au websocket",
     "Disconnect to websocket": "Se déconnecter du websocket",
     "Get schools": "Requérir les écoles"

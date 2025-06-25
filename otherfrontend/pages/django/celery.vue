@@ -1,5 +1,5 @@
 <template>
-  <VoltContainer id="school" class="my-20 space-y-5">
+  <section>
     <VoltCard>
       <template #content>
         <VoltButton v-if="websocketConnected" @click="getSchools">
@@ -37,7 +37,7 @@
         </h1>
       </template>
     </VoltCard>
-  </VoltContainer>
+  </section>
 </template>
 
 <script setup lang="ts">

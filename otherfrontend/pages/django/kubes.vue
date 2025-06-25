@@ -1,14 +1,8 @@
 <template>
-  <VoltContainer id="school" class="md:w-4/6 my-20">
+  <section>
     <VoltCard>
       <template #content>
-        <div class="flex items-center justify-center gap-5">
-          <VoltButton as-child>
-            <NuxtLink to="/">
-              Back
-            </NuxtLink>
-          </VoltButton>
-          
+        <div class="flex items-center justify-center gap-5">          
           <h3 class="text-2xl font-bold uppercase text-center">
             Second Django website
           </h3>
@@ -19,7 +13,7 @@
         </p>
       </template>
     </VoltCard>
-  </VoltContainer>
+  </section>
 </template>
 
 <script setup lang="ts">
