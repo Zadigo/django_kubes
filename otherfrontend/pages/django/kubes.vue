@@ -23,17 +23,13 @@
 </template>
 
 <script setup lang="ts">
-import type { TestApiResponse } from '~/types'
+// import type { TestApiResponse } from '~/types'
 
 useHead({
   title: 'Kubes'
 })
 
-const { data } = useFetch('/api/schools', {
-  transform(data: TestApiResponse) {
-    return data
-  }
-})
+const { data } = await useFetch('/api/schools')
 
-useFetch('/api/authenticated')
+// useFetch('/api/authenticated')
 </script>
