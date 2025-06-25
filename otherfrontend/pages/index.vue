@@ -1,14 +1,18 @@
 <template>
   <VoltCard>
     <template #content>
-      
       <form class="flex flex-col gap-3 w-4/6 mx-auto">
-        {{ isAuthenticated }}
+        <div class="flex">
+          <VoltBadge :severity="isAuthenticated ? 'success' : 'danger'">
+            <spans v-if="isAuthenticated">Authenticated</spans>
+            <spans v-else>Not Authenticated</spans>
+          </VoltBadge>
+        </div>
         
         <VoltInputText id="username" v-model="requestData.username" type="email" autocomplete="username" placeholder="Username" required />
         <VoltInputText id="password" v-model="requestData.password" type="password" autocomplete="current-password" placeholder="Password" required />
 
-        <VoltButton @click="handleLogin">
+        <VoltButton :disabled="!canBeSent" @click="handleLogin">
           {{ $t("Test login") }}
         </VoltButton>
         <VoltButton v-if="authenticated" @click="handleLogout">
@@ -29,6 +33,10 @@ const authenticated = useState('authenticated', () => false)
 const requestData = ref<{ username: string, password: string }>({
   username: '',
   password: ''
+})
+
+const canBeSent = computed(() => {
+  return requestData.value.username !== '' && requestData.value.password !== ''
 })
 
 /**
