@@ -3,15 +3,15 @@
     <VoltCard>
       <template #content>
         <VoltButton v-if="websocketConnected" @click="getSchools">
-          {{ $t("Get schools") }}
+          {{ t("Get schools") }}
         </VoltButton>
         
         <VoltButton v-if="websocketConnected" @click="ws.close()">
-          {{ $t("Disconnect to websocket") }}
+          {{ t("Disconnect to websocket") }}
         </VoltButton>
 
         <VoltButton v-else @click="ws.open()">
-            {{ $t("Connect to websocket") }}
+            {{ t("Connect to websocket") }}
         </VoltButton>
       </template>
     </VoltCard>
@@ -42,6 +42,7 @@
 
 <script setup lang="ts">
 import { useWebSocket } from '@vueuse/core'
+
 import type { School } from '~/types'
 
 type Action = 'connection' | 'disconnection' | 'update'
@@ -52,15 +53,11 @@ interface WebsocketMessage {
   results: School[]
 }
 
-useHead({
-  title: 'Celery'
-})
-
+const { t } = useI18n()
 const { $client } = useNuxtApp()
 const { data: items } = useFetch<School[]>('/api/schools')
 
 const { sendMessage, parseMessage } = useWebsocketUtilities()
-
 const websocketItems = ref<School[]>([])
 
 /**
@@ -113,4 +110,8 @@ async function getSchools() {
     ws.send(result)
   }
 }
+
+useHead({
+  title: 'Celery'
+})
 </script>

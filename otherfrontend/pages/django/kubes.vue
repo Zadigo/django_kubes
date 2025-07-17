@@ -17,13 +17,9 @@
 </template>
 
 <script setup lang="ts">
-// import type { TestApiResponse } from '~/types'
+const { data } = await useFetch('/api/schools')
 
 useHead({
   title: 'Kubes'
 })
-
-const { data } = await useFetch('/api/schools')
-
-// useFetch('/api/authenticated')
 </script>

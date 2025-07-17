@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   ssr: true,
-  sourcemap: true,
+  sourcemap: false,
 
   site: {
     url: process.env.NUXT_SITE_URL || 'http://localhost:3000'
@@ -14,7 +14,8 @@ export default defineNuxtConfig({
   routeRules: {
     '/': { swr: true },
     '/django/celery': { swr: true },
-    '/django/kubes': { ssr: false }
+    '/django/kubes': { ssr: false },
+    '/test-build': { ssr: true }
   },
 
   vite: {
@@ -81,7 +82,7 @@ export default defineNuxtConfig({
     baseUrl: './',
     langDir: './locales',
     defaultLocale: 'fr',
-    // vueI18n: './i18n.config.ts',
+    vueI18n: './i18n.config.ts',
     bundle: {
       // TODO: Remove on major update of i18n
       // https://github.com/nuxt-modules/i18n/issues/3435

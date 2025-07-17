@@ -4,7 +4,7 @@
       <VoltCard>
         <template #content>
           <h1 class="text-3xl font-bold mb-8 text-center">
-            {{ $t("Welcome!") }}
+            {{ t("Welcome!") }}
           </h1>  
 
           <div class="flex justify-center gap-2">
@@ -53,3 +53,7 @@
     </VoltContainer>
   </section>
 </template>
+
+<script setup lang="ts">
+const { t } = useI18n()
+</script>

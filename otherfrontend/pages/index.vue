@@ -4,19 +4,19 @@
       <form class="flex flex-col gap-3 w-4/6 mx-auto">
         <div class="flex">
           <VoltBadge :severity="isAuthenticated ? 'success' : 'danger'">
-            <spans v-if="isAuthenticated">Authenticated</spans>
-            <spans v-else>Not Authenticated</spans>
+            <span v-if="isAuthenticated">Authenticated</span>
+            <span v-else>Not Authenticated</span>
           </VoltBadge>
         </div>
         
-        <VoltInputText id="username" v-model="requestData.username" type="email" autocomplete="username" placeholder="Username" required />
-        <VoltInputText id="password" v-model="requestData.password" type="password" autocomplete="current-password" placeholder="Password" required />
+        <VoltInputText id="username" v-model="requestData.username" type="email" autocomplete="username" placeholder="Username" />
+        <VoltInputText id="password" v-model="requestData.password" type="password" autocomplete="current-password" placeholder="Password" />
 
         <VoltButton :disabled="!canBeSent" @click="handleLogin">
-          {{ $t("Test login") }}
+          {{ t("Test login") }}
         </VoltButton>
         <VoltButton v-if="authenticated" @click="handleLogout">
-          {{ $t("Logout") }}
+          {{ t("Logout") }}
         </VoltButton>
       </form>
     </template>
@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-useHead({ title: 'Home' })
+const { t } = useI18n()
 
 const authStore = useAuthentication()
 const { accessToken, isAuthenticated } = storeToRefs(authStore)
@@ -40,7 +40,7 @@ const canBeSent = computed(() => {
 })
 
 /**
- *
+ * Function to login the user
  */
 async function handleLogin() {
   try {
@@ -52,9 +52,11 @@ async function handleLogin() {
 }
 
 /**
- *
+ * Function to logout the user
  */
 async function handleLogout() {
   await logout()
 }
+
+useHead({ title: 'Home' })
 </script>

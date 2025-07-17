@@ -10,8 +10,8 @@ export type TokenRefreshApiResponse = Pick<LoginApiResponse, 'access'>
  * token for the user
  * @param refresh Referesh token
  */
-export async function refreshAccessToken(refresh: string) {
-  const response = await $fetch<TokenRefreshApiResponse>('/auth/v1/refresh/token/', {
+export async function refreshAccessToken(refresh: string, endpoint: string = '/auth/v1/refresh/token/') {
+  const response = await $fetch<TokenRefreshApiResponse>(endpoint, {
     baseURL: useRuntimeConfig().public.prodDomain,
     method: 'POST',
     body: {
@@ -20,6 +20,9 @@ export async function refreshAccessToken(refresh: string) {
   })
 
   return {
+    /**
+     * Access token used to authenticate the user
+     */
     access: response.access
   }
 }
@@ -29,7 +32,7 @@ export async function refreshAccessToken(refresh: string) {
  * @param email User's email address
  * @param password User's password
  */
-export async function login(email: string, password: string) {
+export async function login<T extends LoginApiResponse>(email: string, password: string, endpoint: string = '/auth/v1/token/') {
   if (import.meta.server) {
     return {
       access: '',
@@ -37,9 +40,9 @@ export async function login(email: string, password: string) {
     }
   }
 
-  const failureCount = ref(0)
+  const failureCount = ref<number>(0)
 
-  const response = await $fetch<LoginApiResponse>('/auth/v1/token/', {
+  const response = await $fetch<T>(endpoint, {
     baseURL: useRuntimeConfig().public.prodDomain,
     method: 'POST',
     body: {
@@ -52,12 +55,24 @@ export async function login(email: string, password: string) {
   })
 
   return {
+    /**
+     * Number of times the request failed
+     */
     failureCount,
+    /**
+     * Access token used to authenticate the user
+     */
     access: response.access,
+    /**
+     * Refresh token used to refresh the access token
+     */
     refresh: response.refresh
   }
 }
 
+/**
+ * Function used to logout the user
+ */
 export async function logout() {
   if (import.meta.server) {
     return
@@ -68,6 +83,4 @@ export async function logout() {
 
   accessToken.value = null
   refreshToken.value = null
-
-  // router.push('/')
 }
