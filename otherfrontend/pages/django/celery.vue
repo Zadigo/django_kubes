@@ -3,15 +3,15 @@
     <VoltCard>
       <template #content>
         <VoltButton v-if="websocketConnected" @click="getSchools">
-          {{ t("Get schools") }}
+          {{ $t("Get schools") }}
         </VoltButton>
         
         <VoltButton v-if="websocketConnected" @click="ws.close()">
-          {{ t("Disconnect to websocket") }}
+          {{ $t("Disconnect to websocket") }}
         </VoltButton>
 
         <VoltButton v-else @click="ws.open()">
-            {{ t("Connect to websocket") }}
+            {{ $t("Connect to websocket") }}
         </VoltButton>
       </template>
     </VoltCard>
@@ -53,7 +53,6 @@ interface WebsocketMessage {
   results: School[]
 }
 
-const { t } = useI18n()
 const { $client } = useNuxtApp()
 const { data: items } = useFetch<School[]>('/api/schools')
 

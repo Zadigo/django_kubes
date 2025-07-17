@@ -13,10 +13,10 @@
         <VoltInputText id="password" v-model="requestData.password" type="password" autocomplete="current-password" placeholder="Password" />
 
         <VoltButton :disabled="!canBeSent" @click="handleLogin">
-          {{ t("Test login") }}
+          {{ $t("Test login") }}
         </VoltButton>
         <VoltButton v-if="authenticated" @click="handleLogout">
-          {{ t("Logout") }}
+          {{ $t("Logout") }}
         </VoltButton>
       </form>
     </template>
@@ -24,8 +24,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
-
 const authStore = useAuthentication()
 const { accessToken, isAuthenticated } = storeToRefs(authStore)
 const authenticated = useState('authenticated', () => false)
