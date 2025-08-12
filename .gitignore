@@ -215,3 +215,5 @@ logs
 !.env.example
 
 .env.sentry-build-plugin
+
+.eslintrc-auto-import.json

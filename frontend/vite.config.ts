@@ -11,7 +11,7 @@ import { PrimeVueResolver } from 'unplugin-vue-components/resolvers'
 import vue from '@vitejs/plugin-vue'
 import eslint from 'vite-plugin-eslint'
 import vueI18n from '@intlify/unplugin-vue-i18n/vite'
-import unheadAddons from '@unhead/addons/vite'
+import unheadVite from '@unhead/addons/vite'
 import unpluginViteComponents from 'unplugin-vue-components/vite'
 import tailwind from '@tailwindcss/vite'
 import autoImport from 'unplugin-auto-import/vite'
@@ -29,17 +29,15 @@ export default defineConfig(({ mode }) => {
         {
           find: '@',
           replacement: resolve(__dirname, 'src')
-        },
-        {
-          find: 'src',
-          replacement: resolve(__dirname, 'src')
         }
       ]
     },
     plugins: [
       vue(),
       eslint(),
-      unheadAddons(),
+      unheadVite({
+        preset: 'default'
+      }),
       tailwind(),
       sentryVitePlugin({
         authToken: process.env.SENTRY_AUTH_TOKEN,
@@ -65,6 +63,11 @@ export default defineConfig(({ mode }) => {
       autoImport({
         dts: 'src/types/auto-imports.d.ts',
         vueTemplate: true,
+        eslintrc: {
+          enabled: true,
+          filepath: '.eslintrc-auto-import.json',
+          globalsPropValue: true
+        },
         imports: [
           'vue',
           'pinia',
