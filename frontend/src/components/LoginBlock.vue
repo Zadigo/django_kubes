@@ -15,24 +15,21 @@
 </template>
 
 <script setup lang="ts">
-import { useAxiosClient } from '@/plugins'
-import { ref } from 'vue'
-
-const showError = ref(false)
-const errorMessage = ref<string>('')
+// const showError = ref<boolean>(false)
+// const errorMessage = ref<string>('')
 const requestData = ref<{ username: string, password: string }>({ username: '', password: '' })
 
 async function handleLogin() {
-  try {
-    const { login } = useAxiosClient()
-    login('/auth/v1/token', requestData.value, (payload) => {
-      console.log(payload.value)
-      requestData.value.username = ''
-      requestData.value.password = ''
-    })
-  } catch (e) {
-    errorMessage.value = `Could not contact quart API: ${e}`
-    showError.value = true
-  }
+  // try {
+  //   const { login } = useAxiosClient()
+  //   login('/auth/v1/token', requestData.value, (payload) => {
+  //     console.log(payload.value)
+  //     requestData.value.username = ''
+  //     requestData.value.password = ''
+  //   })
+  // } catch (e) {
+  //   errorMessage.value = `Could not contact quart API: ${e}`
+  //   showError.value = true
+  // }
 }
 </script>

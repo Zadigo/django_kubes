@@ -16,7 +16,7 @@ useSeoMeta({
   description: 'Some simple description'
 })
 
-const isLoading = ref<boolean>(false)
+// const isLoading = ref<boolean>(false)
 const showAlert = ref<boolean>(false)
 const isWebsocket = ref<boolean>(false)
 const websocketCounter = ref<WebsocketData[]>([])
@@ -40,8 +40,6 @@ const ws = useWebSocket('http://api.johnpm.fr/ws/test', {
   }
 })
 
-const { client } = useAxiosClient()
-
 const eventData = ref<string>('')
 const errorMessage = ref<string>('')
 const showError = ref<boolean>(false)
@@ -57,40 +55,40 @@ provide('eventData', eventData)
  *
  */
 async function handleTestRabbitMQEvent() {
-  try {
-    isLoading.value = true
+  // try {
+  //   isLoading.value = true
 
-    const response = await client.post('/test')
+  //   const response = await client.post('/test')
 
-    if (response.status === 200) {
-      showAlert.value = true
-    }
+  //   if (response.status === 200) {
+  //     showAlert.value = true
+  //   }
 
-    isLoading.value = false
-  } catch (e) {
-    errorMessage.value = `Could not send event: ${e}`
-    showError.value = true
-  }
+  //   isLoading.value = false
+  // } catch (e) {
+  //   errorMessage.value = `Could not send event: ${e}`
+  //   showError.value = true
+  // }
 }
 
 /**
  *
  */
 async function handleTestQuartBackend() {
-  try {
-    isLoading.value = true
+  // try {
+  //   isLoading.value = true
 
-    const { client } = useAxiosClient(null, 5000)
-    const response = await client.post('/test')
+  //   const { client } = useAxiosClient(null, 5000)
+  //   const response = await client.post('/test')
 
-    if (response.status === 200) {
-      showAlert.value = true
-    }
-    isLoading.value = false
-  } catch (e) {
-    errorMessage.value = `Could not contact quart API: ${e}`
-    showError.value = true
-  }
+  //   if (response.status === 200) {
+  //     showAlert.value = true
+  //   }
+  //   isLoading.value = false
+  // } catch (e) {
+  //   errorMessage.value = `Could not contact quart API: ${e}`
+  //   showError.value = true
+  // }
 }
 
 /**
@@ -109,45 +107,18 @@ async function handleTestQuartWebsocket() {
  *
  */
 async function handleTestAuthentication() {
-  try {
-    const { authenticatedClient: client } = useAuthenticatedAxiosClient()
-    const response = await client.get('/schools/v1/test-authenticated')
+  // try {
+  //   const { authenticatedClient: client } = useAuthenticatedAxiosClient()
+  //   const response = await client.get('/schools/v1/test-authenticated')
 
-    if (response.status === 200) {
-      showAlert.value = true
-    }
-  } catch (e) {
-    errorMessage.value = `Could not contact quart API: ${e}`
-    showError.value = true
-  }
+  //   if (response.status === 200) {
+  //     showAlert.value = true
+  //   }
+  // } catch (e) {
+  //   errorMessage.value = `Could not contact quart API: ${e}`
+  //   showError.value = true
+  // }
 }
-
-// const { getStore, open, add } = useIndexDatabase('myDb', 1, [
-//   {
-//     name: 'celebrities',
-//     keyPath: 'id',
-//     autoIncrement: true,
-//     indexes: [
-//       { name: 'celebrityId', keyPath: 'celebrityId', options: { unique: true } },
-//       { name: 'name', keyPath: 'name' }
-//     ]
-//   }
-// ])
-
-// async function google() {
-//   await open()
-//   console.log('setup', getStore('test-db', 'readonly'))
-//   add('celebrities')
-// }
-
-// google()
-
-// const { state, isReady } = useAsyncState(async () => {
-//   await open()
-//   console.log('getStore', getStore('test-db', 'readonly'))
-//   await add()
-// }, null, { immediate: true })
-// console.log('state', state.value, isReady.value)
 </script>
 
 <style>
