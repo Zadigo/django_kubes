@@ -21,8 +21,6 @@ const showAlert = ref<boolean>(false)
 const isWebsocket = ref<boolean>(false)
 const websocketCounter = ref<WebsocketData[]>([])
 
-const a = () => { console.log('a') }
-
 const ws = useWebSocket('http://api.johnpm.fr/ws/test', {
   immediate: false,
   onConnected() {

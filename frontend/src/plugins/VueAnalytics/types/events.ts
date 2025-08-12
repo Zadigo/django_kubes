@@ -6,44 +6,44 @@ import type { GoogleAdEvents } from './ads'
  * Reference:
  * @see {@link https://developers.google.com/tag-platform/gtagjs/reference/events events-reference}
  */
-export type EventNames = 'add_payment_info' |
-  'add_shipping_info' |
-  'add_to_cart' |
-  'add_to_wishlist' |
-  'begin_checkout' |
-  'checkout_progress' |
-  'earn_virtual_currency' |
-  'exception' |
-  'generate_lead' |
-  'join_group' |
-  'level_end' |
-  'level_start' |
-  'level_up' |
-  'login' |
-  'page_view' |
-  'post_score' |
-  'purchase' |
-  'refund' |
-  'remove_from_cart' |
-  'screen_view' |
-  'search' |
-  'select_content' |
-  'select_item' |
-  'select_promotion' |
-  'set_checkout_option' |
-  'share' |
-  'sign_up' |
-  'spend_virtual_currency' |
-  'tutorial_begin' |
-  'tutorial_complete' |
-  'unlock_achievement' |
-  'timing_complete' |
-  'view_cart' |
-  'view_item' |
-  'view_item_list' |
-  'view_promotion' |
-  'view_search_results' |
-  GoogleAdEvents
+export type EventNames = 'add_payment_info'
+  | 'add_shipping_info'
+  | 'add_to_cart'
+  | 'add_to_wishlist'
+  | 'begin_checkout'
+  | 'checkout_progress'
+  | 'earn_virtual_currency'
+  | 'exception'
+  | 'generate_lead'
+  | 'join_group'
+  | 'level_end'
+  | 'level_start'
+  | 'level_up'
+  | 'login'
+  | 'page_view'
+  | 'post_score'
+  | 'purchase'
+  | 'refund'
+  | 'remove_from_cart'
+  | 'screen_view'
+  | 'search'
+  | 'select_content'
+  | 'select_item'
+  | 'select_promotion'
+  | 'set_checkout_opon'
+  | 'share'
+  | 'sign_up'
+  | 'spend_virtual_currency'
+  | 'tutorial_begin'
+  | 'tutorial_complete'
+  | 'unlock_achievement'
+  | 'timing_complete'
+  | 'view_cart'
+  | 'view_item'
+  | 'view_item_list'
+  | 'view_promotion'
+  | 'view_search_results'
+  | GoogleAdEvents
 // close_unconvert_lead
 // disqualify_lead
 // qualify_lead

@@ -19,20 +19,6 @@ export default defineConfig([
     '**/components/volt/**'
   ]),
   {
-    name: 'Files Globally',
-    rules: {
-      '@stylistic/comma-dangle': ['warn', 'never'],
-      '@stylistic/brace-style': ['error', '1tbs'],
-      '@stylistic/no-confusing-arrow': ['warn'],
-      '@stylistic/switch-colon-spacing': [
-        'error', {
-          after: true,
-          before: false
-        }
-      ]
-    }
-  },
-  {
     // files: ['**/*.{js,mjs,cjs,ts,mts,cts,vue}'],
     files: ['**/*.{js,ts,vue}'],
     plugins: { js },
@@ -48,7 +34,12 @@ export default defineConfig([
         tsconfigRootDir: import.meta.dirname,
         extraFileExtensions: ['.vue']
       }
-    },
+    }
+  },
+  stylistic.configs.recommended,
+  tseslint.configs.recommended,
+  pluginVue.configs['flat/strongly-recommended'],
+  {
     rules: {
       'vue/max-attributes-per-line': ['error', {
         singleline: {
@@ -59,7 +50,17 @@ export default defineConfig([
         }
       }],
 
-      '@typescript-eslint/no-unsafe-argument': 'error',
+      '@stylistic/comma-dangle': ['warn', 'never'],
+      '@stylistic/brace-style': ['error', '1tbs'],
+      '@stylistic/no-confusing-arrow': ['warn'],
+      '@stylistic/switch-colon-spacing': [
+        'error', {
+          after: true,
+          before: false
+        }
+      ],
+
+      '@typescript-eslint/no-unsafe-argument': 'warn',
       '@typescript-eslint/unified-signatures': 'error',
       '@typescript-eslint/related-getter-setter-pairs': 'warn',
       '@typescript-eslint/no-unnecessary-type-arguments': 'warn',
@@ -72,16 +73,6 @@ export default defineConfig([
       '@typescript-eslint/no-extraneous-class': 'warn'
     }
   },
-  stylistic.configs.recommended,
-  tseslint.configs.recommended.map((config) => ({
-    ...config,
-    files: ['**/*.ts']
-  })),
-  tseslint.configs.stylistic.map((config) => ({
-    ...config,
-    files: ['**/*.ts']
-  }),
-  pluginVue.configs['flat/strongly-recommended'],
   {
     files: ['**/*.vue'],
     languageOptions: {
