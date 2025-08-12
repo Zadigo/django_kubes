@@ -168,3 +168,7 @@ dist-ssr
 .env.sentry-build-plugin
 
 .eslintrc-auto-import.json
+
+# Auto-imports
+auto.imports.*
+components.d.ts

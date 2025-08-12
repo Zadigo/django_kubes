@@ -336,18 +336,6 @@ declare global {
   // @ts-ignore
   export type { LoginApiResponse, JWTPayload, RefreshApiResposne } from '../plugins/client/index'
   import('../plugins/client/index')
-  // @ts-ignore
-  export type { EventNames, Currency, EventParams, CustomParams } from '../plugins/VueAnalytics/types/events'
-  import('../plugins/VueAnalytics/types/events')
-  // @ts-ignore
-  export type { ControlParams, ConfigParams, ConsentParams, UserParams, GtagCommands, Gtag } from '../plugins/VueAnalytics/types/commands'
-  import('../plugins/VueAnalytics/types/commands')
-  // @ts-ignore
-  export type { TagOptions, AnalyticsOptions } from '../plugins/VueAnalytics/types/options'
-  import('../plugins/VueAnalytics/types/options')
-  // @ts-ignore
-  export type { PhoneTrackingParams, GoogleAdEvents } from '../plugins/VueAnalytics/types/ads'
-  import('../plugins/VueAnalytics/types/ads')
 }
 
 // for vue template auto import
@@ -366,7 +354,6 @@ declare module 'vue' {
     readonly computedWithControl: UnwrapRef<typeof import('@vueuse/core')['computedWithControl']>
     readonly controlledComputed: UnwrapRef<typeof import('@vueuse/core')['controlledComputed']>
     readonly controlledRef: UnwrapRef<typeof import('@vueuse/core')['controlledRef']>
-    readonly createAnalytics: UnwrapRef<typeof import('../plugins/VueAnalytics/index')['createAnalytics']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
     readonly createEventHook: UnwrapRef<typeof import('@vueuse/core')['createEventHook']>
     readonly createGlobalState: UnwrapRef<typeof import('@vueuse/core')['createGlobalState']>
@@ -394,11 +381,9 @@ declare module 'vue' {
     readonly getCurrentWatcher: UnwrapRef<typeof import('vue')['getCurrentWatcher']>
     readonly getDomain: UnwrapRef<typeof import('../plugins/client/index')['getDomain']>
     readonly getWebsocketUrl: UnwrapRef<typeof import('../plugins/client/index')['getWebsocketUrl']>
-    readonly gtag: UnwrapRef<typeof import('../plugins/VueAnalytics/index')['gtag']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>
     readonly inProduction: UnwrapRef<typeof import('../plugins/client/index')['inProduction']>
-    readonly initializeGtag: UnwrapRef<typeof import('../plugins/VueAnalytics/index')['initializeGtag']>
     readonly inject: UnwrapRef<typeof import('vue')['inject']>
     readonly injectHead: UnwrapRef<typeof import('@unhead/vue')['injectHead']>
     readonly injectLocal: UnwrapRef<typeof import('@vueuse/core')['injectLocal']>
@@ -481,7 +466,6 @@ declare module 'vue' {
     readonly unrefElement: UnwrapRef<typeof import('@vueuse/core')['unrefElement']>
     readonly until: UnwrapRef<typeof import('@vueuse/core')['until']>
     readonly useActiveElement: UnwrapRef<typeof import('@vueuse/core')['useActiveElement']>
-    readonly useAnalyticsEvent: UnwrapRef<typeof import('../plugins/VueAnalytics/composables/index')['useAnalyticsEvent']>
     readonly useAnimate: UnwrapRef<typeof import('@vueuse/core')['useAnimate']>
     readonly useArrayDifference: UnwrapRef<typeof import('@vueuse/core')['useArrayDifference']>
     readonly useArrayEvery: UnwrapRef<typeof import('@vueuse/core')['useArrayEvery']>
@@ -551,8 +535,6 @@ declare module 'vue' {
     readonly useFullscreen: UnwrapRef<typeof import('@vueuse/core')['useFullscreen']>
     readonly useGamepad: UnwrapRef<typeof import('@vueuse/core')['useGamepad']>
     readonly useGeolocation: UnwrapRef<typeof import('@vueuse/core')['useGeolocation']>
-    readonly useGoogleAdsEvent: UnwrapRef<typeof import('../plugins/VueAnalytics/composables/index')['useGoogleAdsEvent']>
-    readonly useGtag: UnwrapRef<typeof import('../plugins/VueAnalytics/composables/index')['useGtag']>
     readonly useHead: UnwrapRef<typeof import('@unhead/vue')['useHead']>
     readonly useHeadSafe: UnwrapRef<typeof import('@unhead/vue')['useHeadSafe']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
@@ -573,7 +555,6 @@ declare module 'vue' {
     readonly useMediaQuery: UnwrapRef<typeof import('@vueuse/core')['useMediaQuery']>
     readonly useMemoize: UnwrapRef<typeof import('@vueuse/core')['useMemoize']>
     readonly useMemory: UnwrapRef<typeof import('@vueuse/core')['useMemory']>
-    readonly useMockGtag: UnwrapRef<typeof import('../plugins/VueAnalytics/mocks/index')['useMockGtag']>
     readonly useModel: UnwrapRef<typeof import('vue')['useModel']>
     readonly useMounted: UnwrapRef<typeof import('@vueuse/core')['useMounted']>
     readonly useMouse: UnwrapRef<typeof import('@vueuse/core')['useMouse']>
