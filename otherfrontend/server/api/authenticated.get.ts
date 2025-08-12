@@ -1,6 +1,6 @@
 import { FetchError } from 'ofetch'
-import type { School } from '~/types'
-import { refreshAccessToken } from '~/utils'
+import type { School } from '~/app/types'
+import { refreshAccessToken } from '~/app/utils'
 
 export default defineCachedEventHandler(async event => {
   const access = getCookie(event, 'access')

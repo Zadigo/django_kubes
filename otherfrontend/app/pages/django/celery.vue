@@ -43,7 +43,7 @@
 <script setup lang="ts">
 import { useWebSocket } from '@vueuse/core'
 
-import type { School } from '~/types'
+import type { School } from '~/app/types'
 
 type Action = 'connection' | 'disconnection' | 'update'
 

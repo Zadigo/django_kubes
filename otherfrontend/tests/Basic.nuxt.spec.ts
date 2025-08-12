@@ -6,8 +6,8 @@ import { mountSuspended, renderSuspended } from '@nuxt/test-utils/runtime'
 import { describe, expect, it, beforeEach, vi, afterAll } from 'vitest'
 import { screen, fireEvent, waitFor } from '@testing-library/vue'
 import { setActivePinia, createPinia } from 'pinia'
-import { useAuthentication } from '../stores/authentication'
-import { login } from '../utils'
+import { useAuthentication } from '../app/stores/authentication'
+import { login } from '../app/utils'
 
 
 // https://testing-library.com/docs/guide-disappearance
