@@ -9,6 +9,7 @@
     "skipLibCheck": true,
     "composite": true,
     "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
     /* Bundler mode */
     "moduleResolution": "bundler",
     "verbatimModuleSyntax": true,
@@ -23,6 +24,12 @@
     "noUncheckedSideEffectImports": true
   },
   "include": [
-    "vite.config.ts"
-  ]
+    "**/*.ts",
+    "**/*.d.ts",
+    "**/*.vue"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ],
 }

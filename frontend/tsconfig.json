@@ -5,6 +5,7 @@
     "strict": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
+    "allowJs": true,
     "paths": {
       "@/*": [
         "src/*"
@@ -12,13 +13,12 @@
     }
   },
   "include": [
-    "dist",
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue"
+    "**/*.ts",
+    "**/*.d.ts",
+    "**/*.vue"
   ],
   "exclude": [
+    "dist",
     "node_modules"
   ],
   "references": [

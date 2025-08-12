@@ -10,6 +10,8 @@
     },
     "composite": true,
     "noEmit": false,
+    "allowJs": true,
+    "allowImportingTsExtensions": false,
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
@@ -19,9 +21,12 @@
     "noUncheckedSideEffectImports": true
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue"
+    "**/*.ts",
+    "**/*.d.ts",
+    "**/*.vue"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
   ],
 }

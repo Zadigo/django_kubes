@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "forceConsistentCasingInFileNames": true
+    },
+    "include": [
+        "**/*.ts",
+        "**/*.d.ts",
+        "**/*.vue"
+    ]
+}
