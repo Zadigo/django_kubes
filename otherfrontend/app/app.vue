@@ -11,7 +11,7 @@ import { onBeforeMount } from 'vue'
 onBeforeMount(() => {
   const htmlEl = document.querySelector('html')
   if (isDefined(htmlEl)) {
-    htmlEl.classList.add('font-sans')
+    htmlEl.classList.add('dark:bg-surface-800')
   }
 })
 </script>

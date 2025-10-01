@@ -17,6 +17,9 @@ importers:
       '@vueuse/integrations':
         specifier: ^13.9.0
         version: 13.9.0(axios@1.8.4)(change-case@5.4.4)(fuse.js@7.1.0)(jwt-decode@4.0.0)(universal-cookie@8.0.1)(vue@3.5.22(typescript@5.9.3))
+      '@vueuse/math':
+        specifier: ^13.9.0
+        version: 13.9.0(vue@3.5.22(typescript@5.9.3))
       buffer:
         specifier: ^6.0.3
         version: 6.0.3
@@ -2357,6 +2360,11 @@ packages:
         optional: true
       universal-cookie:
         optional: true
+
+  '@vueuse/math@13.9.0':
+    resolution: {integrity: sha512-Qk2jqlaEGKwwe2/MBGtUd8nPpzoQPSQTfm2d30NPywjpYdpbI+WqOAE99MuSq9kIRoU7Xq3IYBtxMaLTy6lpsA==}
+    peerDependencies:
+      vue: ^3.5.0
 
   '@vueuse/metadata@13.9.0':
     resolution: {integrity: sha512-1AFRvuiGphfF7yWixZa0KwjYH8ulyjDCC0aFgrGRz8+P4kvDFSdXLVfTk5xAN9wEuD1J6z4/myMoYbnHoX07zg==}
@@ -8152,6 +8160,11 @@ snapshots:
       fuse.js: 7.1.0
       jwt-decode: 4.0.0
       universal-cookie: 8.0.1
+
+  '@vueuse/math@13.9.0(vue@3.5.22(typescript@5.9.3))':
+    dependencies:
+      '@vueuse/shared': 13.9.0(vue@3.5.22(typescript@5.9.3))
+      vue: 3.5.22(typescript@5.9.3)
 
   '@vueuse/metadata@13.9.0': {}
 

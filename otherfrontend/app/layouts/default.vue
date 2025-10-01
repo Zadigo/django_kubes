@@ -1,56 +1,54 @@
 <template>
   <section id="site">
-    <VoltContainer class="md:w-4/6 my-20 space-y-5">
-      <VoltCard>
+    <volt-container class="md:w-6/16 my-20 space-y-5">
+      <volt-card>
         <template #content>
           <h1 class="text-3xl font-bold mb-8 text-center">
             {{ $t("Welcome!") }}
           </h1>  
 
-          <div class="flex justify-center gap-2">
-            <VoltButton rounded>
+          <div class="flex-col space-y-2 md:space-y-0 md:flex-row justify-center gap-2">
+            <volt-button class="w-full" rounded>
               <NuxtLink to="/">
                 Home
               </NuxtLink>
-            </VoltButton>
+            </volt-button>
 
-            <VoltButton rounded>
-              <NuxtLink to="/django/celery">
-                Django #1 Celery
-              </NuxtLink>
-            </VoltButton>
+            <volt-button class="w-full" to="/django/celery" rounded>
+              Django #1 Celery
+            </volt-button>
 
-            <VoltButton rounded>
+            <volt-button class="w-full" rounded>
               <NuxtLink to="/django/kubes">
                 Django #2 Kubes
               </NuxtLink>
-            </VoltButton>
+            </volt-button>
 
-            <VoltButton rounded>
+            <volt-button class="w-full" rounded>
               <NuxtLink to="/django/kubes">
                 Django #3 Protected
               </NuxtLink>
-            </VoltButton>
+            </volt-button>
           </div>
 
           <div class="px-5  mt-5 flex justify-center gap-1">
-            <NuxtLinkLocale to="/" locale="fr">
+            <nuxt-link-locale to="/" locale="fr">
               FR
-            </NuxtLinkLocale>
+            </nuxt-link-locale>
             
-            <NuxtLinkLocale to="/" locale="en">
+            <nuxt-link-locale to="/" locale="en">
               EN
-            </NuxtLinkLocale>
+            </nuxt-link-locale>
 
-            <NuxtLinkLocale to="/" locale="es">
+            <nuxt-link-locale to="/" locale="es">
               ES
-            </NuxtLinkLocale>
+            </nuxt-link-locale>
           </div>
         </template>
-      </VoltCard>
+      </volt-card>
 
       <slot />
-    </VoltContainer>
+    </volt-container>
   </section>
 </template>
 
