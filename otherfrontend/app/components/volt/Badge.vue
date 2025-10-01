@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import Badge, { type BadgePassThroughOptions, type BadgeProps } from 'primevue/badge'
 import { ref } from 'vue'
-import { ptViewMerge } from './utils'
+import { ptViewMerge } from '~/components/volt/utils'
 
 interface Props extends /* @vue-ignore */ BadgeProps {}
 defineProps<Props>()

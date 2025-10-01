@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import InputText, { type InputTextPassThroughOptions, type InputTextProps } from 'primevue/inputtext'
 import { ref } from 'vue'
-import { ptViewMerge } from './utils'
+import { ptViewMerge } from '~/components/volt/utils'
 
 interface Props extends /* @vue-ignore */ InputTextProps {}
 defineProps<Props>()

@@ -8,7 +8,7 @@ export default defineNuxtConfig({
   sourcemap: false,
 
   site: {
-    url: process.env.NUXT_SITE_URL || 'http://localhost:3000'
+    url: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000'
   },
 
   routeRules: {
@@ -21,10 +21,7 @@ export default defineNuxtConfig({
   vite: {
     plugins: [
       tailwindcss()
-    ],
-    // build: {
-    //   sourcemap: true
-    // }
+    ]
   },
   
   modules: [
@@ -34,27 +31,31 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@vueuse/nuxt',
     '@nuxt/fonts',
-    '@nuxt/test-utils/module'
+    '@nuxt/test-utils/module',
+    'nuxt-vuefire'
   ],
   
   css: [
     '~/assets/css/tailwind.css'
   ],
+
+  vuefire: {
+    config: {
+        apiKey: process.env.NUXT_PUBLIC_FIREBASE_API_KEY,
+        authDomain: process.env.NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+        dbUrl: process.env.NUXT_PUBLIC_FIREBASE_DB_URL,
+        storageBucket: process.env.NUXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+        appId: process.env.NUXT_PUBLIC_FIREBASE_APP_ID,
+        measurementId: process.env.NUXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+        messageSenderId: process.env.NUXT_PUBLIC_FIREBASE_MESSAGE_SENDER_ID,
+        projectId: process.env.NUXT_PUBLIC_FIREBASE_PROJECT_ID
+    }
+  },
   
   runtimeConfig: {
     public: {
-      prodDomain: process.env.NUXT_PRODUCTION_DOMAIN || 'http://localhost:3000',
-      djangoProdDomain: process.env.NUXT_DJANGO_PROD_DOMAIN,
-      
-      // Firebase
-      firebaseApiKey: process.env.NUXT_FIREBASE_API_KEY,
-      firebaseAuthDomain: process.env.NUXT_FIREBASE_AUTH_DOMAIN,
-      firebaseDbUrl: process.env.NUXT_FIREBASE_DB_URL,
-      firebaseStorageBucket: process.env.NUXT_FIREBASE_STORAGE_BUCKET,
-      firebaseAppId: process.env.NUXT_FIREBASE_APP_ID,
-      firebaseMeasurementId: process.env.NUXT_FIREBASE_MEASUREMENT_ID,
-      firebaseMessageSenderId: process.env.NUXT_FIREBASE_MESSAGE_SENDER_ID,
-      firebaseProjectId: process.env.NUXT_FIREBASE_PROJECT_ID
+      prodDomain: process.env.NUXT_PUBLIC_PRODUCTION_DOMAIN || 'http://localhost:3000',
+      djangoProdDomain: process.env.NUXT_PUBLIC_DJANGO_PROD_DOMAIN
     }
   },
 
@@ -68,12 +69,12 @@ export default defineNuxtConfig({
     provider: 'google',
     families: [
       {
-        name: 'Manrope',
-        weight: '200..800'
+        name: 'Sora',
+        weight: '100..800'
       },
       {
-        name: 'Merriweather',
-        weight: '300..900'
+        name: 'Geist',
+        weight: '100..900'
       }
     ]
   },
@@ -117,10 +118,10 @@ export default defineNuxtConfig({
     storage: {
       redis: {
         driver: 'redis',
-        host: process.env.NUXT_REDIS_HOST,
+        host: process.env.NUXT_PUBLIC_REDIS_HOST,
         port: 6379,
         username: '',
-        password: process.env.NUXT_REDIS_PASSWORD
+        password: process.env.NUXT_PUBLIC_REDIS_PASSWORD
       }
     }
   }

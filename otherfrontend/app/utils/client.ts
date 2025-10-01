@@ -1,3 +1,6 @@
+import { useJwt } from '@vueuse/integrations/useJwt'
+import type { Nullable } from '~/types'
+
 export interface LoginApiResponse {
   access: string
   refresh: string
@@ -8,10 +11,9 @@ export type TokenRefreshApiResponse = Pick<LoginApiResponse, 'access'>
 /**
  * Helper function used to ask for a new access
  * token for the user
- * @param refresh Referesh token
  */
-export async function refreshAccessToken(refresh: string, endpoint: string = '/auth/v1/refresh/token/') {
-  const response = await $fetch<TokenRefreshApiResponse>(endpoint, {
+export async function refreshAccessToken(refresh: string) {
+  const response = await $fetch<TokenRefreshApiResponse>('/auth/v1/token/refresh/', {
     baseURL: useRuntimeConfig().public.prodDomain,
     method: 'POST',
     body: {
@@ -20,60 +22,92 @@ export async function refreshAccessToken(refresh: string, endpoint: string = '/a
   })
 
   return {
-    /**
-     * Access token used to authenticate the user
-     */
     access: response.access
   }
 }
 
 /**
- * Function used to login the user in the frontend
- * @param email User's email address
- * @param password User's password
+ * Function used to refresh the access token
+ * on the client side
  */
-export async function login<T extends LoginApiResponse>(email: string, password: string, endpoint: string = '/auth/v1/token/') {
+export async function refreshAccessTokenClient() {
   if (import.meta.server) {
     return {
+      access: null
+    }
+  }
+
+  const refreshToken = useCookie('refresh')
+  if (isDefined(refreshToken)) {
+    const response = await refreshAccessToken(refreshToken.value)
+    if (response.access) {
+      useCookie('access').value = response.access
+    }
+
+    return response
+  }
+
+  return { access: null }
+}
+
+/**
+ * Function used to login the user in the frontend 
+ */
+export function useLogin() {
+  if (import.meta.server) {
+    return {
+      login: async () => { },
+      email: ref(''),
+      password: ref(''),
+      failureCount: ref(0),
       access: '',
       refresh: ''
     }
   }
 
-  const failureCount = ref<number>(0)
+  const failureCount = ref(0)
 
-  const response = await $fetch<T>(endpoint, {
-    baseURL: useRuntimeConfig().public.prodDomain,
-    method: 'POST',
-    body: {
-      username: email,
-      password
-    },
-    onRequestError() {
-      failureCount.value += 1
+  const email = ref<string>('')
+  const password = ref<string>('')
+
+
+  const accessToken = useCookie('access', { sameSite: 'strict', secure: true })
+  const refreshToken = useCookie('refresh', { sameSite: 'strict', secure: true })
+
+  async function login() {
+    const data = await $fetch<LoginApiResponse>('/auth/v1/token/', {
+      baseURL: useRuntimeConfig().public.prodDomain,
+      method: 'POST',
+      body: {
+        username: email.value,
+        password: password.value
+      },
+      onRequestError() {
+        failureCount.value += 1
+      }
+    })
+
+    if (data) {
+      accessToken.value = data.access
+      refreshToken.value = data.refresh
+      useState('isAuthenticated').value = true
     }
-  })
+  }
 
   return {
-    /**
-     * Number of times the request failed
-     */
+    login,
+    email,
+    password,
     failureCount,
-    /**
-     * Access token used to authenticate the user
-     */
-    access: response.access,
-    /**
-     * Refresh token used to refresh the access token
-     */
-    refresh: response.refresh
+    accessToken,
+    refreshToken
   }
 }
 
 /**
  * Function used to logout the user
  */
-export async function logout() {
+export async function useLogout() {
   if (import.meta.server) {
     return
   }
@@ -83,4 +117,58 @@ export async function logout() {
 
   accessToken.value = null
   refreshToken.value = null
+
+  useState('isAuthenticated').value = false
+
+  // router.push('/')
+}
+
+interface JWTResponseData {
+  user_id: number
+}
+
+/**
+ * Composable used to check if the user is logged in
+ */
+export function useUser<P>() {
+  if (import.meta.server) {
+    return {
+      userId: computed(() => null),
+      isAuthenticated: ref(false),
+      getProfile: async (id: Nullable<number>) => null as Nullable<P>
+    }
+  }
+
+  const accessToken = useCookie('access')
+  const isAuthenticated = useState('isAuthenticated', () => isDefined(accessToken) && accessToken.value !== '')
+
+  const userId = computed(() => {
+    if (accessToken.value) {
+      const result = useJwt<JWTResponseData>(accessToken.value).payload.value
+
+      if (result) {
+        const { user_id } = result
+        return user_id
+      }
+    }
+    return undefined
+  })
+
+  const getProfile = useMemoize(async (id: Nullable<number>) => {
+    if (isDefined(id)) {
+      const { $client } = useNuxtApp()
+
+      const data = await $client<P>(`/api/v1/accounts/${id}`, {
+        method: 'GET'
+      })
+      return data
+    }
+    console.warn('User ID is not defined')
+  })
+
+  return {
+    userId,
+    isAuthenticated,
+    getProfile
+  }
 }
