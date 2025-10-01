@@ -11,6 +11,7 @@ export type TokenRefreshApiResponse = Pick<LoginApiResponse, 'access'>
 /**
  * Helper function used to ask for a new access
  * token for the user
+ * @param refresh - Refresh token of the user
  */
 export async function refreshAccessToken(refresh: string) {
   const response = await $fetch<TokenRefreshApiResponse>('/auth/v1/token/refresh/', {
@@ -53,21 +54,46 @@ export async function refreshAccessTokenClient() {
 /**
  * Function used to login the user in the frontend 
  */
-export function useLogin() {
+export function useLogin(usernameFieldName: 'email' | 'username' = 'email') {
   if (import.meta.server) {
     return {
+      /**
+       * Login function
+       */
       login: async () => { },
-      email: ref(''),
+      /**
+       * Email or username of the user
+       * @default ''
+       */
+      usernameField: ref(''),
+      /**
+       * Password of the user
+       * @default ''
+       */
       password: ref(''),
+      /**
+       * Number of failed login attempts
+       * @default
+       */
       failureCount: ref(0),
-      access: '',
-      refresh: ''
+      /**
+       * Access token of the user
+       */
+      accessToken: ref(''),
+      /**
+       * Refresh token of the user
+       */
+      refreshToken: ref(''),
+      /**
+       * Whether the form can be submitted
+       */
+      canBeSubmitted: ref(false)
     }
   }
 
   const failureCount = ref(0)
 
-  const email = ref<string>('')
+  const usernameField = ref<string>('')
   const password = ref<string>('')
 
 
@@ -79,7 +105,7 @@ export function useLogin() {
       baseURL: useRuntimeConfig().public.prodDomain,
       method: 'POST',
       body: {
-        username: email.value,
+        [`$${usernameFieldName}`]: usernameField.value,
         password: password.value
       },
       onRequestError() {
@@ -94,13 +120,40 @@ export function useLogin() {
     }
   }
 
+  const canBeSubmitted = computed(() => usernameField.value !== '' && password.value !== '')
+
   return {
+    /**
+     * Login function
+     */
     login,
-    email,
+    /**
+     * Email or username of the user
+     * @default ''
+     */
+    usernameField,
+    /**
+     * Password of the user
+     * @default ''
+     */
     password,
+    /**
+     * Number of failed login attempts
+     * @default 0
+     */
     failureCount,
+    /**
+     * Access token of the user
+     */
     accessToken,
-    refreshToken
+    /**
+     * Refresh token of the user
+     */
+    refreshToken,
+    /**
+     * Whether the form can be submitted
+     */
+    canBeSubmitted
   }
 }
 
