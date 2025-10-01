@@ -13,8 +13,8 @@ export type TokenRefreshApiResponse = Pick<LoginApiResponse, 'access'>
  * token for the user
  * @param refresh - Refresh token of the user
  */
-export async function refreshAccessToken(refresh: string) {
-  const response = await $fetch<TokenRefreshApiResponse>('/auth/v1/token/refresh/', {
+export async function refreshAccessToken<T extends TokenRefreshApiResponse>(refresh: string) {
+  const response = await $fetch<T>('/auth/v1/token/refresh/', {
     baseURL: useRuntimeConfig().public.prodDomain,
     method: 'POST',
     body: {
@@ -31,7 +31,7 @@ export async function refreshAccessToken(refresh: string) {
  * Function used to refresh the access token
  * on the client side
  */
-export async function refreshAccessTokenClient() {
+export async function refreshAccessTokenClient<T extends TokenRefreshApiResponse>() {
   if (import.meta.server) {
     return {
       access: null
@@ -39,8 +39,10 @@ export async function refreshAccessTokenClient() {
   }
 
   const refreshToken = useCookie('refresh')
+
   if (isDefined(refreshToken)) {
-    const response = await refreshAccessToken(refreshToken.value)
+    const response = await refreshAccessToken<T>(refreshToken.value)
+
     if (response.access) {
       useCookie('access').value = response.access
     }
@@ -54,7 +56,7 @@ export async function refreshAccessTokenClient() {
 /**
  * Function used to login the user in the frontend 
  */
-export function useLogin(usernameFieldName: 'email' | 'username' = 'email') {
+export function useLogin<T extends LoginApiResponse>(usernameFieldName: 'email' | 'username' = 'email') {
   if (import.meta.server) {
     return {
       /**
@@ -101,7 +103,7 @@ export function useLogin(usernameFieldName: 'email' | 'username' = 'email') {
   const refreshToken = useCookie('refresh', { sameSite: 'strict', secure: true })
 
   async function login() {
-    const data = await $fetch<LoginApiResponse>('/auth/v1/token/', {
+    const data = await $fetch<T>('/auth/v1/token/', {
       baseURL: useRuntimeConfig().public.prodDomain,
       method: 'POST',
       body: {

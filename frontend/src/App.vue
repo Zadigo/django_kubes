@@ -1,7 +1,9 @@
 <template>
   <section id="site">
-    <BootstrapWrapper @rabbit-mq="handleTestRabbitMQEvent" @quart="handleTestQuartBackend" @quart-ws="handleTestQuartWebsocket" @login="handleTestAuthentication" />
-    <VoltWrapper />
+    <div class="px-20 max-w-xl mx-auto space-y-4 my-5">
+      <BootstrapWrapper @rabbit-mq="handleTestRabbitMQEvent" @quart="handleTestQuartBackend" @quart-ws="handleTestQuartWebsocket" @login="handleTestAuthentication" />
+      <VoltWrapper />
+    </div>
   </section>
 </template>
 
@@ -119,8 +121,11 @@ async function handleTestAuthentication() {
   //   showError.value = true
   // }
 }
-</script>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
-</style>
+onMounted(() => {
+  const html = document.querySelector('html')
+  if (isDefined(html)) {
+    html.classList.add('dark:bg-slate-900', 'dark:text-gray-200')
+  }
+})
+</script>
