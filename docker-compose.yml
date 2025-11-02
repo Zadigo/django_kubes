@@ -392,3 +392,19 @@ services:
       - ./myfast:/code
     networks:
       - kubes_network
+
+  app_simple_go:
+    build: ./simple_go
+    container_name: app_simple_go
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.simple_go.entrypoints=websecure
+      - traefik.http.routers.simple_go.rule=Host(`go.johnpm.fr`)
+      - traefik.http.routers.simple_go.tls=true
+      - traefik.http.routers.simple_go.tls.certresolver=staging
+      - traefik.http.services.simple_go-service.loadbalancer.server.port=8080
+      - traefik.http.routers.simple_go.middlewares=https-redirect
+      - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
+    networks:
+      - kubes_network
