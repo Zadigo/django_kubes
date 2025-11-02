@@ -372,3 +372,23 @@ services:
       - ./mycelery:/code
     networks:
       - kubes_network
+
+  app_my_fast:
+    build: ./myfast
+    container_name: app_my_fast
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.my_fast.entrypoints=websecure
+      - traefik.http.routers.my_fast.rule=Host(`fastapi.johnpm.fr`)
+      - traefik.http.routers.my_fast.tls=true
+      - traefik.http.routers.my_fast.tls.certresolver=staging
+      - traefik.http.services.my_fast-service.loadbalancer.server.port=8000
+      - traefik.http.routers.my_fast.middlewares=https-redirect
+      - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
+    env_file:
+      - ./docker/environment/quart.env
+    volumes:
+      - ./myfast:/code
+    networks:
+      - kubes_network

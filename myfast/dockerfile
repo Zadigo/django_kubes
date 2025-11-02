@@ -1,0 +1,19 @@
+FROM python:3.14-slim
+
+ENV PYTHONPATH="/"
+
+WORKDIR /myfast
+
+RUN pip install --upgrade pip
+RUN pip3 install pipenv
+
+COPY Pipfile .
+COPY Pipfile.lock .
+
+RUN pipenv install --system --deploy
+
+COPY . .
+
+EXPOSE 5000
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

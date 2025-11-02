@@ -1,0 +1,12 @@
+docker-compose.yml
+Dockerfile
+.git
+README.md
+.vscode
+.idea
+node_modules
+dist
+logs
+*.log
+*.tmp
+*.env
