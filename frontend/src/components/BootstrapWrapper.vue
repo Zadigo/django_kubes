@@ -23,17 +23,15 @@
 
         <div class="space-y-2">
           <a v-for="(item, i) in urls" :key="i" :href="item.url" class="flex gap-2">
-            <icon-lib :icon="item.icon" class="me-2" />
+            <vue-icon :icon="item.icon" class="me-2" />
             {{ item.title }}
           </a>
         </div>
-
-        <LoginBlock />
       </template>
-      
+
       <template #footer>
         <volt-button type="button" @click="emit('quart')">
-          <icon-lib icon="fa-solid:link" class="me-2" />
+          <vue-icon icon="fa-solid:link" class="me-2" />
           Quart
         </volt-button>
 
@@ -41,17 +39,17 @@
           <div v-if="websocketOpened" class="spinner-grow me-2" style="width: 1rem; height: 1rem;" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
-          <icon-lib v-else icon="fa-solid:link" class="me-2" />
+          <vue-icon v-else icon="fa-solid:link" class="me-2" />
           Django WS
         </volt-button>
 
         <volt-button v-if="websocketOpened" type="button" @click="ws.close(1000)">
-          <icon-lib icon="fa-solid:close" class="me-2" />
+          <vue-icon icon="fa-solid:close" class="me-2" />
           Close rabbit 1
         </volt-button>
 
         <volt-button type="button" @click="emit('login')">
-          <icon-lib icon="fa-solid:link" class="me-2" />
+          <vue-icon icon="fa-solid:link" class="me-2" />
           Test authentication
         </volt-button>
       </template>
