@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@intlify/unplugin-vue-i18n": "^11.0.1",
+    "@primevue/icons": "^4.4.1",
     "@sentry/vite-plugin": "^4.6.0",
     "@sentry/vue": "^10.22.0",
     "@tailwindcss/vite": "^4.1.16",

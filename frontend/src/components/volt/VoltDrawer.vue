@@ -1,5 +1,5 @@
 <template>
-  <Drawer unstyled :pt="theme" :ptOptions="{ mergeProps: ptViewMerge }">
+  <Drawer unstyled :pt="theme" :pt-options="{ mergeProps: ptViewMerge }">
     <template #closebutton="{ closeCallback }">
       <SecondaryButton variant="text" rounded @click="closeCallback" autofocus>
         <template #icon>
@@ -17,8 +17,8 @@
 import TimesIcon from '@primevue/icons/times'
 import Drawer, { type DrawerPassThroughOptions, type DrawerProps } from 'primevue/drawer'
 import { ref } from 'vue'
-import SecondaryButton from './VoltSecondaryButton.vue'
 import { ptViewMerge } from './utils'
+import SecondaryButton from './VoltSecondaryButton.vue'
 
 interface Props extends /* @vue-ignore */ DrawerProps { }
 defineProps<Props>()
