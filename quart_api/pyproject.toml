@@ -1,0 +1,20 @@
+[project]
+name = "quart-api"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "firebase-admin>=7.4.0",
+    "hypercorn>=0.18.0",
+    "pytest>=9.0.3",
+    "pytest-aio>=2.1.7",
+    "pytest-cov>=7.1.0",
+    "pytest-env>=1.6.0",
+    "python-dotenv>=1.2.2",
+    "python-memcached>=1.62",
+    "quart>=0.20.0",
+    "quart-cors>=0.8.0",
+    "redis>=7.4.0",
+    "requests>=2.34.2",
+]
