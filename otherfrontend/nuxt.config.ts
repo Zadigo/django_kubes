@@ -20,9 +20,13 @@ export default defineNuxtConfig({
 
   vite: {
     plugins: [
-      tailwindcss()
+      tailwindcss({ optimize: false })
     ]
   },
+
+  extends: [
+    'github:Zadigo/nuxt-extender',
+  ],
   
   modules: [
     '@nuxt/eslint',
@@ -84,11 +88,6 @@ export default defineNuxtConfig({
     langDir: './locales',
     defaultLocale: 'fr',
     vueI18n: './i18n.config.ts',
-    bundle: {
-      // TODO: Remove on major update of i18n
-      // https://github.com/nuxt-modules/i18n/issues/3435
-      optimizeTranslationDirective: false
-    },
     locales: [
       {
         code: 'en',
