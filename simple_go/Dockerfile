@@ -1,16 +1,21 @@
-FROM golang:latest
+FROM golang:1.26.3-alpine3.23 AS build-stage
 
 WORKDIR /app
 
-COPY go.mod ./
-COPY go.sum ./
-
+COPY go.mod go.sum ./
 RUN go mod download
 
-COPY *.go ./
+COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o /simple_go
+RUN CGO_ENABLED=0 GOOS=linux go build -o server .
 
-EXPOSE 8080
+FROM alpine:latest
 
-CMD [ "/simple_go" ]
+WORKDIR /app
+
+COPY --from=build-stage /app/server .
+COPY --from=build-stage /app/.env .
+
+EXPOSE 9000
+
+CMD ["./simple_go"]

@@ -1,33 +1,26 @@
-import mimetypes
 import os
 from datetime import timedelta
 from pathlib import Path
 
-import dotenv
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-env_path = BASE_DIR / '.env'
-if env_path.exists():
-    dotenv.load_dotenv(env_path)
+env = environ.Env()
+
+env.read_env(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
-
-
-def get_debug():
-    debug_value = os.getenv('DEBUG')
-    state = True if debug_value == '1' else False
-    return state
+SECRET_KEY = env('SECRET_KEY')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = get_debug()
+DEBUG = env.bool('DEBUG', default=False)
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -152,7 +145,7 @@ USE_TZ = True
 USE_S3 = False
 
 if USE_S3:
-    AWS_LOCATION = os.getenv('AWS_LOCATION')
+    AWS_LOCATION = env('AWS_LOCATION')
 
     AWS_S3_FILE_OVERWRITE = False
 
@@ -160,15 +153,15 @@ if USE_S3:
 
     AWS_QUERYSTRING_AUTH = False
 
-    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+    AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
 
     AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 
-    AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
+    AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
 
-    AWS_S3_ACCESS_KEY_ID = os.getenv('AWS_S3_ACCESS_KEY_ID')
+    AWS_S3_ACCESS_KEY_ID = env('AWS_S3_ACCESS_KEY_ID')
 
-    AWS_S3_SECRET_ACCESS_KEY = os.getenv('AWS_S3_SECRET_ACCESS_KEY')
+    AWS_S3_SECRET_ACCESS_KEY = env('AWS_S3_SECRET_ACCESS_KEY')
 
     STORAGES = {
         'default': {
@@ -184,7 +177,7 @@ if USE_S3:
         'CacheControl': 'max-age=2592000'
     }
 
-    AWS_CLOUDFRONT_DISTRIBUTION = os.getenv('AWS_CLOUDFRONT_DISTRIBUTION')
+    AWS_CLOUDFRONT_DISTRIBUTION = env('AWS_CLOUDFRONT_DISTRIBUTION')
 
 
 # Static files (CSS, JavaScript, Images)
@@ -232,17 +225,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Redis
 
-REDIS_HOST = os.getenv('REDIS_HOST', '127.0.0.1')
+REDIS_HOST = env('REDIS_HOST', default='127.0.0.1')
 
-REDIS_PASSWORD = os.getenv('REDIS_PASSWORD')
+REDIS_PASSWORD = env('REDIS_PASSWORD', default='')
 
 REDIS_URL = f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:6379'
 
-RABBITMQ_HOST = os.getenv('RABBITMQ_HOST', 'localhost')
+RABBITMQ_HOST = env('RABBITMQ_HOST', default='localhost')
 
-RABBITMQ_USER = os.getenv('RABBITMQ_DEFAULT_USER', 'guest')
+RABBITMQ_USER = env('RABBITMQ_DEFAULT_USER', default='guest')
 
-RABBITMQ_PASSWORD = os.getenv('RABBITMQ_DEFAULT_PASS', 'guest')
+RABBITMQ_PASSWORD = env('RABBITMQ_DEFAULT_PASS', default='guest')
 
 CELERY_BROKER_URL = f'amqp://{RABBITMQ_USER}:{RABBITMQ_PASSWORD}@{RABBITMQ_HOST}:5672'
 

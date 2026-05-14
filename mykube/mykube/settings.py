@@ -1,29 +1,24 @@
 import os
 from pathlib import Path
+import environ
 
-import dotenv
+
+environ.Env.read_env()
+
+
+env = environ.Env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-env_path = BASE_DIR / '.env'
-if env_path.exists():
-    dotenv.load_dotenv(BASE_DIR / '.env')
-
-
-def get_debug():
-    debug_value = os.getenv('DEBUG')
-    state = True if debug_value == '1' else False
-    return state
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = get_debug()
+DEBUG = env.bool('DEBUG', default=False)
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -87,11 +82,11 @@ WSGI_APPLICATION = 'mykube.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': '5432'
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env.int('DB_PORT', default=5432)
     }
 }
 

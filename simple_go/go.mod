@@ -1,3 +1,18 @@
 module django_kubes/simple_go
 
-go 1.22.2
+go 1.24
+
+require (
+	github.com/go-chi/chi v1.5.5
+	github.com/gorilla/websocket v1.5.3
+	github.com/redis/go-redis/v9 v9.19.0
+)
+
+require (
+	github.com/cespare/xxhash/v2 v2.3.0 // indirect
+	github.com/go-chi/chi/v5 v5.2.5 // indirect
+	github.com/go-co-op/gocron v1.37.0 // indirect
+	github.com/google/uuid v1.6.0 // indirect
+	github.com/robfig/cron/v3 v3.0.1 // indirect
+	go.uber.org/atomic v1.11.0 // indirect
+)

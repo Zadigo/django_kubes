@@ -15,5 +15,22 @@
             "!**/node_modules/**",
             "**/node_modules/.vite-temp/**"
         ]
-    }
+    },
+    "python-envs.pythonProjects": [
+        {
+            "path": "mykube",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": "quart_api",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": "mycelery",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        }
+    ]
 }
