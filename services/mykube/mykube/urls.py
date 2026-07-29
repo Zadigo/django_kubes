@@ -13,6 +13,16 @@ from mykube.views import base as base_views
 
 urlpatterns = [
     path(
+        'api/rest/',
+        include('rest_framework.urls'),
+        name='rest_framework'
+    ),
+    path(
+        'api/schema/',
+        drf_views.SpectacularAPIView.as_view(),
+        name='schema'
+    ),
+    path(
         'api/schema/swagger-ui/',
         drf_views.SpectacularSwaggerView.as_view(url_name='schema'),
         name='swagger-ui'
@@ -21,11 +31,6 @@ urlpatterns = [
         'api/schema/redoc/',
         drf_views.SpectacularRedocView.as_view(url_name='schema'),
         name='redoc'
-    ),
-    path(
-        'api/rest/',
-        include('rest_framework.urls'),
-        name='rest_framework'
     ),
     path(
         '__reload__/', 
@@ -50,9 +55,14 @@ urlpatterns = [
         include(oauth2_urls)
     ),
     re_path(
-        r'^api/v1/test',
+        r'^api/v1/test/$',
         base_views.test_endpoint,
         name='test_endpoint'
+    ),
+    re_path(
+        r'^api/v1/protected/$',
+        base_views.ProtectedView.as_view(),
+        name='protected'
     ),
     path(
         '',

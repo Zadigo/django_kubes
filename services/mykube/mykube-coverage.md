@@ -16,9 +16,9 @@
 | mykube/\_\_init\_\_.py            |        0 |        0 |    100% |
 | mykube/asgi.py                    |        4 |        4 |      0% |
 | mykube/schema.py                  |        9 |        9 |      0% |
-| mykube/settings.py                |       49 |       49 |      0% |
+| mykube/settings.py                |       50 |       50 |      0% |
 | mykube/tests/\_\_init\_\_.py      |        0 |        0 |    100% |
 | mykube/tests/test\_oauth.py       |       25 |       13 |     48% |
 | mykube/urls.py                    |       15 |       15 |      0% |
 | mykube/wsgi.py                    |        4 |        4 |      0% |
-| **TOTAL**                         |  **170** |  **121** | **29%** |
+| **TOTAL**                         |  **171** |  **122** | **29%** |
