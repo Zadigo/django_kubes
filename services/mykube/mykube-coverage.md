@@ -13,8 +13,8 @@
 | manage.py                         |       11 |       11 |     0% |
 | mykube/\_\_init\_\_.py            |        0 |        0 |   100% |
 | mykube/asgi.py                    |        4 |        4 |     0% |
-| mykube/schema.py                  |        6 |        6 |     0% |
+| mykube/schema.py                  |        9 |        9 |     0% |
 | mykube/settings.py                |       49 |       49 |     0% |
 | mykube/urls.py                    |       15 |       15 |     0% |
 | mykube/wsgi.py                    |        4 |        4 |     0% |
-| **TOTAL**                         |  **125** |  **118** | **6%** |
+| **TOTAL**                         |  **128** |  **121** | **5%** |
