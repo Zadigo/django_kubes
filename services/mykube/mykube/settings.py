@@ -1,12 +1,13 @@
 import os
 from pathlib import Path
+
 import environ
 
-
-environ.Env.read_env()
+environ.Env.read_env('.env')
 
 
 env = environ.Env()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -15,17 +16,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env.str('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    '176.31.162.80',
-    'johnpm.fr'
-]
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1'])
 
 
 # Application definition
@@ -40,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
     'django.contrib.sites',
+    'oauth2_provider',
+    'django_browser_reload',
 ]
 
 MIDDLEWARE = [
@@ -161,3 +159,8 @@ STORAGES = {
 }
 
 SITE_ID = 1
+
+
+# Login
+
+LOGIN_URL = '/admin/login/'

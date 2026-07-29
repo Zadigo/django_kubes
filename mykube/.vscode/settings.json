@@ -1,8 +1,0 @@
-{
-    "[python]": {
-        "editor.codeActionsOnSave": {
-            "source.unusedImports": "explicit",
-            "source.fixAll.pylance": "explicit"
-        }
-    },
-}
