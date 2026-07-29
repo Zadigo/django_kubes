@@ -562,6 +562,19 @@ wheels = [
 ]
 
 [[package]]
+name = "django-ninja"
+version = "1.6.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d5/7c/3307e17b872f545c88314b2737a22f965785dfb5a120d739b0131d0492c3/django_ninja-1.6.2.tar.gz", hash = "sha256:d56ae5aa4791068ef4ac9a66cfdf2fc11f507413ded35abb79c51d0d52ad6412", size = 3685599, upload-time = "2026-03-18T20:06:47.284Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/21/0c/25f72060a39632fbd2d90e9c8b6052a09cd45b0598fc06c0758d313f0052/django_ninja-1.6.2-py3-none-any.whl", hash = "sha256:20095f5900bada22ea00cf1a58af50bdb285b2354c61a9d9b47d0dc89ac462d6", size = 2374994, upload-time = "2026-03-18T20:06:45.676Z" },
+]
+
+[[package]]
 name = "django-oauth-toolkit"
 version = "3.4.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1307,6 +1320,7 @@ dependencies = [
     { name = "django-filter" },
     { name = "django-mcp" },
     { name = "django-mcp-server" },
+    { name = "django-ninja" },
     { name = "django-oauth-toolkit" },
     { name = "django-oauth-toolkit-dcr" },
     { name = "django-redis" },
@@ -1356,6 +1370,7 @@ requires-dist = [
     { name = "django-filter", specifier = ">=26.1" },
     { name = "django-mcp", specifier = ">=0.3.1" },
     { name = "django-mcp-server", specifier = ">=0.5.7" },
+    { name = "django-ninja", specifier = ">=1.6.2" },
     { name = "django-oauth-toolkit", specifier = ">=3.4.0" },
     { name = "django-oauth-toolkit-dcr", specifier = ">=0.1.0" },
     { name = "django-redis", specifier = ">=6.0.0" },

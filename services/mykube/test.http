@@ -1,0 +1,12 @@
+POST http://127.0.0.1:8000/o/token/ HTTP/1.1
+Host: localhost:8000
+# Content-Type: application/x-www-form-urlencoded
+Content-Type: application/json
+Authorization: Basic iRIHuOgqjlX7VTkp7XgwWc0H7zVG95CXNDKR4B0C:pbkdf2_sha256$1200000$OKaJw9J3unYfWFggkAIOLb$yIPtZCTH/Ic7f//pP/m9JeeMkjBe0O4czhv/mShii4o=
+
+# grant_type=password&username=zadigo&password=touparet&code=
+{
+  "grant_type": "openid-hybrid",
+  "username": "zadigo",
+  "password": "touparet"
+}

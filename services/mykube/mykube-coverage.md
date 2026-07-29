@@ -4,7 +4,7 @@
 | books/admin.py                    |        1 |        0 |    100% |
 | books/apps.py                     |        5 |        0 |    100% |
 | books/mcp.py                      |       12 |        1 |     92% |
-| books/migrations/0001\_initial.py |        5 |        0 |    100% |
+| books/migrations/0001\_initial.py |        5 |        5 |      0% |
 | books/migrations/\_\_init\_\_.py  |        0 |        0 |    100% |
 | books/models.py                   |        5 |        1 |     80% |
 | books/tests.py                    |        1 |        1 |      0% |
@@ -18,8 +18,7 @@
 | mykube/schema.py                  |        9 |        9 |      0% |
 | mykube/settings.py                |       49 |       49 |      0% |
 | mykube/tests/\_\_init\_\_.py      |        0 |        0 |    100% |
-| mykube/tests/test\_oauth.py       |       25 |        1 |     96% |
-| mykube/urls.py                    |       15 |        2 |     87% |
-| mykube/views/base.py              |        8 |        1 |     88% |
+| mykube/tests/test\_oauth.py       |       25 |       13 |     48% |
+| mykube/urls.py                    |       15 |       15 |      0% |
 | mykube/wsgi.py                    |        4 |        4 |      0% |
-| **TOTAL**                         |  **178** |   **92** | **48%** |
+| **TOTAL**                         |  **170** |  **121** | **29%** |
