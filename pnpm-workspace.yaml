@@ -1,2 +1,8 @@
 packages:
   - 'frontends/*'
+allowBuilds:
+  '@firebase/util': true
+  '@sentry/cli': true
+  esbuild: true
+  protobufjs: true
+  vue-demi: true

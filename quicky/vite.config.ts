@@ -31,14 +31,14 @@ export default defineConfig({
         {
           'vue-router': ['useRouter', 'useRoute']
         },
-        {
-          'vue-axios-manager': [
-            'useRequest',
-            'useAsyncRequest',
-            'useAxiosLogin',
-            'vueAxiosManager'
-          ]
-        },
+        // {
+        //   'vue-axios-manager': [
+        //     'useRequest',
+        //     'useAsyncRequest',
+        //     'useAxiosLogin',
+        //     'vueAxiosManager'
+        //   ]
+        // },
         unheadVueComposablesImports
       ],
       dirs: [

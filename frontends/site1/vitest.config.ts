@@ -1,11 +1,14 @@
 import { fileURLToPath } from 'node:url'
 import { configDefaults, defineConfig, mergeConfig, defineProject } from 'vitest/config'
+import { unheadVueComposablesImports } from '@unhead/vue'
+import { PrimeVueResolver } from 'unplugin-vue-components/resolvers'
+
 import path from 'node:path'
 import viteConfig from './vite.config'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import { unheadVueComposablesImports } from '@unhead/vue'
 import autoImport from 'unplugin-auto-import/vite'
+import unpluginViteComponents from 'unplugin-vue-components/vite'
 
 export default mergeConfig(
   viteConfig,
@@ -23,6 +26,19 @@ export default mergeConfig(
           plugins: [
             vue(), 
             vueJsx(),
+            unpluginViteComponents({
+              deep: true,
+              dts: 'src/types/components.d.ts',
+              resolvers: [
+                PrimeVueResolver({
+                  prefix: 'Volt'
+                })
+              ],
+              dirs: [
+                '../components',
+                '../layouts'
+              ]
+            }),
             autoImport({
               dts: 'src/types/auto-imports.d.ts',
               vueTemplate: true,

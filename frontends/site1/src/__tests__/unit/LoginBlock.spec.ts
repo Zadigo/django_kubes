@@ -5,6 +5,6 @@ import LoginBlock from '../../components/LoginBlock.vue'
 describe('App', () => {
   it('should work', () => {
     const component = mount(LoginBlock)
-    console.log(component.html())
+    console.log('html', component.html())
   })
 })
