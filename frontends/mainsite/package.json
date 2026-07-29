@@ -6,6 +6,17 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "test": "vitest run",
+    "test:watch": "vitest watch --coverage",
+    "test:coverage": "vitest run --coverage",
+    "test:nuxt": "vitest run --project nuxt",
+    "test:unit": "vitest run --project unit",
+    "test:playwright": "playwright test",
+    "test:playwright:report": "playwright show-report",
+    "test:playwright:ui": "playwright test --ui",
+    "cleanup": "nuxt cleanup && rm -rf .nuxt .output dist node_modules/.cache",
+    "lint": "oxlint lint .",
+    "lint:eslint": "eslint . --ext .ts,.vue",
+    "fix": "oxlint fix .",
     "deploy": "vitest run && nuxt build",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
@@ -56,6 +67,7 @@
     "@nuxtjs/sitemap": "^8.3.1",
     "@nuxtjs/tailwindcss": "^6.14.0",
     "@pinia/nuxt": "^1.0.1",
+    "@playwright/test": "^1.62.0",
     "@primevue/icons": "^5.0.0",
     "@tailwindcss/vite": "^4.3.2",
     "@takumi-rs/core": "^2.5.3",
@@ -93,5 +105,5 @@
     "vuefire": "^3.2.3",
     "zod": "^4.4.3"
   },
-  "packageManager": "pnpm@10.12.1+sha512.f0dda8580f0ee9481c5c79a1d927b9164f2c478e90992ad268bbb2465a736984391d6333d2c327913578b2804af33474ca554ba29c04a8b13060a717675ae3ac"
+  "packageManager": "pnpm@10.34.5+sha512.a4ee05f2f73658255bd6a89859c065a45c28a57daefae2c893a168ee2b73168c37b91e83e57ea67654ad03f03031746430e8bce38e362e042605fb8abc80192e"
 }
