@@ -23,7 +23,8 @@ export default defineConfig({
     sentryVitePlugin({
       authToken: process.env.SENTRY_AUTH_TOKEN,
       org: 'jpm-holdings',
-      project: 'javascript-vue'
+      project: 'javascript-vue',
+      telemetry: false,
     }),
     vueI18n({
       runtimeOnly: true,
