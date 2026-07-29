@@ -1,5 +1,6 @@
 packages:
   - frontends/*
+  - services/nitroapp
 
 allowBuilds:
   '@firebase/util': true

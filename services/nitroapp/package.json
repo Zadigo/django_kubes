@@ -1,5 +1,5 @@
 {
-  "name": "nitro-app",
+  "name": "nitroapp",
   "private": true,
   "scripts": {
     "build": "nitro build",
