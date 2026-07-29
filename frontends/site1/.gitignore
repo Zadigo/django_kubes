@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 **/coverage/*
+
+e2e-results/*
+playwright-report/*

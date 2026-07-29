@@ -17,7 +17,7 @@ export default mergeConfig(
     test: {
       globals: true,
       testTimeout: 20000,
-      exclude: [ ...configDefaults.exclude, 'e2e/**' ],
+      exclude: [...configDefaults.exclude, 'e2e/**'],
       coverage: {
         enabled: true
       },
@@ -82,13 +82,6 @@ export default mergeConfig(
             testTimeout: 20000
           }
         }),
-        // defineProject({
-        //   test: {
-        //     name: 'e2e',
-        //     include: ['e2e/*.{test,spec}.ts'],
-        //     environment: 'jsdom'
-        //   }
-        // }),
         defineProject({
           test: {
             name: 'integration',
