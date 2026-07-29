@@ -1,5 +1,7 @@
 {"pytest_version": "9.1.1", "$report_type": "SessionStart"}
 {"nodeid": "", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "$report_type": "CollectReport"}
+{"nodeid": "books/api/graphql", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "$report_type": "CollectReport"}
+{"nodeid": "books/api", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "$report_type": "CollectReport"}
 {"nodeid": "books/migrations", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "$report_type": "CollectReport"}
 {"nodeid": "books", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "$report_type": "CollectReport"}
 {"nodeid": "mykube/views", "outcome": "passed", "longrepr": null, "result": null, "sections": [], "$report_type": "CollectReport"}

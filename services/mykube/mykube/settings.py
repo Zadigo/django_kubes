@@ -257,3 +257,10 @@ TASKS = {
         'BACKEND': 'django.tasks.backends.immediate.ImmediateBackend'
     }
 }
+
+
+# GraphQL
+
+GRAPHENE = {
+    'SCHEMA': 'mykube.schema.schema',
+}
