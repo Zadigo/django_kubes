@@ -1,0 +1,6 @@
+{
+    "scripts": {
+        "dev": "pnpm run dev --parallel --filter 'frontends/*'",
+        "dev:site1": "pnpm run dev --parallel --filter 'frontends/site1'"
+    }
+}

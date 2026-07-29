@@ -10,6 +10,7 @@ import (
 var allowedOrigins = map[string]bool{
 	"http://localhost:3000": true,
 	"http://127.0.0.1:8000": true,
+	"http://localhost:5173": true,
 }
 
 var CustomRequestUpgrader = websocket.Upgrader{

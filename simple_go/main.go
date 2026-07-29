@@ -82,8 +82,11 @@ func main() {
 	channel := cmd.Channel()
 
 	go func() {
-		scheduler.Every(5).Seconds().Do(func() {
-			// Do something
+		scheduler.Every(40).Seconds().Do(func() {
+			cmd := redisClient.Publish(context.Background(), "my_channel", "Hello from Go!")
+			if cmd.Err() != nil {
+				log.Println("❌ Failed to publish message:", cmd.Err())
+			}
 		})
 		scheduler.StartAsync()
 	}()
