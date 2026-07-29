@@ -3,6 +3,15 @@
     "scripts": {
         "dev": "pnpm --parallel --filter './frontends/*' dev",
         "dev:site1": "pnpm --filter site1 dev",
-        "dev:mobile": "pnpm --filter mobile dev"
+        "dev:mobile": "pnpm --filter mobile dev",
+        "dev:mainsite": "pnpm --filter mainsite dev",
+        "build": "pnpm --parallel --filter './frontends/*' build",
+        "build:site1": "pnpm --filter site1 build",
+        "build:mobile": "pnpm --filter mobile build",
+        "build:mainsite": "pnpm --filter mainsite build",
+        "test": "pnpm --parallel --filter './frontends/*' test",
+        "test:site1": "pnpm --filter site1 test",
+        "test:mobile": "pnpm --filter mobile test",
+        "test:mainsite": "pnpm --filter mainsite test"
     }
 }
