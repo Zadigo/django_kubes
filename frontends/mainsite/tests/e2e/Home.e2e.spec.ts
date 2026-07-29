@@ -2,6 +2,8 @@ import { test, expect } from '@playwright/test'
 
 test('has title', async ({ page }) => {
   await page.goto('/')
+  
+  await expect(page.getByRole('button', { name: 'Home' })).toBeVisible()
 
 //   // Expect a title "to contain" a substring.
 //   await expect(page).toHaveTitle(/Playwright/);
@@ -15,4 +17,4 @@ test('has title', async ({ page }) => {
 
 //   // Expects page to have a heading with the name of Installation.
 //   await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
-});
+})
