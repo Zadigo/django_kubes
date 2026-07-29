@@ -9,7 +9,6 @@ import { createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
 import App from './App.vue'
 import router from './router'
-// import { createVueAxiosManager } from 'vue-axios-manager'
 
 import './style.css'
 
@@ -17,21 +16,22 @@ const app = createApp(App)
 
 const locale = useStorage('locale', 'fr-FR')
 
-const head = createHead({
-  init: [
-    {
-      title: '...',
-      titleTemplate: '%s | Vite',
-      htmlAttrs: { lang: 'fr' }
-    }
-  ]
-})
-
 const i18n = createI18n({
   legacy: false,
   locale: locale.value,
   messages
 })
+
+const head = createHead({
+  init: [
+    {
+      title: '...',
+      titleTemplate: '%s | Vite',
+      htmlAttrs: { lang: locale.value }
+    }
+  ]
+})
+
 
 // const axiosManager = createVueAxiosManager({
 //   disableAuth: true,

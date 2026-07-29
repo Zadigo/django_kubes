@@ -1,15 +1,15 @@
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
 import vueI18n from '@intlify/unplugin-vue-i18n/vite'
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 import tailwind from '@tailwindcss/vite'
-import unheadVite from '@unhead/addons/vite'
+import { Unhead } from '@unhead/bundler/vite'
 import { unheadVueComposablesImports } from '@unhead/vue'
-import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import { fileURLToPath, URL } from 'node:url'
 import autoImport from 'unplugin-auto-import/vite'
 import { PrimeVueResolver } from 'unplugin-vue-components/resolvers'
 import unpluginViteComponents from 'unplugin-vue-components/vite'
-import { defineConfig } from 'vite'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
@@ -18,7 +18,7 @@ export default defineConfig({
     vue(),
     vueJsx(),
     vueDevTools(),
-    unheadVite(),
+    Unhead(),
     tailwind(),
     sentryVitePlugin({
       authToken: process.env.SENTRY_AUTH_TOKEN,
@@ -28,7 +28,7 @@ export default defineConfig({
     vueI18n({
       runtimeOnly: true,
       compositionOnly: true,
-      include: [fileURLToPath(new URL('./src/locales/**', import.meta.url))]
+      include: [ fileURLToPath(new URL('./src/locales/**', import.meta.url)) ]
     }),
     unpluginViteComponents({
       deep: true,
@@ -60,7 +60,7 @@ export default defineConfig({
         '@vueuse/core',
         'vue-i18n',
         {
-          'vue-router': ['useRouter', 'useRoute']
+          'vue-router': [ 'useRouter', 'useRoute' ]
         },
         {
           'vue-axios-manager': [
