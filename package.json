@@ -1,6 +1,7 @@
 {
+    "name": "@django-kubes/project",
     "scripts": {
-        "dev": "pnpm run dev --parallel --filter 'frontends/*'",
-        "dev:site1": "pnpm run dev --parallel --filter 'frontends/site1'"
+        "dev": "pnpm --parallel --filter './frontends/*' dev",
+        "dev:site1": "pnpm --filter site1 dev"
     }
 }
