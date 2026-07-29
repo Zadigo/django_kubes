@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from pathlib import Path
 
 import environ
@@ -38,11 +39,22 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'oauth2_provider',
     'django_browser_reload',
+    'corsheaders',
+    'drf_spectacular',
+    'storages',
+    'django_filters',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'graphene_django',
+    'mcp_server',
+    'oauth_dcr',
+    'books',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -114,6 +126,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
+LOCALE_PATHS = [
+    BASE_DIR / 'locale'
+]
+
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
@@ -165,3 +181,79 @@ SITE_ID = 1
 # Login
 
 LOGIN_URL = '/admin/login/'
+
+
+# Debug
+
+INTERNAL_IPS = ['127.0.0.1']
+
+
+# CORS
+# https://github.com/adamchainz/django-cors-headers
+
+CORS_ALLOW_ALL_ORIGINS = False
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r'^https?\:\/\/localhost\:8080$'
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:8007'
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:8007'
+]
+
+
+# RestFrameWork
+# https://www.django-rest-framework.org/
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1440),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+    'SLIDING_TOKEN_LIFETIME': timedelta(days=30),
+    'SLIDING_TOKEN_REFRESH_LIFETIME_LATE_USER': timedelta(days=1),
+    'SLIDING_TOKEN_LIFETIME_LATE_USER': timedelta(days=30),
+    'UPDATE_LAST_LOGIN': True,
+    'AUTH_HEADER_TYPES': ['Token']
+}
+
+# Redis
+
+REDIS_HOST = env('REDIS_HOST', default='127.0.0.1')
+
+REDIS_PASSWORD = env('REDIS_PASSWORD')
+
+REDIS_URL = f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:6379'
+
+
+# Caching
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': REDIS_URL,
+        'KEY_PREFIX': 'mykube'
+    }
+}
+
+
+# Tasks
+
+TASKS = {
+    'default': {
+        'BACKEND': 'django.tasks.backends.immediate.ImmediateBackend'
+    }
+}

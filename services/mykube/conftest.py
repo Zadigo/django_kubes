@@ -32,5 +32,16 @@ def pytest_configure(config):
                 'django.contrib.staticfiles',
                 'django.contrib.sitemaps',
                 'django.contrib.sites',
-            ]
+                'oauth2_provider',
+                'corsheaders',
+                'drf_spectacular',
+                'storages',
+                'django_filters',
+                'rest_framework',
+                'rest_framework.authtoken',
+                'graphene_django',
+                'mcp_server',
+                'oauth_dcr',
+            ],
+            REDIS_URL=f'redis://:{env("REDIS_PASSWORD")}@{env("REDIS_HOST", default="127.0.0.1")}:6379'
         )
