@@ -1,6 +1,6 @@
 
 import pydantic
-from mcp_server import ModelQueryToolset
+from mcp_server import MCPToolset, ModelQueryToolset
 
 from books.models import Book
 
@@ -14,5 +14,8 @@ class BookQueryTool(ModelQueryToolset):
     search_fields = ('title',)
 
     def get_queryset(self):
-        qs = super().get_queryset()
-        return qs
+        return super().get_queryset()
+
+
+class BookTools(MCPToolset):
+    pass

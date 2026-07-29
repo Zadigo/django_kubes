@@ -12,6 +12,7 @@ def pytest_configure(config):
         settings.configure(
             DEBUG=True,
             SECRET_KEY='aXDfw6xCDKIFRgz2yzpTgAqFBqVLgSeyOVGayj8KqcJAjG3O96dT7cQPMExxAteX',
+            ROOT_URLCONF = 'mykube.urls',
             DATABASES={
                 'default': {
                     'ENGINE': 'django.db.backends.postgresql',
@@ -42,6 +43,10 @@ def pytest_configure(config):
                 'graphene_django',
                 'mcp_server',
                 'oauth_dcr',
+                'books',
             ],
-            REDIS_URL=f'redis://:{env("REDIS_PASSWORD")}@{env("REDIS_HOST", default="127.0.0.1")}:6379'
+            REDIS_URL=f'redis://:{env("REDIS_PASSWORD")}@{env("REDIS_HOST", default="127.0.0.1")}:6379',
+            GRAPHENE = {
+                'SCHEMA': 'mykube.schema.schema'
+            }
         )
