@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { defineVitestConfig } from '@nuxt/test-utils/config'
 
-export default defineConfig({
+export default defineVitestConfig({
   test: {
     exclude: [
       'node_modules',
@@ -13,7 +13,7 @@ export default defineConfig({
     coverage: {
       enabled: true,
       provider: 'v8',
-      reporter: [ 'text', 'json', 'html' ]
+      reporter: ['text', 'json', 'html']
     },
     env: {
       NODE_ENV: 'test'
@@ -22,7 +22,7 @@ export default defineConfig({
       await defineVitestProject({
         test: {
           name: 'unit',
-          include: [ 'test/unit/**/*.{test,spec}.ts' ],
+          include: ['test/unit/**/*.{test,spec}.ts'],
           environment: 'node',
           testTimeout: 20000,
           tags: [
@@ -35,7 +35,7 @@ export default defineConfig({
       await defineVitestProject({
         test: {
           name: 'nuxt',
-          include: [ 'test/nuxt/**/*.{test,spec}.ts' ],
+          include: ['test/nuxt/**/*.{test,spec}.ts'],
           environment: 'nuxt',
           testTimeout: 20000,
           tags: [
@@ -48,7 +48,7 @@ export default defineConfig({
       await defineVitestProject({
         test: {
           name: 'integration',
-          include: [ 'test/integration/**/*.{test,spec}.ts' ],
+          include: ['test/integration/**/*.{test,spec}.ts'],
           environment: 'node',
           testTimeout: 20000,
           tags: [
@@ -58,7 +58,7 @@ export default defineConfig({
           ]
         }
       })
-    ]
+  ]
   },
   // resolve: {
   //   alias: {
