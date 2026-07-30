@@ -55,6 +55,11 @@ urlpatterns = [
         include(oauth2_urls)
     ),
     re_path(
+        r'^o/challenge/$',
+        base_views.CodeVerifierView.as_view(),
+        name='code_verifier'
+    ),
+    re_path(
         r'^api/v1/test/$',
         base_views.test_endpoint,
         name='test_endpoint'

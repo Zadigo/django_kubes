@@ -273,3 +273,7 @@ GRAPHENE = {
 DJANGO_MCP_AUTHENTICATION_CLASSES = [
     'oauth2_provider.contrib.rest_framework.OAuth2Authentication'
 ]
+
+OAUTH2_PROVIDER = {
+    'PKCE_REQUIRED': False
+}
