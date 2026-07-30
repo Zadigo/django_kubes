@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'graphene_django',
     'mcp_server',
     'oauth_dcr',
+    'django_celery_beat',
     'books',
 ]
 
