@@ -64,8 +64,10 @@ func (a *App) Start() error {
 		defer cancel()
 
 		a.redisClient.Close()
-
 		shutdownErr := server.Shutdown(timeoutCtx)
+
+		// close(a.chanErr)
+
 		return errors.Join(fmt.Errorf("🔴 Shutting down %s HTTP server...", os.Getenv("SERVICE_NAME")), shutdownErr, a.ctx.Err())
 	}
 }
