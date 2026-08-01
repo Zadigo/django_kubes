@@ -5,10 +5,13 @@ import string
 
 from django.core.cache import cache
 from django.views.generic import TemplateView
+from drf_spectacular.utils import extend_schema
 from oauth2_provider.views.generic import ProtectedResourceMixin
 from rest_framework.decorators import api_view
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+
+from mykube.api.rest.serializers import CodeChallengeSerializer
 
 
 # @method_decorator(cache_page(2 * 60), name='dispatch')
@@ -26,6 +29,11 @@ class ProtectedView(ProtectedResourceMixin, GenericAPIView):
         return Response({'status': True})
 
 
+@extend_schema(
+    description="Generates a code verifier and code challenge for PKCE (Proof Key for Code Exchange). The code verifier is a random string between 43 and 128 characters, and the code challenge is a SHA256 hash of the code verifier, base64-url-encoded without padding.",
+    tags=['Authentication'],
+    responses={200: CodeChallengeSerializer}
+)
 class CodeVerifierView(GenericAPIView):
     """A view that generates a code verifier and code challenge for PKCE (Proof Key for Code Exchange)."""
 

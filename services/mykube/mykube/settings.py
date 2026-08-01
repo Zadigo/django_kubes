@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
     'django.contrib.sites',
+    'django_plus',
     'oauth2_provider',
     'django_browser_reload',
     'corsheaders',
@@ -278,3 +279,27 @@ DJANGO_MCP_AUTHENTICATION_CLASSES = [
 OAUTH2_PROVIDER = {
     'PKCE_REQUIRED': False
 }
+
+# Celery
+
+RABBITMQ_HOST = env('RABBITMQ_DEFAULT_HOST', default='localhost')
+
+RABBITMQ_USER = env('RABBITMQ_DEFAULT_USER', default='guest')
+
+RABBITMQ_PASSWORD = env('RABBITMQ_DEFAULT_PASSWORD', default='guest')
+
+CELERY_BROKER_URL = f'amqp://{RABBITMQ_USER}:{RABBITMQ_PASSWORD}@{RABBITMQ_HOST}:5672'
+
+CELERY_RESULT_BACKEND = REDIS_URL
+
+CELERY_ACCEPT_CONTENT = ['json']
+
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_RESULT_SERIALIZER = 'json'
+
+CELERY_TIMEZONE = 'Europe/Oslo'
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
