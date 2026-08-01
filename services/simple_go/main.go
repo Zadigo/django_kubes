@@ -2,156 +2,165 @@ package main
 
 import (
 	"context"
-	"django_kubes/simple_go/internal"
-	"log"
-	"net/http"
-	"sync"
-	"time"
+	"django_kubes/simple_go/internal/app"
+	"os"
+	"os/signal"
 
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/go-co-op/gocron"
-	"github.com/google/uuid"
-	"github.com/gorilla/websocket"
-	"github.com/redis/go-redis/v9"
+	"github.com/joho/godotenv"
 )
 
-type ServerRegistry struct {
-	clients map[string]*websocket.Conn
-	mu      sync.Mutex
-}
+// type ServerRegistry struct {
+// 	clients map[string]*websocket.Conn
+// 	mu      sync.Mutex
+// }
 
-func (s *ServerRegistry) AddClient(conn *websocket.Conn) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+// func (s *ServerRegistry) AddClient(conn *websocket.Conn) {
+// 	s.mu.Lock()
+// 	defer s.mu.Unlock()
 
-	s.clients[uuid.NewString()] = conn
-	log.Println("⚡️ New client connected. Total clients:", len(s.clients))
-}
+// 	s.clients[uuid.NewString()] = conn
+// 	log.Println("⚡️ New client connected. Total clients:", len(s.clients))
+// }
 
-func (s *ServerRegistry) RemoveClient(conn *websocket.Conn) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+// func (s *ServerRegistry) RemoveClient(conn *websocket.Conn) {
+// 	s.mu.Lock()
+// 	defer s.mu.Unlock()
 
-	for id, c := range s.clients {
-		if c == conn {
-			delete(s.clients, id)
-			break
-		}
-	}
+// 	for id, c := range s.clients {
+// 		if c == conn {
+// 			delete(s.clients, id)
+// 			break
+// 		}
+// 	}
 
-	log.Println("⚡️ Client disconnected. Total clients:", len(s.clients))
-}
+// 	log.Println("⚡️ Client disconnected. Total clients:", len(s.clients))
+// }
 
-func NewServerRegistry() *ServerRegistry {
-	return &ServerRegistry{
-		clients: make(map[string]*websocket.Conn),
-	}
-}
+// func NewServerRegistry() *ServerRegistry {
+// 	return &ServerRegistry{
+// 		clients: make(map[string]*websocket.Conn),
+// 	}
+// }
 
 func main() {
-	log.Println("⚡️ Starting server on port 9000...")
+	err := godotenv.Load(".env")
 
-	router := chi.NewRouter()
+	if err != nil {
+		panic("Error loading .env file")
+	}
 
-	router.Use(middleware.RequestID)
-	router.Use(middleware.RealIP)
-	router.Use(middleware.Logger)
-	router.Use(middleware.Recoverer)
-	router.Use(middleware.Timeout(60 * time.Second))
-	router.Use(middleware.Logger)
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer cancel()
 
-	// Initialize Redis client
-	options, err := redis.ParseURL("redis://localhost:6379")
+	httpApp := app.NewApp(ctx)
+	err = httpApp.Start()
+
 	if err != nil {
 		panic(err)
 	}
 
-	// Create a server registry to manage WebSocket clients
-	serverRegistry := NewServerRegistry()
+	// log.Println("⚡️ Starting server on port 9000...")
 
-	redisClient := redis.NewClient(options)
-	log.Println("✅ Connected to Redis")
+	// router := chi.NewRouter()
 
-	// Start a Gocron job to publish messages to Redis every 5 seconds
-	scheduler := gocron.NewScheduler(time.UTC)
-	log.Println("⏰ Created new scheduler")
+	// router.Use(middleware.RequestID)
+	// router.Use(middleware.RealIP)
+	// router.Use(middleware.Logger)
+	// router.Use(middleware.Recoverer)
+	// router.Use(middleware.Timeout(60 * time.Second))
+	// router.Use(middleware.Logger)
 
-	cmd := redisClient.Subscribe(context.Background(), "my_channel")
-	log.Println("✅ Subscribed to Redis channel")
-	channel := cmd.Channel()
+	// // Initialize Redis client
+	// options, err := redis.ParseURL("redis://localhost:6379")
+	// if err != nil {
+	// 	panic(err)
+	// }
 
-	go func() {
-		scheduler.Every(40).Seconds().Do(func() {
-			cmd := redisClient.Publish(context.Background(), "my_channel", "Hello from Go!")
-			if cmd.Err() != nil {
-				log.Println("❌ Failed to publish message:", cmd.Err())
-			}
-		})
-		scheduler.StartAsync()
-	}()
+	// // Create a server registry to manage WebSocket clients
+	// serverRegistry := NewServerRegistry()
 
-	// Start a goroutine to listen for messages from Redis
-	// and broadcast them to WebSocket clients
-	broadcast := make(chan string)
-	go func() {
-		for msg := range channel {
-			broadcast <- msg.Payload
-		}
-	}()
+	// redisClient := redis.NewClient(options)
+	// log.Println("✅ Connected to Redis")
 
-	go func() {
-		for {
-			select {
-			case message := <-broadcast:
-				for _, conn := range serverRegistry.clients {
-					err := conn.WriteJSON(map[string]string{"message": message})
-					if err != nil {
-						conn.Close()
-					}
-				}
-			}
-		}
-	}()
+	// // Start a Gocron job to publish messages to Redis every 5 seconds
+	// scheduler := gocron.NewScheduler(time.UTC)
+	// log.Println("⏰ Created new scheduler")
 
-	router.Get("/connect", internal.Cors(func(w http.ResponseWriter, r *http.Request) {
-		conn, err := internal.CustomRequestUpgrader.Upgrade(w, r, nil)
-		if err != nil {
-			http.Error(w, "Failed to upgrade connection", http.StatusInternalServerError)
-			return
-		}
+	// cmd := redisClient.Subscribe(context.Background(), "my_channel")
+	// log.Println("✅ Subscribed to Redis channel")
+	// channel := cmd.Channel()
 
-		defer func() {
-			serverRegistry.RemoveClient(conn)
-			conn.Close()
-		}()
+	// go func() {
+	// 	scheduler.Every(40).Seconds().Do(func() {
+	// 		cmd := redisClient.Publish(context.Background(), "my_channel", "Hello from Go!")
+	// 		if cmd.Err() != nil {
+	// 			log.Println("❌ Failed to publish message:", cmd.Err())
+	// 		}
+	// 	})
+	// 	scheduler.StartAsync()
+	// }()
 
-		conn.SetReadLimit(1024)
-		conn.SetReadDeadline(time.Now().Add(60 * time.Second))
+	// // Start a goroutine to listen for messages from Redis
+	// // and broadcast them to WebSocket clients
+	// broadcast := make(chan string)
+	// go func() {
+	// 	for msg := range channel {
+	// 		broadcast <- msg.Payload
+	// 	}
+	// }()
 
-		conn.SetPongHandler(func(string) error {
-			conn.SetReadDeadline(time.Now().Add(60 * time.Second))
-			return nil
-		})
+	// go func() {
+	// 	for {
+	// 		select {
+	// 		case message := <-broadcast:
+	// 			for _, conn := range serverRegistry.clients {
+	// 				err := conn.WriteJSON(map[string]string{"message": message})
+	// 				if err != nil {
+	// 					conn.Close()
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }()
 
-		serverRegistry.AddClient(conn)
+	// router.Get("/connect", internal.Cors(func(w http.ResponseWriter, r *http.Request) {
+	// 	conn, err := internal.CustomRequestUpgrader.Upgrade(w, r, nil)
+	// 	if err != nil {
+	// 		http.Error(w, "Failed to upgrade connection", http.StatusInternalServerError)
+	// 		return
+	// 	}
 
-		for {
-			var message map[string]any
-			err := conn.ReadJSON(&message)
+	// 	defer func() {
+	// 		serverRegistry.RemoveClient(conn)
+	// 		conn.Close()
+	// 	}()
 
-			if err != nil {
-				if websocket.IsCloseError(err, websocket.CloseNormalClosure) {
-					return
-				}
-				http.Error(w, "Failed to read message", http.StatusInternalServerError)
-				return
-			}
-		}
-	}))
+	// 	conn.SetReadLimit(1024)
+	// 	conn.SetReadDeadline(time.Now().Add(60 * time.Second))
 
-	err = http.ListenAndServe(":9000", router)
-	if err != nil {
-		panic(err)
-	}
+	// 	conn.SetPongHandler(func(string) error {
+	// 		conn.SetReadDeadline(time.Now().Add(60 * time.Second))
+	// 		return nil
+	// 	})
+
+	// 	serverRegistry.AddClient(conn)
+
+	// 	for {
+	// 		var message map[string]any
+	// 		err := conn.ReadJSON(&message)
+
+	// 		if err != nil {
+	// 			if websocket.IsCloseError(err, websocket.CloseNormalClosure) {
+	// 				return
+	// 			}
+	// 			http.Error(w, "Failed to read message", http.StatusInternalServerError)
+	// 			return
+	// 		}
+	// 	}
+	// }))
+
+	// err = http.ListenAndServe(":9000", router)
+	// if err != nil {
+	// 	panic(err)
+	// }
 }
