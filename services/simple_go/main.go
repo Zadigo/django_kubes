@@ -3,6 +3,9 @@ package main
 import (
 	"context"
 	"django_kubes/simple_go/internal/app"
+	"django_kubes/simple_go/internal/utils"
+	"errors"
+	"fmt"
 	"os"
 	"os/signal"
 
@@ -52,11 +55,17 @@ func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
 
+	rootDir, err := utils.GetAbsolutePath(".")
+	if err != nil {
+		panic("Error while trying to get absolute directory")
+	}
+
+	ctx = context.WithValue(ctx, "rootDir", rootDir)
+
 	httpApp := app.NewApp(ctx)
 	err = httpApp.Start()
-
 	if err != nil {
-		panic(err)
+		panic(errors.Join(fmt.Errorf("An error occured"), err))
 	}
 
 	// log.Println("⚡️ Starting server on port 9000...")
