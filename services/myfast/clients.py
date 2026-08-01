@@ -13,6 +13,7 @@ class ReceiveActions(enum.Enum):
 
 
 class SendActions(enum.Enum):
+    TODOS = 'todos'
     ERROR = 'error'
 
 

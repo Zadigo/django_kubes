@@ -91,5 +91,6 @@ async def create_handler_chain(client: WebsocketClient) -> AbstractHandler:
     todo_handler = TodoHandler(client)
     todo_handler.redis = redis
 
-    # You can add more handlers here and chain them
+    # You can add more handlers 
+    # here and chain them
     return todo_handler
