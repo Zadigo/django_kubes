@@ -23,12 +23,12 @@
             "packageManager": "ms-python.python:pip"
         },
         {
-            "path": "quart_api",
+            "path": "services/quart_api",
             "envManager": "ms-python.python:venv",
             "packageManager": "ms-python.python:pip"
         },
         {
-            "path": "mycelery",
+            "path": "services/mycelery",
             "envManager": "ms-python.python:venv",
             "packageManager": "ms-python.python:pip"
         }
