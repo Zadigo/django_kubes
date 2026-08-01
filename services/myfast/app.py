@@ -5,9 +5,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.websockets import WebSocket, WebSocketDisconnect
 
+from backends import redis_client
 from clients import WebsocketClient
 from handlers import create_handler_chain
 from models import ReceiveMessage, Todo
+
+STORAGE_KEY: str = 'myfast:{value}'
 
 CLIENTS: set[WebsocketClient] = set()
 
@@ -33,9 +36,19 @@ app.add_middleware(
 
 @app.get("/v1/todos")
 async def todos() -> list[Todo]:
-    async with httpx2.AsyncClient() as client:
-        response = await client.get("https://jsonplaceholder.typicode.com/todos")
-        return [Todo(**item) for item in response.json()]
+    storage_key = STORAGE_KEY.format(value='todos')
+    redis = redis_client()
+    data = redis.lrange(storage_key, 0, -1)
+
+    if not data:
+        async with httpx2.AsyncClient() as client:
+            response = await client.get("https://jsonplaceholder.typicode.com/todos")
+            data = [Todo(**item) for item in response.json()]
+        redis.lpush(storage_key, *[str(item.model_dump()) for item in data])
+    else:
+        data = [Todo(**eval(item)) for item in data]
+
+    return data
 
 
 @app.websocket("/v1/todos/ws")
@@ -45,7 +58,7 @@ async def todos_websocket(websocket: WebSocket):
     client = WebsocketClient(websocket)
     CLIENTS.add(client)
 
-    handler = create_handler_chain(client)
+    handler = await create_handler_chain(client)
 
     try:
         while True:

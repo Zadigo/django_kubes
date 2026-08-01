@@ -12,7 +12,7 @@ class ReceiveActions(enum.Enum):
     TODOS = 'todos'
 
 
-class SendActions(ReceiveActions):
+class SendActions(enum.Enum):
     ERROR = 'error'
 
 
@@ -33,15 +33,23 @@ class AbstractWebsocketClient(abc.ABC):
     def __hash__(self):
         return hash(self.uuid)
 
+    def __repr__(self):
+        return f"WebsocketClient(uuid={self.uuid})"
+
+    def __eq__(self, other: object):
+        if not isinstance(other, AbstractWebsocketClient):
+            return False
+        return self.uuid == other.uuid
+
     async def send_message(self, action: SendActions, data: dict | BaseModel | None = None, message: str | None = None):
         """Send a message back to the WebSocket client."""
         if isinstance(data, BaseModel):
             data = data.model_dump()
-        return await self.websocket.send_json({'action': action.value, 'data': data, 'message': message})
+        await self.websocket.send_json({'action': action.value, 'data': data, 'message': message})
 
     async def send_error(self, message: str):
         """Send an error message back to the WebSocket client."""
-        return await self.send_message(SendActions.ERROR, message=self.message_model(message=message))
+        await self.send_message(SendActions.ERROR, message=self.message_model(message=message))
 
 
 class WebsocketClient(AbstractWebsocketClient):

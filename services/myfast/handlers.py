@@ -1,14 +1,18 @@
 import abc
 import asyncio
 
-import aioredis
 import httpx2
+import redis
 
 from backends import redis_client
 from clients import ReceiveActions, SendActions, WebsocketClient
 from models import ReceiveMessage, Todo
 
 ACTIVE_TASKS: set[asyncio.Task] = set()
+
+TASK_ERRORS: set[asyncio.Task] = set()
+
+LOCK = asyncio.Lock()
 
 
 class AbstractHandler(abc.ABC):
@@ -37,7 +41,7 @@ class TodoHandler(AbstractHandler):
     def __init__(self, client: WebsocketClient):
         super().__init__(client)
 
-        self.redis: aioredis.Redis | None = None
+        self.redis: redis.Redis | None = None
 
     async def set_next(self, handler: AbstractHandler):
         await super().set_next(handler)
@@ -47,6 +51,8 @@ class TodoHandler(AbstractHandler):
             response = await client.get("https://jsonplaceholder.typicode.com/todos")
             values = [Todo(**item) for item in response.json()]
 
+            # Publish to a Redis channel that 
+            # subscribers can listen to
             async def publisher_task():
                 todos = asyncio.Queue()
 
@@ -55,12 +61,18 @@ class TodoHandler(AbstractHandler):
 
                 while not todos.empty():
                     todo: Todo = await todos.get()
-                    await self.client.send_message(SendActions.TODOS, data=todo.model_dump())
+                    if self.redis is not None:
+                        try:
+                            self.redis.publish("todos_channel", str(todo.model_dump()))
+                        except Exception as e: # noqa
+                            async with LOCK:
+                                TASK_ERRORS.add(str(e))
+                    await asyncio.sleep(1)
 
             async with asyncio.TaskGroup() as tg:
                 task = tg.create_task(publisher_task())
-
                 ACTIVE_TASKS.add(task)
+
                 task.add_done_callback(lambda t: ACTIVE_TASKS.discard(t))
 
     async def handle(self, data: ReceiveMessage):
@@ -74,7 +86,7 @@ class TodoHandler(AbstractHandler):
 
 
 async def create_handler_chain(client: WebsocketClient) -> AbstractHandler:
-    redis = await redis_client()
+    redis = redis_client()
 
     todo_handler = TodoHandler(client)
     todo_handler.redis = redis

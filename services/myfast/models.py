@@ -3,7 +3,7 @@ import pydantic
 
 class ReceiveMessage(pydantic.BaseModel):
     action: str
-    message: str
+    message: str = None
 
 
 class SendMessage(pydantic.BaseModel):
