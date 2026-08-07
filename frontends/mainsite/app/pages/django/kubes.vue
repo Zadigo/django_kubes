@@ -1,6 +1,6 @@
 <template>
   <section>
-    <VoltCard>
+    <u-badge>
       <template #content>
         <div class="flex items-center justify-center gap-5">          
           <h3 class="text-2xl font-bold uppercase text-center">
@@ -12,7 +12,7 @@
           {{ data }}
         </p>
       </template>
-    </VoltCard>
+    </u-badge>
   </section>
 </template>
 

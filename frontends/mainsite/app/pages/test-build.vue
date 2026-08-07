@@ -1,5 +1,5 @@
 <template>
-  <VoltCard>
+  <u-badge>
     <template #content>
       <div class="space-y-10 overflow-y-scroll h-[400px]">
         <p>
@@ -39,7 +39,7 @@
         </p>
       </div>
     </template>
-  </VoltCard>
+  </u-badge>
 </template>
 
 <script setup lang="ts">

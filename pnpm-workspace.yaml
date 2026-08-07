@@ -4,9 +4,11 @@ packages:
 
 allowBuilds:
   '@firebase/util': true
+  '@parcel/watcher': true
   '@sentry/cli': true
   esbuild: true
   protobufjs: true
+  unrs-resolver: true
   vue-demi: true
 
 onlyBuiltDependencies:

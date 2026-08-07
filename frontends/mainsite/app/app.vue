@@ -6,8 +6,6 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount } from 'vue'
-
 useState('isAuthenticated', () => false)
 
 onBeforeMount(() => {

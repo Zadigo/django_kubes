@@ -1,23 +1,21 @@
 <template>
   <section>
-    <VoltCard>
-      <template #content>
-        <VoltButton v-if="websocketConnected" @click="getSchools">
-          {{ $t("Get schools") }}
-        </VoltButton>
-        
-        <VoltButton v-if="websocketConnected" @click="ws.close()">
-          {{ $t("Disconnect to websocket") }}
-        </VoltButton>
+    <u-badge>
+      <u-button v-if="websocketConnected" @click="getSchools">
+        {{ $t("Get schools") }}
+      </u-button>
+      
+      <u-button v-if="websocketConnected" @click="ws.close()">
+        {{ $t("Disconnect to websocket") }}
+      </u-button>
 
-        <VoltButton v-else @click="ws.open()">
-            {{ $t("Connect to websocket") }}
-        </VoltButton>
-      </template>
-    </VoltCard>
+      <u-button v-else @click="ws.open()">
+          {{ $t("Connect to websocket") }}
+      </u-button>
+    </u-badge>
 
-    <VoltCard>
-      <template v-if="items" #content>
+    <u-badge>
+      <template v-if="items">
         <div class="grid grid-cols-4 grid-rows-1 gap-2">
           <div v-for="item in items" :key="item.name" class="block w-full p-6 bg-white rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
             <h2 class="font-bold text-sm">
@@ -31,18 +29,16 @@
         </div>
       </template>
 
-      <template v-else #content>
+      <template v-else>
         <h1 class="font-bold text-3xl text-center">
           No schools
         </h1>
       </template>
-    </VoltCard>
+    </u-badge>
   </section>
 </template>
 
 <script setup lang="ts">
-import { useWebSocket } from '@vueuse/core'
-
 import type { School } from '~/types'
 
 type Action = 'connection' | 'disconnection' | 'update'

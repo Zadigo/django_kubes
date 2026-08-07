@@ -1,5 +1,3 @@
-import tailwindcss from '@tailwindcss/vite'
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
@@ -8,7 +6,8 @@ export default defineNuxtConfig({
   sourcemap: false,
 
   site: {
-    url: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+    url: process.env.NUXT_PUBLIC_SITE_URL,
+    name: process.env.NUXT_PUBLIC_SITE_NAME
   },
 
   routeRules: {
@@ -18,15 +17,9 @@ export default defineNuxtConfig({
     '/test-build': { ssr: true }
   },
 
-  vite: {
-    plugins: [
-      tailwindcss({ optimize: false })
-    ]
-  },
-
-  extends: [
-    'github:Zadigo/nuxt-extender',
-  ],
+  // extends: [
+  //   'github:Zadigo/nuxt-extender',
+  // ],
   
   modules: [
     '@nuxt/eslint',
@@ -35,8 +28,9 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@vueuse/nuxt',
     '@nuxt/fonts',
+    '@nuxt/ui',
     '@nuxt/test-utils/module',
-    'nuxt-vuefire'
+    'nuxt-vuefire',
   ],
   
   css: [
@@ -58,7 +52,7 @@ export default defineNuxtConfig({
   
   runtimeConfig: {
     public: {
-      prodDomain: process.env.NUXT_PUBLIC_PRODUCTION_DOMAIN || 'http://localhost:3000',
+      prodDomain: process.env.NUXT_PUBLIC_PRODUCTION_DOMAIN,
       djangoProdDomain: process.env.NUXT_PUBLIC_DJANGO_PROD_DOMAIN
     }
   },
@@ -123,5 +117,44 @@ export default defineNuxtConfig({
         password: process.env.NUXT_PUBLIC_REDIS_PASSWORD
       }
     }
-  }
+  },
+
+  seo: {
+    fallbackTitle: true
+  },
+
+  head: {
+    titleTemplate: "%s %separator %siteName",
+    templateParams: {
+      separator: '-',
+      siteName: process.env.NUXT_PUBLIC_SITE_NAME,
+      meta: [
+        {
+          name: 'theme-color',
+          content: '#96726a'
+        },
+        {
+          name: 'theme-color',
+          content: '#5e4842',
+          media: '(prefers-color-scheme: dark)'
+        }
+      ]
+    }
+  },
+
+  app: {
+    pageTransition: {
+      name: 'page',
+      mode: 'out-in'
+    },
+    head: {
+      meta: [
+        { name: 'theme-color', content: '#00dc82' },
+        {
+          name: 'theme-color', content: '#18181b',
+          media: '(prefers-color-scheme: dark)'
+        }
+      ]
+    }
+  },
 })
