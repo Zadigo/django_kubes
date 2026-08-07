@@ -1,13 +1,13 @@
 import index from '../pages/index.vue'
-import firebasePlugin from './mocks/firebasePlugin'
-import primevue from './mocks/primevue'
+import firebasePlugin from './mocks/firebasePlugin.js'
+import primevue from './mocks/primevue.js'
 
 import { mountSuspended, renderSuspended } from '@nuxt/test-utils/runtime'
 import { describe, expect, it, beforeEach, vi, afterAll } from 'vitest'
 import { screen, fireEvent, waitFor } from '@testing-library/vue'
 import { setActivePinia, createPinia } from 'pinia'
-import { useAuthentication } from '../app/stores/authentication'
-import { login } from '../app/utils'
+import { useAuthentication } from '../app/stores/authentication.js'
+import { login } from '../app/utils/index.js'
 
 
 // https://testing-library.com/docs/guide-disappearance
