@@ -11,11 +11,11 @@
       <u-input id="username" v-model="usernameField" type="email" autocomplete="username" placeholder="Username" />
       <u-input id="password" v-model="password" type="password" autocomplete="current-password" placeholder="Password" />
 
-      <u-button :disabled="!canBeSubmitted" @click="login">
+      <u-button :disabled="!canBeSubmitted" color="tertiary" @click="async () => { void login() }">
         {{ $t("Test login") }}
       </u-button>
 
-      <u-button v-if="isAuthenticated" @click="useLogout">
+      <u-button v-if="isAuthenticated" @click="async () => { void useLogout() }">
         {{ $t("Logout") }}
       </u-button>
     </form>

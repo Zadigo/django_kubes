@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     'nuxt-vuefire',
     '@pinia/nuxt',
     '@nuxtjs/i18n',
+    'nuxt-authentication',
   ],
 
   devtools: {
@@ -88,5 +89,34 @@ export default defineNuxtConfig({
     dirs: [
       '~/constants'
     ]
+  },
+
+  fonts: {
+    provider: 'google',
+    families: [
+      {
+        name: 'Sora',
+        weight: '100..800'
+      },
+      {
+        name: 'Geist',
+        weight: '100..900'
+      }
+    ]
+  },
+
+  ui: {
+    theme: {
+      colors: [
+        'primary',
+        'neutral',
+        'error',
+        'info',
+        'success',
+        'warning',
+        'tertiary',
+        'secondary',
+      ]
+    }
   }
 })

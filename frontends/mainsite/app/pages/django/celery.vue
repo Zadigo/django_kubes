@@ -1,6 +1,6 @@
 <template>
   <section>
-    <u-badge>
+    <u-card>
       <u-button v-if="websocketConnected" @click="getSchools">
         {{ $t("Get schools") }}
       </u-button>
@@ -12,9 +12,9 @@
       <u-button v-else @click="ws.open()">
           {{ $t("Connect to websocket") }}
       </u-button>
-    </u-badge>
+    </u-card>
 
-    <u-badge>
+    <u-card>
       <template v-if="items">
         <div class="grid grid-cols-4 grid-rows-1 gap-2">
           <div v-for="item in items" :key="item.name" class="block w-full p-6 bg-white rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
@@ -34,7 +34,7 @@
           No schools
         </h1>
       </template>
-    </u-badge>
+    </u-card>
   </section>
 </template>
 
