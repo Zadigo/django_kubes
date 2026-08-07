@@ -14,7 +14,10 @@ export default defineConfig({
       enabled: true,
       provider: 'v8',
       reporter: [ 'text', 'json', 'html', 'clover' ],
-
+      exclude: [
+        'i18n/locales/**',
+        'app/assets/**',
+      ]
     },
     env: {
       NODE_ENV: 'test'
