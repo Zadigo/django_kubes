@@ -1,7 +1,9 @@
 <template>
   <nuxt-layout>
-    <nuxt-loading-indicator />
-    <nuxt-page />
+    <u-app>
+      <nuxt-loading-indicator />
+      <nuxt-page />
+    </u-app>
   </nuxt-layout>
 </template>
 

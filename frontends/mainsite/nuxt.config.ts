@@ -11,8 +11,8 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
-    '/': { swr: true },
-    '/django/celery': { swr: true },
+    '/': { ssr: true },
+    '/django/celery': { ssr: true },
     '/django/kubes': { ssr: false },
     '/test-build': { ssr: true }
   },
@@ -34,7 +34,7 @@ export default defineNuxtConfig({
   ],
   
   css: [
-    '~/assets/css/tailwind.css'
+    '~/assets/css/main.css'
   ],
 
   vuefire: {
@@ -157,4 +157,10 @@ export default defineNuxtConfig({
       ]
     }
   },
+
+  ui: {
+    experimental: {
+      componentDetection: true
+    }
+  }
 })
