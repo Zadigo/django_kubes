@@ -3,7 +3,6 @@ import createErrorTemplate from '#shared/errors'
 
 export default defineCachedEventHandler(async event => {
   const access = getCookie(event, 'access')
-  const refresh = getCookie(event, 'refresh')
 
   try {
     return await $fetch<School>(`schools/v1/`, {
