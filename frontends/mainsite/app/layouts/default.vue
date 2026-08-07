@@ -1,5 +1,5 @@
 <template>
-  <u-container id="site">
+  <section id="site">
     <u-card>
       <h1 class="text-3xl font-bold mb-8 text-center">
         {{ $t("Welcome!") }}
@@ -44,8 +44,10 @@
       </div>
     </u-card>
 
-    <slot />
-  </u-container>
+    <u-container tag="main">
+      <slot />
+    </u-container>
+  </section>
 </template>
 
 <script setup lang="ts">

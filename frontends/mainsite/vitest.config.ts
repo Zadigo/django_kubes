@@ -7,7 +7,8 @@ export default defineConfig({
     coverage: {
       enabled: true,
       provider: 'v8',
-      reporter: [ 'text', 'json', 'html' ]
+      reporter: [ 'text', 'json', 'html', 'clover' ],
+
     },
     env: {
       NODE_ENV: 'test'
@@ -15,26 +16,18 @@ export default defineConfig({
     projects: [
       await defineVitestProject({
         test: {
-          name: 'unit',
-          include: [ 'test/unit/**/*.{test,spec}.ts' ],
-          environment: 'node',
-          testTimeout: 20000,
-          tags: [
-            {
-              name: 'unit',
-            }
-          ]
-        }
-      }),
-      await defineVitestProject({
-        test: {
           name: 'nuxt',
-          include: [ 'test/nuxt/**/*.{test,spec}.ts' ],
+          include: [ 'tests/nuxt/**/*.{test,spec}.ts' ],
           environment: 'nuxt',
           testTimeout: 20000,
           tags: [
             {
-              name: 'nuxt',
+              name: 'unit',
+              description: 'Tests that are focused on a single unit of code, such as a function or component.',
+            },
+            {
+              name: 'isolation',
+              description: 'Tests that are isolated and do not depend on external services or state.'
             }
           ]
         }
@@ -42,12 +35,13 @@ export default defineConfig({
       await defineVitestProject({
         test: {
           name: 'integration',
-          include: [ 'test/integration/**/*.{test,spec}.ts' ],
+          include: [ 'tests/integration/**/*.{test,spec}.ts' ],
           environment: 'node',
           testTimeout: 20000,
           tags: [
             {
               name: 'integration',
+              description: 'Tests that verify the interaction between multiple units of code or components.'
             }
           ]
         }

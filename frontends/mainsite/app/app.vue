@@ -1,10 +1,10 @@
 <template>
-  <nuxt-layout>
-    <u-app>
+  <u-app>
+    <nuxt-layout>
       <nuxt-loading-indicator />
       <nuxt-page />
-    </u-app>
-  </nuxt-layout>
+    </nuxt-layout>
+  </u-app>
 </template>
 
 <script setup lang="ts">
