@@ -264,10 +264,10 @@ const file_insee_proto_rawDesc = "" +
 	"\x05items\x18\x01 \x03(\v2\x0f.insee.BusinessR\x05items\"2\n" +
 	"\bBusiness\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x12\n" +
-	"\x04city\x18\x02 \x01(\tR\x04city2u\n" +
+	"\x04city\x18\x02 \x01(\tR\x04city2v\n" +
 	"\fInseeService\x122\n" +
-	"\x05Siren\x12\x13.insee.SirenRequest\x1a\x14.insee.SirenResponse\x121\n" +
-	"\x05Siret\x12\x13.insee.SiretRequest\x1a\x13.insee.SiretRequestB\x18Z\x16services/goproto/inseeb\x06proto3"
+	"\x05Siren\x12\x13.insee.SirenRequest\x1a\x14.insee.SirenResponse\x122\n" +
+	"\x05Siret\x12\x13.insee.SiretRequest\x1a\x14.insee.SiretResponseB\x18Z\x16services/goproto/inseeb\x06proto3"
 
 var (
 	file_insee_proto_rawDescOnce sync.Once
@@ -295,7 +295,7 @@ var file_insee_proto_depIdxs = []int32{
 	0, // 2: insee.InseeService.Siren:input_type -> insee.SirenRequest
 	2, // 3: insee.InseeService.Siret:input_type -> insee.SiretRequest
 	1, // 4: insee.InseeService.Siren:output_type -> insee.SirenResponse
-	2, // 5: insee.InseeService.Siret:output_type -> insee.SiretRequest
+	3, // 5: insee.InseeService.Siret:output_type -> insee.SiretResponse
 	4, // [4:6] is the sub-list for method output_type
 	2, // [2:4] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name

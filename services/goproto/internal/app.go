@@ -3,10 +3,12 @@ package internal
 import (
 	"context"
 	"fmt"
-	"net/http"
+	"log"
+	"net"
 
-	"github.com/go-chi/chi/middleware"
+	pb "github.com/Zadigo/goproto/inseeproto"
 	"github.com/go-chi/chi/v5"
+	"google.golang.org/grpc"
 )
 
 type App struct {
@@ -15,21 +17,26 @@ type App struct {
 	errCh chan error
 }
 
-func (a *App) Start() {	
-	a.router = chi.NewRouter()
-	a.router.Use(middleware.Logger)
-	a.errCh = make(chan error)
+func (a *App) Start() {
+	fmt.Print("Starting server...")
 
-	go func() {
-		a.errCh <- http.ListenAndServe(":8080", a.router)
-	}()
+	listener, err := net.Listen("tcp", ":9001")
+	if err != nil {
+		log.Fatalf("Could not start TCP server %b", err)
+	}
+
+	defer listener.Close()
+
+	grpcServer := grpc.NewServer()
+	pb.RegisterInseeServiceServer(grpcServer, &Server{})
+	a.errCh <- grpcServer.Serve(listener)
 
 	select {
-		case err := <-a.errCh:
-			panic(err)
-		case err := <- a.ctx.Done():
-			close(a.errCh)
-			fmt.Printf("Server closed: %b", err)
+	case err := <- a.errCh:
+		fmt.Printf("Error running server %b", err)
+	case  <- a.ctx.Done():
+		close(a.errCh)
+		fmt.Print("Closing server")
 	}
 }
 

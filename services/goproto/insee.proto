@@ -6,7 +6,7 @@ option go_package = "services/goproto/insee";
 
 service InseeService {
     rpc Siren (SirenRequest) returns (SirenResponse);
-    rpc Siret (SiretRequest) returns (SiretRequest);
+    rpc Siret (SiretRequest) returns (SiretResponse);
 }
 
 message SirenRequest {

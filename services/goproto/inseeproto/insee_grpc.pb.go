@@ -28,7 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type InseeServiceClient interface {
 	Siren(ctx context.Context, in *SirenRequest, opts ...grpc.CallOption) (*SirenResponse, error)
-	Siret(ctx context.Context, in *SiretRequest, opts ...grpc.CallOption) (*SiretRequest, error)
+	Siret(ctx context.Context, in *SiretRequest, opts ...grpc.CallOption) (*SiretResponse, error)
 }
 
 type inseeServiceClient struct {
@@ -49,9 +49,9 @@ func (c *inseeServiceClient) Siren(ctx context.Context, in *SirenRequest, opts .
 	return out, nil
 }
 
-func (c *inseeServiceClient) Siret(ctx context.Context, in *SiretRequest, opts ...grpc.CallOption) (*SiretRequest, error) {
+func (c *inseeServiceClient) Siret(ctx context.Context, in *SiretRequest, opts ...grpc.CallOption) (*SiretResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SiretRequest)
+	out := new(SiretResponse)
 	err := c.cc.Invoke(ctx, InseeService_Siret_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -64,7 +64,7 @@ func (c *inseeServiceClient) Siret(ctx context.Context, in *SiretRequest, opts .
 // for forward compatibility.
 type InseeServiceServer interface {
 	Siren(context.Context, *SirenRequest) (*SirenResponse, error)
-	Siret(context.Context, *SiretRequest) (*SiretRequest, error)
+	Siret(context.Context, *SiretRequest) (*SiretResponse, error)
 	mustEmbedUnimplementedInseeServiceServer()
 }
 
@@ -78,7 +78,7 @@ type UnimplementedInseeServiceServer struct{}
 func (UnimplementedInseeServiceServer) Siren(context.Context, *SirenRequest) (*SirenResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Siren not implemented")
 }
-func (UnimplementedInseeServiceServer) Siret(context.Context, *SiretRequest) (*SiretRequest, error) {
+func (UnimplementedInseeServiceServer) Siret(context.Context, *SiretRequest) (*SiretResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Siret not implemented")
 }
 func (UnimplementedInseeServiceServer) mustEmbedUnimplementedInseeServiceServer() {}
