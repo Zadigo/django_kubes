@@ -393,6 +393,22 @@ services:
     networks:
       - kubes_network
 
+  app_gomcp:
+    build: ./services/gomcp
+    container_name: app_gomcp
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.gomcp.entrypoints=websecure
+      - traefik.http.routers.gomcp.rule=Host(`gomcp.johnpm.fr`)
+      - traefik.http.routers.gomcp.tls=true
+      - traefik.http.routers.gomcp.tls.certresolver=staging
+      - traefik.http.services.gomcp-service.loadbalancer.server.port=8080
+      - traefik.http.routers.gomcp.middlewares=https-redirect
+      - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
+    networks:
+      - kubes_network
+
   app_simple_go:
     build: ./simple_go
     container_name: app_simple_go

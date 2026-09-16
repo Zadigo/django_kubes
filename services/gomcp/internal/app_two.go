@@ -8,7 +8,7 @@ import (
 	"github.com/mark3labs/mcp-go/server"
 )
 
-func McpAlternative() {
+func SSEMcpServer() {
     // Create a new MCP server
     s := server.NewMCPServer(
         "Calculator Demo",

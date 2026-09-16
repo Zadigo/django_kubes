@@ -10,5 +10,6 @@ func main() {
 	// app := internal.NewApp(ctx)
 	// app.Start()
 	
-	internal.McpAlternative()
+	// internal.McpAlternative()
+	internal.NewHTTPServerWithRoots()
 }
