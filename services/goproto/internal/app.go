@@ -34,9 +34,9 @@ func (a *App) Start() {
 	select {
 	case err := <- a.errCh:
 		fmt.Printf("Error running server %b", err)
-	case  <- a.ctx.Done():
+	case err :=  <- a.ctx.Done():
 		close(a.errCh)
-		fmt.Print("Closing server")
+		fmt.Printf("Closing server %s", err)
 	}
 }
 

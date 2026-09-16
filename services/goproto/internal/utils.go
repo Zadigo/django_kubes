@@ -12,11 +12,11 @@ type Server struct {
 
 func (s *Server) Siren(ctx context.Context, req *pb.SirenRequest) (*pb.SirenResponse, error) {
 	items := []*pb.Business{
-		&pb.Business{
+		{
 			Name: "Leclerc",
 			City: "Lille",
 		},
-		&pb.Business{
+		{
 			Name: "Carrefour",
 			City: "Lille",
 		},
@@ -29,11 +29,11 @@ func (s *Server) Siren(ctx context.Context, req *pb.SirenRequest) (*pb.SirenResp
 
 func (s *Server) Siret(ctx context.Context, req *pb.SiretRequest) (*pb.SiretResponse, error) {
 	items := []*pb.Business{
-		&pb.Business{
+		{
 			Name: "Banque Populaire",
 			City: "Paris",
 		},
-		&pb.Business{
+		{
 			Name: "Crédit Agricole",
 			City: "Marseille",
 		},
