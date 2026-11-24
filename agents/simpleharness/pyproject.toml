@@ -9,10 +9,17 @@ dependencies = [
     "playwright>=1.65.2",
     "polar>=0.0.127",
     "pydantic>=2.14.4",
+    "pyyaml>=6.0.4",
     "turboenv>=0.2.0a3",
 ]
 
 [dependency-groups]
 dev = [
+    "pytest>=9.2.0",
+    "pytest-aio>=2.1.7",
+    "pytest-cov>=7.1.0",
+    "pytest-playwright>=0.10.0",
+    "pytest-reportlog>=1.0.0",
+    "pytest-timeout>=2.4.0",
     "ruff>=0.17.6",
 ]
