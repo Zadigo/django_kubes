@@ -25,6 +25,7 @@ SKILLS_DIRS: Sequence[pathlib.Path] = [BASE_DIR / ".agents"]
 API_KEY = env.string("DEEPSEEK_API_KEY")
 BASE_URL = env.url("BASE_URL", secured=True)
 
+TASKS: dict[str, asyncio.Task] = {}
 
 FILES_STATE: dict[str, datetime.datetime] = {}
 
@@ -45,24 +46,33 @@ async def read_file(path: str) -> str:
     return content
 
 
-async def write_file(path: str, content: str) -> None:
+async def write_file(path: str, content: str) -> str:
     fullpath = BASE_DIR / path
     async with aiofiles.open(fullpath, mode="w") as f:
         await f.write(content)
-    FILES_STATE[path] = datetime.datetime.now(tz=datetime.UTC)
+    FILES_STATE[path] = fullpath.stat().st_mtime
     return f"Wrote {path}"
 
 
+async def done_callback(task: asyncio.Task[str]):
+    if task.cancelled():
+        return
+
+    if (exc := task.exception()) is not None:
+        print(exc)
+        return
+
+    TASKS.pop(task.get_name(), None)
+
+
 async def open_browser():
-    page_content: str = ''
+    page_content: str = ""
 
     async with async_playwright() as context:
-        browser = await context.chromium.launch()
+        browser = await context.chromium.launch(headless=False)
         page = await browser.new_page()
-        
-        await page.goto("http://example.com")
-        await page.wait_for_event("domcontentloaded", timeout=1000)
-        
+
+        await page.goto("http://example.com", timeout=5000)
         page_content = await page.evaluate("document.body.innerText")
 
         await asyncio.sleep(5)
@@ -112,7 +122,24 @@ async def call_tools(
                     }
                 )
 
-            if tool_call.function.name == 'open_browser':
+            if tool_call.function.name == "write_file":
+                func_args: dict = json.loads(tool_call.function.arguments)
+                async with asyncio.TaskGroup() as tg:
+                    t = tg.create_task(
+                        write_file(func_args["path"], func_args["content"])
+                    )
+                    t.add_done_callback(done_callback)
+
+                messages.append(
+                    {
+                        "role": "tool",
+                        "content": "",
+                        "name": "write_file",
+                        "tool_call_id": tool_call.id,
+                    }
+                )
+
+            if tool_call.function.name == "open_browser":
                 page_content = await open_browser()
 
                 messages.append(
@@ -129,6 +156,24 @@ async def call_tools(
         )
         return final_output
     return output
+
+
+def reminder() -> ChatCompletionMessageParam:
+    return {
+        "role": "user",
+        "content": (
+            "<env>\n",
+            f"time: {datetime.datetime.now(tz=datetime.UTC)}:%Y-%m-%d %H:%M\n",
+            "</env>",
+            "<todos>\n",
+            "</todos>",
+            "<system-reminder>",
+            "These files have changed since you last read them. Read them again when necessary ",
+            "before editing:\n",
+            "\n".join(FILES_STATE.keys()),
+            "</system-reminder>",
+        ),
+    }
 
 
 async def main():
@@ -176,9 +221,9 @@ async def main():
                                 "content": {
                                     "type": "string",
                                     "description": "The content to write",
-                                }
+                                },
                             },
-                            "required": ["path"],
+                            "required": ["path", "content"],
                         },
                     },
                 },
