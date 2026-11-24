@@ -7,13 +7,11 @@ import (
 	"net"
 
 	pb "github.com/Zadigo/goproto/inseeproto"
-	"github.com/go-chi/chi/v5"
 	"google.golang.org/grpc"
 )
 
 type App struct {
 	ctx context.Context
-	router *chi.Mux
 	errCh chan error
 }
 
@@ -33,7 +31,7 @@ func (a *App) Start() {
 
 	select {
 	case err := <- a.errCh:
-		fmt.Printf("Error running server %b", err)
+		fmt.Printf("Error running server %s", err)
 	case err :=  <- a.ctx.Done():
 		close(a.errCh)
 		fmt.Printf("Closing server %s", err)
@@ -43,5 +41,6 @@ func (a *App) Start() {
 func NewApp(ctx context.Context) *App {
 	return &App{
 		ctx: ctx,
+		errCh: make(chan error, 1),
 	}
 }

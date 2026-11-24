@@ -1,0 +1,18 @@
+[project]
+name = "simpleharness"
+version = "0.1.0"
+requires-python = ">=3.14"
+dependencies = [
+    "aiofiles>=25.1.0",
+    "deepseek>=1.0.0",
+    "openai>=3.58.0",
+    "playwright>=1.65.2",
+    "polar>=0.0.127",
+    "pydantic>=2.14.4",
+    "turboenv>=0.2.0a3",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.17.6",
+]
